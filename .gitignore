@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+/PageInHTML
 
 # next.js
 /.next/
