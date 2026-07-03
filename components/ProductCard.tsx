@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Star } from "lucide-react";
+import Link from "next/link";
 
 interface ProductCardProps {
   image: string;
@@ -16,7 +17,7 @@ export default function ProductCard({ image, name, price, description, tags }: P
   return (
     <div className="bg-[#FFFFFF] rounded-2xl p-4 flex flex-col shadow-sm border border-[#F0F4F8] hover:shadow-md hover:border-[#D6E8F5] transition-all h-full">
       {/* Image Container */}
-      <div className="bg-[#F0F4F8] rounded-xl aspect-square relative flex items-center justify-center p-4 mb-4">
+      <Link href="/shop/products/1" className="bg-[#F0F4F8] rounded-xl aspect-square relative flex items-center justify-center p-4 mb-4 block hover:opacity-90 transition-opacity">
         <Image
           src={image}
           alt={name}
@@ -24,7 +25,7 @@ export default function ProductCard({ image, name, price, description, tags }: P
           className="object-contain p-2 mix-blend-multiply"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
-      </div>
+      </Link>
 
       {/* Rating */}
       <div className="flex items-center space-x-1 mb-2">
@@ -42,9 +43,11 @@ export default function ProductCard({ image, name, price, description, tags }: P
       </div>
 
       {/* Product Info */}
-      <h3 className="text-[#1A1A1A] font-bold font-serif text-base md:text-lg leading-tight mb-2 flex-grow">
-        {name}
-      </h3>
+      <Link href="/shop/products/1" className="flex-grow group">
+        <h3 className="text-[#1A1A1A] font-bold font-serif text-base md:text-lg leading-tight mb-2 group-hover:text-[#1B6CA8] transition-colors">
+          {name}
+        </h3>
+      </Link>
       
       <p className="text-[#F26641] font-bold text-lg md:text-xl mb-4">
         {price}

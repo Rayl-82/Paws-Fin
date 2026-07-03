@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
+import SubscriptionCard from "@/components/SubscriptionCard";
 import Image from "next/image";
 import Link from "next/link";
 import { PawPrint, ArrowRight, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
@@ -26,13 +27,13 @@ export default function TokoPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F7F9FC] font-sans text-[#1A1A1A] flex flex-col relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#F7F9FC] font-sans text-[#1A1A1A] flex flex-col relative">
       <Navbar />
 
       <main className="w-full flex flex-col items-center flex-grow pt-6 lg:pt-8">
         {/* Section 1: Hero Banner */}
         <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-12 lg:pb-16">
-          <div className="w-full relative overflow-hidden rounded-2xl bg-[#ECEEF1] shadow-xl min-h-[400px] lg:h-[500px] flex items-center group">
+          <Link href="/shop/subscriptions/1" className="w-full relative overflow-hidden rounded-2xl bg-[#ECEEF1] shadow-xl min-h-[400px] lg:h-[500px] flex items-center group block">
             <Image
               src="/images/featuredmainbanner.png"
               alt="Ocean Omega Box Background"
@@ -67,10 +68,9 @@ export default function TokoPage() {
                 </div>
 
                 {/* Add to Cart Button */}
-                <button className="w-full sm:w-auto bg-[#F26641] hover:bg-[#D55331] transition-colors text-white font-semibold py-4 px-8 rounded-xl flex justify-center items-center gap-2 shadow-lg hover:-translate-y-1 hover:shadow-xl">
-                  <ShoppingCart size={20} className="transition-transform" />
-                  <span>Add to Cart</span>
-                </button>
+                <div className="w-full sm:w-auto bg-[#F26641] group-hover:bg-[#D55331] transition-colors text-white font-semibold py-4 px-8 rounded-xl flex justify-center items-center gap-2 shadow-lg group-hover:-translate-y-1 group-hover:shadow-xl">
+                  <span>View Details</span>
+                </div>
               </div>
             </div>
 
@@ -88,14 +88,23 @@ export default function TokoPage() {
               <div className="w-2.5 h-2.5 bg-white/40 hover:bg-white/70 transition-all duration-300 rounded-full cursor-pointer shadow-md" />
               <div className="w-2.5 h-2.5 bg-white/40 hover:bg-white/70 transition-all duration-300 rounded-full cursor-pointer shadow-md" />
             </div>
-          </div>
+          </Link>
         </section>
 
         {/* Section 2: Product Cards Row */}
         <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-16">
-          <div className="flex overflow-x-auto lg:grid lg:grid-cols-4 gap-6 pb-8 pt-4 -mt-4 px-2 -mx-2 snap-x snap-mandatory hide-scrollbar items-stretch">
-            {featuredProducts.map((prod, idx) => (
-              <div key={idx} className="w-[280px] lg:w-auto shrink-0 snap-center h-full flex flex-col">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
+            <h2 className="text-[#191C1E] text-3xl md:text-4xl font-bold font-serif">
+              Our Products
+            </h2>
+            <Link href="/shop/products" className="bg-[#005387] hover:bg-[#003D63] transition-colors text-white font-medium py-3 px-6 rounded-xl shadow-md">
+              View Details
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 items-stretch">
+            {[...featuredProducts, ...featuredProducts].map((prod, idx) => (
+              <div key={idx} className="w-full h-full flex flex-col">
                 <ProductCard
                   image={prod.image}
                   name={prod.name}
@@ -121,19 +130,13 @@ export default function TokoPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
               {subscriptionPlans.map((plan, idx) => (
-                <div key={idx} className="bg-white rounded-2xl border-2 border-transparent hover:border-[#F26641] flex flex-col overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-                  <div className="w-full h-56 relative overflow-hidden bg-gray-100">
-                    <Image src={plan.image} alt={plan.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                  </div>
-                  <div className="p-6 md:p-8 flex flex-col flex-grow">
-                    <h3 className="text-[#191C1E] text-2xl font-bold font-serif mb-2">{plan.name}</h3>
-                    <p className="text-[#414750] text-base mb-6 flex-grow">{plan.desc}</p>
-                    <div className="text-[#F26641] text-2xl font-bold mb-6">{plan.price}<span className="text-lg">/mo</span></div>
-                    <button className="w-full border-2 border-[#F26641] text-[#F26641] hover:bg-[#F26641] hover:text-white font-bold py-3 px-6 rounded-xl transition-colors">
-                      Subscribe Now
-                    </button>
-                  </div>
-                </div>
+                <SubscriptionCard
+                  key={idx}
+                  image={plan.image}
+                  name={plan.name}
+                  desc={plan.desc}
+                  price={plan.price}
+                />
               ))}
             </div>
           </div>
@@ -145,7 +148,7 @@ export default function TokoPage() {
             <h2 className="text-[#191C1E] text-3xl md:text-4xl font-bold font-serif">
               Shop by Collection
             </h2>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
               {collections.map((col, idx) => (
                 <Link href="/shop/products" key={idx} className="group relative w-full h-[300px] md:h-[350px] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block">
@@ -165,17 +168,13 @@ export default function TokoPage() {
         <section className="w-full flex justify-center pb-24">
           <div className="w-full max-w-3xl px-4 flex flex-col items-center text-center gap-6">
             <div className="w-16 h-16 bg-[#F26641]/10 text-[#F26641] rounded-2xl flex items-center justify-center mb-2">
-               <PawPrint size={32} />
+              <PawPrint size={32} />
             </div>
-            
+
             <h2 className="text-[#191C1E] text-3xl md:text-5xl font-bold font-serif leading-tight">
               Ready to dive deeper?
             </h2>
-            
-            <p className="text-[#414750] text-lg md:text-xl max-w-2xl mx-auto mb-4">
-              Browse our full catalog of over 200+ premium fish-based products sourced from the purest oceans.
-            </p>
-            
+
             <Link href="/shop/products" className="bg-[#005387] hover:bg-[#003D63] text-white font-semibold py-4 px-8 rounded-xl inline-flex items-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">
               Explore All Products
               <ArrowRight size={20} />
