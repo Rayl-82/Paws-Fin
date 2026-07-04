@@ -66,7 +66,7 @@ export default function ShopPage() {
         {/* Main Content: Sidebar + Grid */}
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Sidebar */}
-          <aside className="w-full lg:w-[260px] flex-shrink-0 lg:sticky lg:top-[140px] h-fit">
+          <aside className="hidden lg:block w-[260px] flex-shrink-0 sticky top-[140px] h-fit">
             <div className="bg-[#FFFFFF] rounded-2xl p-6 flex flex-col gap-8 shadow-sm border border-[#E0E6EB]">
               
               {/* PET TYPE */}
@@ -138,8 +138,8 @@ export default function ShopPage() {
           </aside>
 
           {/* Product Grid */}
-          <div className="flex-1">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="flex-1 w-full">
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
               {products.map((product, index) => (
                 <ProductCard
                   key={index}

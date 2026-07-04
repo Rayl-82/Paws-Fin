@@ -39,9 +39,9 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
       <Navbar />
 
 
-      <main className="max-w-[1280px] mx-auto px-4 md:px-8 pb-24 pt-8">
+      <main className="max-w-[1280px] mx-auto px-4 md:px-8 pb-16 md:pb-24 pt-4 md:pt-8">
         {/* PRODUCT HERO */}
-        <section className="flex flex-col lg:flex-row gap-12 lg:gap-16 mb-24">
+        <section className="flex flex-col lg:flex-row gap-8 lg:gap-16 mb-16 md:mb-24">
 
           {/* Left: Gallery */}
           <div className="flex-1 flex flex-col gap-4">
@@ -74,10 +74,10 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
               <div className="inline-block px-4 py-1.5 bg-[#F26641] text-white text-xs font-bold uppercase tracking-widest rounded-full mb-4">
                 Best Seller
               </div>
-              <h1 className="text-4xl md:text-5xl font-serif font-bold text-[#1B6CA8] leading-tight mb-4">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#1B6CA8] leading-tight mb-3 md:mb-4">
                 Ocean Omega Box
               </h1>
-              <p className="text-lg text-[#546E7A] mb-4">
+              <p className="text-base sm:text-lg text-[#546E7A] mb-4">
                 Premium fish-based treats for adult cats
               </p>
 
@@ -146,11 +146,11 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
         </section>
 
         {/* UNIFIED PRODUCT INFORMATION */}
-        <section className="mb-24">
-          <div className="bg-white border border-[#E0E6EB] rounded-2xl p-8 md:p-12 shadow-sm">
-            <h2 className="text-2xl font-serif font-bold text-[#1A1A1A] mb-8">Product Information</h2>
+        <section className="mb-16 md:mb-24">
+          <div className="bg-white border border-[#E0E6EB] rounded-2xl p-6 md:p-8 lg:p-12 shadow-sm">
+            <h2 className="text-xl md:text-2xl font-serif font-bold text-[#1A1A1A] mb-6 md:mb-8">Product Information</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
               {/* Left Column */}
               <div className="md:col-span-4 flex flex-col gap-8">
                 <div>
@@ -219,8 +219,8 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
         </section>
 
         {/* CUSTOMER REVIEWS */}
-        <section className="mb-24">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+        <section className="mb-16 md:mb-24">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
             <div className="md:col-span-4">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-serif font-bold text-[#1B6CA8]">Reviews</h2>
@@ -301,11 +301,11 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
         <section>
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-serif font-bold text-[#1A1A1A]">You Might Also Like</h2>
-            <Link href="/shop/products" className="flex items-center gap-2 font-bold text-[#1B6CA8] hover:text-[#124E7A] transition-colors">
-              View All <ChevronRight className="w-5 h-5" />
+            <Link href="/shop/products" className="flex items-center gap-2 font-bold text-[#1B6CA8] hover:text-[#124E7A] transition-colors text-sm md:text-base">
+              View All <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
             {relatedProducts.map((product, index) => (
               <ProductCard
                 key={index}

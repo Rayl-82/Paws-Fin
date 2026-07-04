@@ -50,7 +50,7 @@ export default function LanggananPage() {
         </section>
 
         {/* SUBSCRIPTION PLANS */}
-        <section id="plans" className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 mb-24">
+        <section id="plans" className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 mb-16 md:mb-24">
           <SubscriptionCarousel
             title="Subscription Plans"
             plans={subscriptionPlans}
@@ -61,7 +61,7 @@ export default function LanggananPage() {
         </section>
 
         {/* ONE-TIME BUNDLES */}
-        <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 mb-32">
+        <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 mb-16 md:mb-32">
           <SubscriptionCarousel
             title="One-Time Bundles"
             plans={bundlePlans}
@@ -72,9 +72,9 @@ export default function LanggananPage() {
         </section>
 
         {/* WHY SUBSCRIBE? */}
-        <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 mb-32">
-          <div className="mb-12">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#1A1A1A] mb-4">Why Subscribe?</h2>
+        <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 mb-20 md:mb-32">
+          <div className="mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-[#1A1A1A] mb-4">Why Subscribe?</h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -121,8 +121,8 @@ export default function LanggananPage() {
         </section>
 
         {/* FAQ */}
-        <section className="w-full max-w-3xl px-4 md:px-8 mx-auto mb-16">
-          <div className="text-center mb-10">
+        <section className="w-full max-w-3xl px-4 md:px-8 mx-auto mb-8 md:mb-16">
+          <div className="text-center mb-8 md:mb-10">
             <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#1A1A1A]">Frequently Asked Questions</h2>
           </div>
 

@@ -32,8 +32,8 @@ export default function TokoPage() {
 
       <main className="w-full flex flex-col items-center flex-grow pt-6 lg:pt-8">
         {/* Section 1: Hero Banner */}
-        <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-12 lg:pb-16">
-          <Link href="/shop/subscriptions/1" className="w-full relative overflow-hidden rounded-2xl bg-[#ECEEF1] shadow-xl min-h-[400px] lg:h-[500px] flex items-center group block">
+        <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-8 md:pb-12 lg:pb-16">
+          <Link href="/shop/subscriptions/1" className="w-full relative overflow-hidden rounded-2xl bg-[#ECEEF1] shadow-xl min-h-[320px] md:min-h-[400px] lg:h-[500px] flex items-center group block">
             <Image
               src="/images/featuredmainbanner.png"
               alt="Ocean Omega Box Background"
@@ -102,7 +102,7 @@ export default function TokoPage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 items-stretch">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 items-stretch">
             {[...featuredProducts, ...featuredProducts].map((prod, idx) => (
               <div key={idx} className="w-full h-full flex flex-col">
                 <ProductCard
@@ -120,10 +120,10 @@ export default function TokoPage() {
         <section className="w-full bg-[#005387]/5 py-16 lg:py-24">
           <div className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 mx-auto flex flex-col gap-10">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
-              <h2 className="text-[#191C1E] text-3xl md:text-4xl font-bold font-serif">
+              <h2 className="text-[#191C1E] text-2xl md:text-3xl lg:text-4xl font-bold font-serif">
                 Subscription Spotlight
               </h2>
-              <button className="bg-[#005387] hover:bg-[#003D63] transition-colors text-white font-medium py-3 px-6 rounded-xl shadow-md">
+              <button className="bg-[#005387] hover:bg-[#003D63] transition-colors text-white font-medium py-3 px-6 rounded-xl shadow-md w-full sm:w-auto">
                 View All Plans
               </button>
             </div>
@@ -145,13 +145,13 @@ export default function TokoPage() {
         {/* Section 4: Shop by Collection */}
         <section className="w-full flex justify-center py-16 lg:py-24">
           <div className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 flex flex-col gap-10">
-            <h2 className="text-[#191C1E] text-3xl md:text-4xl font-bold font-serif">
+            <h2 className="text-[#191C1E] text-2xl md:text-3xl lg:text-4xl font-bold font-serif">
               Shop by Collection
             </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {collections.map((col, idx) => (
-                <Link href="/shop/products" key={idx} className="group relative w-full h-[300px] md:h-[350px] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block">
+                <Link href="/shop/products" key={idx} className="group relative w-full h-[250px] md:h-[300px] lg:h-[350px] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block">
                   <Image src={col.image} alt={col.name} fill className="object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-black/90 transition-colors" />
                   <div className="absolute left-6 bottom-6 text-white text-2xl font-bold font-serif flex items-center gap-2">
