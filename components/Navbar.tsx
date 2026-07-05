@@ -187,6 +187,7 @@ export default function Navbar() {
             { name: "Home", path: "/" },
             { name: "Marketplace", path: "/shop" },
             { name: "Subscription", path: "/langganan" },
+            { name: "Majalah", path: "/majalah" },
             { name: "Supplier Portal", path: "/suplier-portal" },
           ].map((item) => (
             <Link 
