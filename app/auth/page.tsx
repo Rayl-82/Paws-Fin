@@ -120,7 +120,7 @@ export default function AuthPage() {
                   </button>
 
                   <div className="mt-6 text-center text-sm text-[#546E7A]">
-                    Don't have an account?{" "}
+                    Don&apos;t have an account?{" "}
                     <button onClick={() => setActiveTab("signup")} className="font-bold text-[#1B6CA8] hover:underline">
                       Create Account
                     </button>

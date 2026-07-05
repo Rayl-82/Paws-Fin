@@ -98,7 +98,7 @@ export default function SuplierPortal() {
                 Giving Marine Resources A Second Life
               </h2>
               <p className="text-[#546E7A] text-base md:text-lg mb-12">
-                Your supplied materials don't just disappear. They enter our sustainable ecosystem, transforming into high-quality nutrition that makes a real difference.
+                Your supplied materials don&apos;t just disappear. They enter our sustainable ecosystem, transforming into high-quality nutrition that makes a real difference.
               </p>
               
               <div className="flex flex-col gap-6 relative">
