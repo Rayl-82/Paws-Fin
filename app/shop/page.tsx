@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import SubscriptionCard from "@/components/SubscriptionCard";
@@ -6,6 +9,13 @@ import Link from "next/link";
 import { PawPrint, ArrowRight, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function TokoPage() {
+  const [hasProfile, setHasProfile] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const profileExists = localStorage.getItem("hasPetProfile") === "true";
+    setHasProfile(profileExists);
+  }, []);
+
   const featuredProducts = [
     { image: "/images/product1.png", name: "Wild Salmon Jerky", price: "$14.99", tags: ["High Omega-3", "Single Ingredient"] },
     { image: "/images/product2.png", name: "Cod & Shrimp Bites", price: "$9.99", tags: ["Grain-Free", "Low Calorie"] },
@@ -29,6 +39,25 @@ export default function TokoPage() {
   return (
     <div className="min-h-screen bg-[#F7F9FC] font-sans text-[#1A1A1A] flex flex-col relative">
       <Navbar />
+
+      {/* Dev Demo Toggle */}
+      <div className="w-full bg-[#D6E8F5] p-3 text-sm font-bold text-[#1B6CA8] flex justify-center items-center gap-3">
+        <input 
+          type="checkbox" 
+          checked={!!hasProfile} 
+          onChange={(e) => {
+            const isChecked = e.target.checked;
+            if (isChecked) {
+              localStorage.setItem("hasPetProfile", "true");
+            } else {
+              localStorage.removeItem("hasPetProfile");
+            }
+            setHasProfile(isChecked);
+          }}
+          className="w-4 h-4 cursor-pointer accent-[#1B6CA8]"
+        />
+        <label>Demo: Pet Profile Created</label>
+      </div>
 
       <main className="w-full flex flex-col items-center flex-grow pt-6 lg:pt-8">
         {/* Section 1: Hero Banner */}
@@ -90,6 +119,52 @@ export default function TokoPage() {
             </div>
           </Link>
         </section>
+
+        {/* State A: Recommended For Your Pet */}
+        {hasProfile === true && (
+          <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-16">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
+              <h2 className="text-[#191C1E] text-3xl md:text-4xl font-bold font-serif">
+                Recommended For Your Pet
+              </h2>
+              <Link href="/shop/personalized" className="bg-[#005387] hover:bg-[#003D63] transition-colors text-white font-medium py-3 px-6 rounded-xl shadow-md">
+                View detail
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 items-stretch">
+              {featuredProducts.map((prod, idx) => (
+                <div key={idx} className="w-full h-full flex flex-col">
+                  <ProductCard
+                    image={prod.image}
+                    name={prod.name}
+                    price={prod.price}
+                    tags={prod.tags}
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* State B: Banner Prompting Profile Creation */}
+        {hasProfile === false && (
+          <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-16">
+            <div className="w-full bg-[#1B6CA8] rounded-[24px] overflow-hidden flex flex-col md:flex-row items-center p-8 md:p-12 gap-8 shadow-sm">
+              <div className="w-32 h-32 md:w-48 md:h-48 bg-white/10 rounded-full flex items-center justify-center shrink-0 border border-white/20">
+                <Image src="/images/UserPet.png" alt="Pet illustration" width={140} height={140} className="object-contain" />
+              </div>
+              <div className="flex-1 text-center md:text-left flex flex-col items-center md:items-start max-w-2xl">
+                <h3 className="text-white text-2xl md:text-3xl font-serif font-bold mb-6 leading-tight">
+                  Create a pet profile to unlock personalized product suggestions and subscription recommendations.
+                </h3>
+                <Link href="/shop/personalized/create" className="bg-[#F26641] hover:bg-[#BF4A28] transition-colors text-white font-bold py-4 px-8 rounded-xl shadow-md">
+                  Create Pet Profile
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Section 2: Product Cards Row */}
         <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-16">

@@ -60,8 +60,8 @@ export default function Navbar() {
                 <Link href="/langganan" className={`${isActive('/langganan') ? 'text-[#F26641]' : 'text-[#1A1A1A] opacity-80 hover:opacity-100'} transition-opacity text-[15px] font-semibold tracking-[0.28px]`}>
                   Langganan
                 </Link>
-                <Link href="/dampak" className={`${isActive('/dampak') ? 'text-[#F26641]' : 'text-[#1A1A1A] opacity-80 hover:opacity-100'} transition-opacity text-[15px] font-semibold tracking-[0.28px]`}>
-                  Dampak
+                <Link href="/majalah" className={`${isActive('/majalah') ? 'text-[#F26641]' : 'text-[#1A1A1A] opacity-80 hover:opacity-100'} transition-opacity text-[15px] font-semibold tracking-[0.28px]`}>
+                  Majalah
                 </Link>
                 <Link href="/suplier-portal" className={`${isActive('/suplier-portal') ? 'text-[#F26641]' : 'text-[#1A1A1A] opacity-80 hover:opacity-100'} transition-opacity text-[15px] font-semibold tracking-[0.28px]`}>
                   Suplier Portal
