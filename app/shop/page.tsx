@@ -6,63 +6,93 @@ import ProductCard from "@/components/ProductCard";
 import SubscriptionCard from "@/components/SubscriptionCard";
 import Image from "next/image";
 import Link from "next/link";
-import { PawPrint, ArrowRight, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
+import { PawPrint, ArrowRight, ShoppingCart, ChevronLeft, ChevronRight, Check } from "lucide-react";
 
 export default function TokoPage() {
-  const [hasProfile, setHasProfile] = useState<boolean | null>(null);
+  const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
+  const [regularProducts, setRegularProducts] = useState<any[]>([]);
+  const [subscriptionPlans, setSubscriptionPlans] = useState<any[]>([]);
+  const [hasProfile, setHasProfile] = useState(false);
 
   useEffect(() => {
-    const profileExists = localStorage.getItem("hasPetProfile") === "true";
-    setHasProfile(profileExists);
+    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    setHasProfile(loggedIn);
+
+    async function fetchFeatured() {
+      try {
+        const res = await fetch("/api/products");
+        if (res.ok) {
+          const data = await res.json();
+          const allProducts = data?.data?.products || [];
+          // Pick 4 random or first 4 products as featured (any category)
+          setFeaturedProducts(allProducts.slice(0, 4));
+        }
+      } catch (err) {
+        console.error("Failed to fetch featured products", err);
+      }
+    }
+
+    async function fetchRegular() {
+      try {
+        const params = new URLSearchParams();
+        params.append('excludeCategory', 'Subscription');
+        params.append('excludeCategory', 'Bundle');
+        const res = await fetch(`/api/products?${params.toString()}`);
+        if (res.ok) {
+          const data = await res.json();
+          const allProducts = data?.data?.products || [];
+          setRegularProducts(allProducts.slice(0, 8));
+        }
+      } catch (err) {
+        console.error("Failed to fetch regular products", err);
+      }
+    }
+
+    async function fetchSubscriptions() {
+      try {
+        const res = await fetch(`/api/products?category=Subscription`);
+        if (res.ok) {
+          const data = await res.json();
+          const subs = data?.data?.products || [];
+          
+          if (subs.length > 0) {
+            setSubscriptionPlans(subs.slice(0, 3));
+          } else {
+            // Fallback mock data if DB is empty
+            setSubscriptionPlans([
+              { id: "sub1", imageUrl: "/images/sub1.png", name: "Kotak Ocean Omega", description: "Pengiriman bulanan kotak ikan premium kami", price: 375000 },
+              { id: "sub2", imageUrl: "/images/sub2.png", name: "Kotak Hewan Aktif", description: "Cemilan protein energi tinggi untuk hewan peliharaan aktif", price: 450000 },
+              { id: "sub3", imageUrl: "/images/sub3.png", name: "Kotak Perawatan Senior", description: "Cemilan lembut, mudah dikunyah dengan dukungan sendi", price: 345000 },
+            ]);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch subscriptions", err);
+      }
+    }
+
+    fetchFeatured();
+    fetchRegular();
+    fetchSubscriptions();
   }, []);
 
-  const featuredProducts = [
-    { image: "/images/product1.png", name: "Wild Salmon Jerky", price: "$14.99", tags: ["High Omega-3", "Single Ingredient"] },
-    { image: "/images/product2.png", name: "Cod & Shrimp Bites", price: "$9.99", tags: ["Grain-Free", "Low Calorie"] },
-    { image: "/images/product3.png", name: "Pure Salmon Oil", price: "$24.00", tags: ["Skin & Coat", "Wild-Caught"] },
-    { image: "/images/product4.png", name: "Atlantic Topper Mix", price: "$18.25", tags: ["Digestive Health", "Freeze-Dried"] },
-  ];
-
-  const subscriptionPlans = [
-    { image: "/images/sub1.png", name: "Ocean Omega Box", desc: "Monthly delivery of our premium fish box", price: "$24.99" },
-    { image: "/images/sub2.png", name: "Active Pet Box", desc: "High-energy protein snacks for active pets", price: "$29.99" },
-    { image: "/images/sub3.png", name: "Senior Care Box", desc: "Soft, easy-to-chew treats with joint support", price: "$22.99" },
-  ];
-
   const collections = [
-    { image: "/images/cattreats.png", name: "Cat Treats" },
-    { image: "/images/dogtreats.png", name: "Dog Treats" },
-    { image: "/images/functionaltreats.png", name: "Functional" },
-    { image: "/images/subscriptionbox.png", name: "Sub Boxes" },
+    { image: "/images/cattreats.png", name: "Cemilan Kucing", href: "/shop/products?petType=Cat" },
+    { image: "/images/dogtreats.png", name: "Cemilan Anjing", href: "/shop/products?petType=Dog" },
+    { image: "/images/functionaltreats.png", name: "Fungsional", href: "/shop/products?category=Functional" },
+    { image: "/images/subscriptionbox.png", name: "Kotak Langganan", href: "/shop/subscriptions" },
   ];
 
   return (
     <div className="min-h-screen bg-[#F7F9FC] font-sans text-[#1A1A1A] flex flex-col relative">
       <Navbar />
 
-      {/* Dev Demo Toggle */}
-      <div className="w-full bg-[#D6E8F5] p-3 text-sm font-bold text-[#1B6CA8] flex justify-center items-center gap-3">
-        <input 
-          type="checkbox" 
-          checked={!!hasProfile} 
-          onChange={(e) => {
-            const isChecked = e.target.checked;
-            if (isChecked) {
-              localStorage.setItem("hasPetProfile", "true");
-            } else {
-              localStorage.removeItem("hasPetProfile");
-            }
-            setHasProfile(isChecked);
-          }}
-          className="w-4 h-4 cursor-pointer accent-[#1B6CA8]"
-        />
-        <label>Demo: Pet Profile Created</label>
-      </div>
+
 
       <main className="w-full flex flex-col items-center flex-grow pt-6 lg:pt-8">
         {/* Section 1: Hero Banner */}
         <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-8 md:pb-12 lg:pb-16">
-          <Link href="/shop/subscriptions/1" className="w-full relative overflow-hidden rounded-2xl bg-[#ECEEF1] shadow-xl min-h-[320px] md:min-h-[400px] lg:h-[500px] flex items-center group block">
+          <Link href="/shop/subscriptions/sub1" className="w-full relative overflow-hidden rounded-2xl bg-[#ECEEF1] shadow-xl min-h-[320px] md:min-h-[400px] lg:h-[500px] flex items-center group block">
             <Image
               src="/images/featuredmainbanner.png"
               alt="Ocean Omega Box Background"
@@ -81,9 +111,11 @@ export default function TokoPage() {
 
                 {/* Feature Tags */}
                 <div className="flex flex-col gap-3 mb-6">
-                  {["High Omega-3", "Grain-Free"].map((tag) => (
+                  {["Tinggi Omega-3", "Bebas Biji-bijian"].map((tag) => (
                     <div key={tag} className="flex items-center gap-3">
-                      <div className="w-4 h-4 bg-white lg:bg-[#005387] rounded-sm shrink-0 shadow-sm" />
+                      <div className="w-5 h-5 rounded-full bg-[#1B6CA8] lg:bg-[#005387] flex items-center justify-center flex-shrink-0 shadow-sm">
+                        <Check className="text-white w-3 h-3" strokeWidth={3} />
+                      </div>
                       <span className="text-white lg:text-[#005387] text-base font-semibold tracking-wide drop-shadow-sm lg:drop-shadow-none">
                         {tag}
                       </span>
@@ -92,13 +124,13 @@ export default function TokoPage() {
                 </div>
 
                 {/* Price */}
-                <div className="text-white lg:text-[#F26641] text-3xl font-bold mb-8 drop-shadow-md lg:drop-shadow-none">
-                  $24.99
+                <div className="text-[#F26641] text-3xl font-bold font-serif mb-6 drop-shadow-sm lg:drop-shadow-none">
+                  Rp 375.000
                 </div>
 
                 {/* Add to Cart Button */}
                 <div className="w-full sm:w-auto bg-[#F26641] group-hover:bg-[#D55331] transition-colors text-white font-semibold py-4 px-8 rounded-xl flex justify-center items-center gap-2 shadow-lg group-hover:-translate-y-1 group-hover:shadow-xl">
-                  <span>View Details</span>
+                  <span>Lihat Detail</span>
                 </div>
               </div>
             </div>
@@ -120,15 +152,15 @@ export default function TokoPage() {
           </Link>
         </section>
 
-        {/* State A: Recommended For Your Pet */}
-        {hasProfile === true && (
+        {/* Recommended For Your Pet or Create Profile Banner */}
+        {hasProfile ? (
           <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-16">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
               <h2 className="text-[#191C1E] text-3xl md:text-4xl font-bold font-serif">
-                Recommended For Your Pet
+                Rekomendasi Untuk Hewan Peliharaan Anda
               </h2>
               <Link href="/shop/personalized" className="bg-[#005387] hover:bg-[#003D63] transition-colors text-white font-medium py-3 px-6 rounded-xl shadow-md">
-                View detail
+                Lihat detail
               </Link>
             </div>
 
@@ -136,30 +168,32 @@ export default function TokoPage() {
               {featuredProducts.map((prod, idx) => (
                 <div key={idx} className="w-full h-full flex flex-col">
                   <ProductCard
-                    image={prod.image}
+                    id={prod.id}
+                    image={prod.imageUrl || "/images/product1.png"}
                     name={prod.name}
-                    price={prod.price}
-                    tags={prod.tags}
+                    price={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(prod.price)}
                   />
                 </div>
               ))}
             </div>
           </section>
-        )}
-
-        {/* State B: Banner Prompting Profile Creation */}
-        {hasProfile === false && (
+        ) : (
           <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-16">
-            <div className="w-full bg-[#1B6CA8] rounded-[24px] overflow-hidden flex flex-col md:flex-row items-center p-8 md:p-12 gap-8 shadow-sm">
-              <div className="w-32 h-32 md:w-48 md:h-48 bg-white/10 rounded-full flex items-center justify-center shrink-0 border border-white/20">
-                <Image src="/images/UserPet.png" alt="Pet illustration" width={140} height={140} className="object-contain" />
+            <div className="w-full bg-[#1B6CA8] rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
+              <div className="flex flex-col text-white max-w-2xl">
+                <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
+                  Rekomendasi yang Dipersonalisasi untuk Hewan Anda
+                </h2>
+                <p className="text-[#D6E8F5] text-lg">
+                  Buat profil hewan peliharaan Anda untuk mendapatkan rekomendasi produk yang disesuaikan dengan kebutuhan nutrisi spesifik mereka.
+                </p>
               </div>
-              <div className="flex-1 text-center md:text-left flex flex-col items-center md:items-start max-w-2xl">
-                <h3 className="text-white text-2xl md:text-3xl font-serif font-bold mb-6 leading-tight">
-                  Create a pet profile to unlock personalized product suggestions and subscription recommendations.
-                </h3>
-                <Link href="/shop/personalized/create" className="bg-[#F26641] hover:bg-[#BF4A28] transition-colors text-white font-bold py-4 px-8 rounded-xl shadow-md">
-                  Create Pet Profile
+              <div className="w-full md:w-auto flex-shrink-0">
+                <Link
+                  href="/profile?create=true"
+                  className="block w-full text-center bg-[#F26641] hover:bg-[#BF4A28] transition-colors text-white font-bold py-4 px-8 rounded-xl shadow-md text-lg"
+                >
+                  Buat Profil Hewan Peliharaan
                 </Link>
               </div>
             </div>
@@ -170,21 +204,21 @@ export default function TokoPage() {
         <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-16">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
             <h2 className="text-[#191C1E] text-3xl md:text-4xl font-bold font-serif">
-              Our Products
+              Produk Kami
             </h2>
             <Link href="/shop/products" className="bg-[#005387] hover:bg-[#003D63] transition-colors text-white font-medium py-3 px-6 rounded-xl shadow-md">
-              View Details
+              Lihat Detail
             </Link>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 items-stretch">
-            {[...featuredProducts, ...featuredProducts].map((prod, idx) => (
+            {regularProducts.map((prod, idx) => (
               <div key={idx} className="w-full h-full flex flex-col">
                 <ProductCard
-                  image={prod.image}
+                  id={prod.id}
+                  image={prod.imageUrl || "/images/product1.png"}
                   name={prod.name}
-                  price={prod.price}
-                  tags={prod.tags}
+                  price={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(prod.price)}
                 />
               </div>
             ))}
@@ -196,10 +230,10 @@ export default function TokoPage() {
           <div className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 mx-auto flex flex-col gap-10">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
               <h2 className="text-[#191C1E] text-2xl md:text-3xl lg:text-4xl font-bold font-serif">
-                Subscription Spotlight
+                Sorotan Langganan
               </h2>
               <button className="bg-[#005387] hover:bg-[#003D63] transition-colors text-white font-medium py-3 px-6 rounded-xl shadow-md w-full sm:w-auto">
-                View All Plans
+                Lihat Semua Paket
               </button>
             </div>
 
@@ -207,10 +241,11 @@ export default function TokoPage() {
               {subscriptionPlans.map((plan, idx) => (
                 <SubscriptionCard
                   key={idx}
-                  image={plan.image}
+                  href={`/shop/subscriptions/${plan.id}`}
+                  image={plan.imageUrl || plan.image}
                   name={plan.name}
-                  desc={plan.desc}
-                  price={plan.price}
+                  desc={plan.description || plan.desc}
+                  price={typeof plan.price === 'number' ? new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(plan.price) : plan.price}
                 />
               ))}
             </div>
@@ -221,12 +256,12 @@ export default function TokoPage() {
         <section className="w-full flex justify-center py-16 lg:py-24">
           <div className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 flex flex-col gap-10">
             <h2 className="text-[#191C1E] text-2xl md:text-3xl lg:text-4xl font-bold font-serif">
-              Shop by Collection
+              Belanja Berdasarkan Koleksi
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {collections.map((col, idx) => (
-                <Link href="/shop/products" key={idx} className="group relative w-full h-[250px] md:h-[300px] lg:h-[350px] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block">
+                <Link href={col.href} key={idx} className="group relative w-full h-[250px] md:h-[300px] lg:h-[350px] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block">
                   <Image src={col.image} alt={col.name} fill className="object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-black/90 transition-colors" />
                   <div className="absolute left-6 bottom-6 text-white text-2xl font-bold font-serif flex items-center gap-2">
@@ -247,11 +282,11 @@ export default function TokoPage() {
             </div>
 
             <h2 className="text-[#191C1E] text-3xl md:text-5xl font-bold font-serif leading-tight">
-              Ready to dive deeper?
+              Siap untuk menjelajah lebih dalam?
             </h2>
 
             <Link href="/shop/products" className="bg-[#005387] hover:bg-[#003D63] text-white font-semibold py-4 px-8 rounded-xl inline-flex items-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">
-              Explore All Products
+              Jelajahi Semua Produk
               <ArrowRight size={20} />
             </Link>
           </div>
@@ -267,7 +302,7 @@ export default function TokoPage() {
               Paws&amp;Fin
             </div>
             <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-[#E0E3E6] text-lg">
-              {["Privacy Policy", "Terms of Service", "Sustainability Report", "Contact Us"].map((link) => (
+              {["Kebijakan Privasi", "Ketentuan Layanan", "Laporan Keberlanjutan", "Hubungi Kami"].map((link) => (
                 <Link key={link} href="#" className="hover:text-white transition-colors">
                   {link}
                 </Link>
@@ -277,7 +312,7 @@ export default function TokoPage() {
 
           {/* Bottom Row */}
           <div className="text-center md:text-left text-[#E0E3E6]/60 text-base">
-            © 2024 Paws&amp;Fin. Committed to oceanic integrity and pet vitality.
+            © 2024 Paws&amp;Fin. Berkomitmen pada integritas laut dan vitalitas hewan peliharaan.
           </div>
         </div>
       </footer>

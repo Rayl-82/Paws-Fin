@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// --- USER & AUTHENTICATION ---
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(CUSTOMER)
+  createdAt    DateTime @default(now())
+
+  // Relationships (Required for Prisma mapping)
+  pets          Pet[]
+  orders        Order[]
+  subscriptions Subscription[]
+  cartItems     CartItem[]
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+// --- PET PROFILES ---
+model Pet {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  petName         String
+  species         String
+  breed           String?
+  age             Int?
+  weight          Float?
+  activityLevel   String?
+  healthCondition String?
+
+  createdAt DateTime @default(now())
+}
+
+// --- E-COMMERCE: PRODUCTS ---
+model Product {
+  id          String  @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  stock       Int     @default(0)
+  imageUrl        String?
+  category        String?
+  features        String[] // E.g., benefits for subscriptions or bundles
+  billingInterval String?  // E.g., "MONTHLY" for subscriptions
+
+  createdAt DateTime @default(now())
+
+  // Relationships (Required for Prisma mapping)
+  orderItems OrderItem[]
+  cartItems  CartItem[]
+}
+
+// --- SHOPPING CART ---
+model CartItem {
+  id        String  @id @default(uuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int     @default(1)
+}
+
+// --- ORDERS & CHECKOUT ---
+model Order {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  totalPrice      Float
+  status          String   @default("PENDING")
+  shippingAddress String?
+  notes           String?
+  createdAt       DateTime @default(now())
+
+  // Relationships
+  orderItems OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  quantity Int
+  price    Float // Price at time of purchase
+}
+
+// --- ACTIVE USER SUBSCRIPTIONS ---
+model Subscription {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  planName     String
+  status       String    @default("ACTIVE")
+  startDate    DateTime  @default(now())
+  nextDelivery DateTime?
+}

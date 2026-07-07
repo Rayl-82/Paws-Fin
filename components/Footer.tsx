@@ -9,7 +9,7 @@ export default function Footer() {
           <div className="flex flex-col gap-6">
             <h3 className="font-serif text-3xl font-bold text-white tracking-tight">Paws&Fin</h3>
             <p className="text-[#D6E8F5] leading-relaxed max-w-sm">
-              Deeply Committed to Oceanic Integrity & Pet Vitality. We transform underutilized marine by-products into premium, personalized nutrition for your furry friends.
+              Berkomitmen pada Integritas Laut & Vitalitas Hewan Peliharaan. Kami mengubah produk sampingan perikanan menjadi nutrisi premium dan personal untuk hewan peliharaan Anda.
             </p>
             <div className="flex items-center gap-4 mt-2">
               <a href="#" className="w-10 h-10 rounded-full bg-[#0C3350] font-bold text-sm flex items-center justify-center hover:bg-[#F26641] transition-colors">
@@ -26,43 +26,43 @@ export default function Footer() {
 
           {/* Links Col 1 */}
           <div className="flex flex-col gap-6">
-            <h4 className="font-bold text-lg text-white">Shop</h4>
+            <h4 className="font-bold text-lg text-white">Belanja</h4>
             <ul className="flex flex-col gap-4 text-[#D6E8F5]">
-              <li><Link href="#" className="hover:text-white transition-colors">All Products</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Subscription Box</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Treats & Chews</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Supplements</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors">Semua Produk</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors">Kotak Langganan</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors">Cemilan & Kunyahan</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors">Suplemen</Link></li>
             </ul>
           </div>
 
           {/* Links Col 2 */}
           <div className="flex flex-col gap-6">
-            <h4 className="font-bold text-lg text-white">About</h4>
+            <h4 className="font-bold text-lg text-white">Tentang</h4>
             <ul className="flex flex-col gap-4 text-[#D6E8F5]">
-              <li><Link href="#" className="hover:text-white transition-colors">Our Story</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Sustainability Impact</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Sourcing</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Careers</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors">Cerita Kami</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors">Dampak Keberlanjutan</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors">Sumber Bahan</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors">Karir</Link></li>
             </ul>
           </div>
 
           {/* Links Col 3 */}
           <div className="flex flex-col gap-6">
-            <h4 className="font-bold text-lg text-white">Support</h4>
+            <h4 className="font-bold text-lg text-white">Bantuan</h4>
             <ul className="flex flex-col gap-4 text-[#D6E8F5]">
-              <li><Link href="#" className="hover:text-white transition-colors">Contact Us</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors">Hubungi Kami</Link></li>
               <li><Link href="#" className="hover:text-white transition-colors">FAQ</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Shipping & Returns</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Track Order</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors">Pengiriman & Pengembalian</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors">Lacak Pesanan</Link></li>
             </ul>
           </div>
         </div>
 
         <div className="pt-8 border-t border-[#0C3350] flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-[#7AB3D4]">
-          <p>© 2024 Paws&Fin. All rights reserved.</p>
+          <p>© 2024 Paws&Fin. Hak cipta dilindungi undang-undang.</p>
           <div className="flex gap-6">
-            <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="#" className="hover:text-white transition-colors">Kebijakan Privasi</Link>
+            <Link href="#" className="hover:text-white transition-colors">Ketentuan Layanan</Link>
           </div>
         </div>
       </div>

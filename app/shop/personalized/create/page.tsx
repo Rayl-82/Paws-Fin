@@ -41,9 +41,40 @@ export default function CreatePetProfile() {
   const nextStep = () => setStep(prev => Math.min(prev + 1, totalSteps + 1));
   const prevStep = () => setStep(prev => Math.max(prev - 1, 1));
 
-  const completeProfile = () => {
-    localStorage.setItem("hasPetProfile", "true");
-    setStep(6); // Success State
+  const completeProfile = async () => {
+    try {
+      const userRes = await fetch("/api/auth/me");
+      const userData = await userRes.json();
+      
+      if (userData.authenticated) {
+        // Save to DB
+        await fetch("/api/pets", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            petName: formData.name,
+            species: formData.species,
+            breed: "", // We didn't collect breed in the UI
+            age: formData.dob ? new Date().getFullYear() - new Date(formData.dob).getFullYear() : 0,
+            weight: formData.weight,
+            activityLevel: formData.activityLevel,
+            healthCondition: formData.primaryGoal
+          })
+        });
+      } else {
+        // Save to localStorage for guests
+        localStorage.setItem("petProfileData", JSON.stringify(formData));
+      }
+      
+      localStorage.setItem("hasPetProfile", "true");
+      setStep(6); // Success State
+    } catch (err) {
+      console.error("Failed to complete profile", err);
+      // Fallback
+      localStorage.setItem("petProfileData", JSON.stringify(formData));
+      localStorage.setItem("hasPetProfile", "true");
+      setStep(6);
+    }
   };
 
   // --- Step 1: Basic Information ---

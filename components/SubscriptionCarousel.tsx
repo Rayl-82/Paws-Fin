@@ -5,6 +5,7 @@ import SubscriptionCard from "@/components/SubscriptionCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Plan {
+  id: string;
   image: string;
   name: string;
   desc: string;
@@ -16,11 +17,11 @@ interface SubscriptionCarouselProps {
   subtitle?: string;
   plans: Plan[];
   isMonthly: boolean;
-  href: string;
+  baseHref: string;
   buttonText: string;
 }
 
-export default function SubscriptionCarousel({ title, subtitle, plans, isMonthly, href, buttonText }: SubscriptionCarouselProps) {
+export default function SubscriptionCarousel({ title, subtitle, plans, isMonthly, baseHref, buttonText }: SubscriptionCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -69,7 +70,7 @@ export default function SubscriptionCarousel({ title, subtitle, plans, isMonthly
               name={plan.name}
               desc={plan.desc}
               price={plan.price}
-              href={href}
+              href={`${baseHref}/${plan.id}`}
               buttonText={buttonText}
               isMonthly={isMonthly}
             />

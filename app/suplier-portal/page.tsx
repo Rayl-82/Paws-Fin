@@ -35,7 +35,7 @@ export default function SuplierPortal() {
               <p className="text-gray-200 text-base md:text-xl mb-6 md:mb-10 max-w-2xl leading-relaxed">
                 Partner with us to transform underutilized marine by-products into premium, sustainable pet nutrition.
               </p>
-              <Link href="#contact" className="inline-flex justify-center bg-[#F26641] hover:bg-[#BF4A28] text-white font-semibold py-3 px-6 md:py-4 md:px-8 rounded-xl transition-all shadow-md hover:-translate-y-1 w-full md:w-max">
+              <Link href="/suplier-portal/apply" className="inline-flex justify-center bg-[#F26641] hover:bg-[#BF4A28] text-white font-semibold py-3 px-6 md:py-4 md:px-8 rounded-xl transition-all shadow-md hover:-translate-y-1 w-full md:w-max">
                 Become a Supplier
               </Link>
             </div>
@@ -239,8 +239,8 @@ export default function SuplierPortal() {
             <p className="text-[#546E7A] text-lg md:text-xl mb-12 max-w-2xl leading-relaxed">
               Whether you're a local fishery, seafood processor, or distributor, we'd love to explore a long-term partnership with you.
             </p>
-            <Link href="mailto:partnership@pawsnfin.com" className="bg-[#1B6CA8] hover:bg-[#124E7A] text-white font-semibold py-4 px-10 rounded-xl transition-all shadow-lg hover:-translate-y-1 text-lg">
-              Contact Our Team
+            <Link href="/suplier-portal/apply" className="bg-[#1B6CA8] hover:bg-[#124E7A] text-white font-semibold py-4 px-10 rounded-xl transition-all shadow-lg hover:-translate-y-1 text-lg">
+              Submit Application
             </Link>
           </div>
         </section>

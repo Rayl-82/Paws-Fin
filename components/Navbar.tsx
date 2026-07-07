@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -10,6 +10,62 @@ export default function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [cartCount, setCartCount] = useState(0);
+  
+  // Search State
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+
+  const fetchCartCount = async (isAuth: boolean) => {
+    if (isAuth) {
+      try {
+        const res = await fetch('/api/cart');
+        if (res.ok) {
+          const data = await res.json();
+          const items = data.data?.items || [];
+          setCartCount(items.reduce((acc: number, item: any) => acc + item.quantity, 0));
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      const guestCart = JSON.parse(localStorage.getItem('guestCart') || '[]');
+      setCartCount(guestCart.reduce((acc: number, item: any) => acc + item.quantity, 0));
+    }
+  };
+
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          setIsAuthenticated(true);
+          fetchCartCount(true);
+        } else {
+          setIsAuthenticated(false);
+          fetchCartCount(false);
+        }
+      } catch (err) {
+        setIsAuthenticated(false);
+        fetchCartCount(false);
+      }
+    }
+    checkAuth();
+
+    // Listen for custom cart update events
+    const handleCartUpdate = () => {
+      // Re-check auth state synchronously if possible, or just use the current state
+      // Since state might be stale in event listener, we check localStorage directly if not authenticated
+      const token = document.cookie.includes('token'); // simplistic check
+      fetchCartCount(token);
+    };
+
+    window.addEventListener('cartUpdated', handleCartUpdate);
+    return () => window.removeEventListener('cartUpdated', handleCartUpdate);
+  }, []);
 
   const isActive = (path: string) => pathname === path;
   const isShopActive = pathname?.startsWith("/shop");
@@ -22,6 +78,39 @@ export default function Navbar() {
       document.body.style.overflow = 'unset';
     }
   }
+
+  // Handle Search Fetching
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+      return;
+    }
+    const timer = setTimeout(async () => {
+      setIsSearching(true);
+      try {
+        const res = await fetch(`/api/products?search=${encodeURIComponent(searchQuery)}`);
+        const data = await res.json();
+        setSearchResults(data?.data?.products?.slice(0, 4) || []);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 300); // 300ms debounce
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Click outside to close search
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.search-container')) {
+        setIsSearchOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <>
@@ -64,7 +153,7 @@ export default function Navbar() {
                   Majalah
                 </Link>
                 <Link href="/suplier-portal" className={`${isActive('/suplier-portal') ? 'text-[#F26641]' : 'text-[#1A1A1A] opacity-80 hover:opacity-100'} transition-opacity text-[15px] font-semibold tracking-[0.28px]`}>
-                  Suplier Portal
+                  Portal Suplier
                 </Link>
               </div>
             </div>
@@ -73,13 +162,21 @@ export default function Navbar() {
             <div className="flex items-center gap-4 lg:gap-[24px]">
               <Link href="/cart" className="relative text-[#1B6CA8] hover:opacity-80 transition-opacity flex items-center justify-center p-1 lg:p-0">
                 <ShoppingCart className="w-[24px] h-[24px] lg:w-[22px] lg:h-[22px]" />
-                <div className="absolute top-0 right-0 lg:-top-[8px] lg:-right-[8px] w-4 h-4 bg-[#F26641] rounded-full flex items-center justify-center border-[1.5px] border-white">
-                  <span className="text-white text-[9px] font-bold leading-none">0</span>
-                </div>
+                {cartCount > 0 && (
+                  <div className="absolute top-0 right-0 lg:-top-[8px] lg:-right-[8px] w-4 h-4 bg-[#F26641] rounded-full flex items-center justify-center border-[1.5px] border-white">
+                    <span className="text-white text-[9px] font-bold leading-none">{cartCount}</span>
+                  </div>
+                )}
               </Link>
-              <Link href="/profile" className="text-[#1B6CA8] hover:opacity-80 transition-opacity flex items-center justify-center p-1 lg:p-0">
-                <UserCircle className="w-[28px] h-[28px] lg:w-[22px] lg:h-[22px]" />
-              </Link>
+              {isAuthenticated === false ? (
+                <Link href="/auth" className="hidden lg:flex items-center justify-center bg-[#F26641] hover:bg-[#BF4A28] text-white px-4 py-1.5 rounded-lg text-sm font-bold transition-colors">
+                  Masuk
+                </Link>
+              ) : (
+                <Link href="/profile" className="text-[#1B6CA8] hover:opacity-80 transition-opacity flex items-center justify-center p-1 lg:p-0">
+                  <UserCircle className="w-[28px] h-[28px] lg:w-[22px] lg:h-[22px]" />
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -93,22 +190,30 @@ export default function Navbar() {
                 <Search className="w-5 h-5 text-[#7C8597] flex-shrink-0" />
                 <input 
                   type="text" 
-                  placeholder="Search products..." 
+                  placeholder="Cari produk..." 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => setIsSearchOpen(true)}
                   className="w-full h-full bg-transparent outline-none border-none text-[14px] text-[#656C7B] ml-2 placeholder-[#656C7B]"
                 />
+                {searchQuery && (
+                  <button onClick={() => { setSearchQuery(""); setSearchResults([]); }} className="p-1 hover:bg-gray-100 rounded-full">
+                    <X className="w-4 h-4 text-gray-500" />
+                  </button>
+                )}
               </div>
             </div>
             {/* Mobile Categories (Horizontal Pills) */}
             <div className="w-full px-4 pb-3 flex items-center justify-between gap-3">
               <div className="flex-1 overflow-x-auto no-scrollbar flex items-center gap-2">
                 <Link href="/shop" className={`flex-shrink-0 px-4 py-1.5 rounded-full text-[13px] font-semibold transition-colors border ${isActive('/shop') ? 'bg-[#1B6CA8] text-white border-[#1B6CA8]' : 'bg-white text-[#546E7A] border-[#E0E7EF]'}`}>
-                  Featured
+                  Unggulan
                 </Link>
                 <Link href="/shop/products" className={`flex-shrink-0 px-4 py-1.5 rounded-full text-[13px] font-semibold transition-colors border ${isActive('/shop/products') ? 'bg-[#1B6CA8] text-white border-[#1B6CA8]' : 'bg-white text-[#546E7A] border-[#E0E7EF]'}`}>
-                  Products
+                  Semua Produk
                 </Link>
                 <Link href="/shop/personalized" className={`flex-shrink-0 px-4 py-1.5 rounded-full text-[13px] font-semibold transition-colors border ${isActive('/shop/personalized') ? 'bg-[#1B6CA8] text-white border-[#1B6CA8]' : 'bg-white text-[#546E7A] border-[#E0E7EF]'}`}>
-                  Pet Picks
+                  Rekomendasi Hewan
                 </Link>
               </div>
 
@@ -131,24 +236,128 @@ export default function Navbar() {
               {/* Left: Sub-links */}
               <div className="flex items-center gap-[32px] h-full">
                 <Link href="/shop" className={`h-full flex items-center pt-[2px] transition-opacity ${isActive('/shop') ? 'border-b-2 border-[#F26641]' : 'opacity-80 hover:opacity-100'}`}>
-                  <span className={`${isActive('/shop') ? 'text-[#F26641]' : 'text-[#484848]'} text-[12px] font-semibold`}>Featured</span>
+                  <span className={`${isActive('/shop') ? 'text-[#F26641]' : 'text-[#484848]'} text-[12px] font-semibold`}>Unggulan</span>
                 </Link>
                 <Link href="/shop/products" className={`h-full flex items-center pt-[2px] transition-opacity ${isActive('/shop/products') ? 'border-b-2 border-[#F26641]' : 'opacity-80 hover:opacity-100'}`}>
                   <span className={`${isActive('/shop/products') ? 'text-[#F26641]' : 'text-[#484848]'} text-[12px] font-semibold`}>Semua Produk</span>
                 </Link>
                 <Link href="/shop/personalized" className={`h-full flex items-center pt-[2px] transition-opacity ${isActive('/shop/personalized') ? 'border-b-2 border-[#F26641]' : 'opacity-80 hover:opacity-100'}`}>
-                  <span className={`${isActive('/shop/personalized') ? 'text-[#F26641]' : 'text-[#484848]'} text-[12px] font-semibold`}>Pet Recommendation</span>
+                  <span className={`${isActive('/shop/personalized') ? 'text-[#F26641]' : 'text-[#484848]'} text-[12px] font-semibold`}>Rekomendasi Hewan</span>
                 </Link>
               </div>
 
               {/* Right: Search Bar */}
-              <div className="w-full max-w-[500px] h-[36px] bg-white rounded-[7px] border-[0.5px] border-[#B0BEC5] focus-within:border-[#1B6CA8] focus-within:border flex items-center px-3 transition-colors group">
-                <Search className="w-4 h-4 text-[#7C8597] flex-shrink-0" />
-                <input 
-                  type="text" 
-                  placeholder="Cari..." 
-                  className="w-full h-full bg-transparent outline-none border-none text-[12.5px] text-[#656C7B] ml-2 placeholder-[#656C7B]"
-                />
+              <div className="w-full max-w-[500px] relative search-container">
+                <div className="w-full h-[36px] bg-white rounded-[7px] border-[0.5px] border-[#B0BEC5] focus-within:border-[#1B6CA8] focus-within:border flex items-center px-3 transition-colors group z-10 relative">
+                  <Search className="w-4 h-4 text-[#7C8597] flex-shrink-0" />
+                  <input 
+                    type="text" 
+                    placeholder="Cari produk, kategori, dll..." 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onFocus={() => setIsSearchOpen(true)}
+                    className="w-full h-full bg-transparent outline-none border-none text-[12.5px] text-[#656C7B] ml-2 placeholder-[#656C7B]"
+                  />
+                  {searchQuery && (
+                    <button onClick={() => { setSearchQuery(""); setSearchResults([]); }} className="p-1 hover:bg-gray-100 rounded-full">
+                      <X className="w-3 h-3 text-gray-500" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Search Dropdown Overlay (Responsive) */}
+        {isShopActive && isSearchOpen && (
+          <div className="absolute top-full left-0 w-full bg-white shadow-xl border-t border-[#E0E7EF] z-50 search-container animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="w-full max-w-[1440px] mx-auto px-4 lg:px-[48px] py-6 lg:py-8 flex flex-col lg:flex-row gap-8 lg:gap-12 max-h-[80vh] overflow-y-auto">
+              {/* Left Column: Suggestions */}
+              <div className="w-full lg:w-[300px] flex-shrink-0 flex flex-col gap-4 lg:gap-6 lg:border-r border-[#E0E7EF] lg:pr-8">
+                <div>
+                  <h3 className="text-[#1B6CA8] font-bold text-xs uppercase tracking-wider mb-4">Saran</h3>
+                  <div className="flex flex-col gap-1">
+                    {searchQuery ? (
+                      <>
+                        <Link href={`/shop/products?search=${searchQuery}`} onClick={() => setIsSearchOpen(false)} className="px-3 py-2 text-sm text-[#1A1A1A] hover:bg-[#F0F4F8] rounded-lg transition-colors font-semibold flex items-center gap-2">
+                          <Search className="w-4 h-4 text-[#B0BEC5]" />
+                          {searchQuery}
+                        </Link>
+                        <Link href={`/shop/products?search=${searchQuery} treats`} onClick={() => setIsSearchOpen(false)} className="px-3 py-2 text-sm text-[#546E7A] hover:bg-[#F0F4F8] rounded-lg transition-colors flex items-center gap-2">
+                          <Search className="w-4 h-4 text-[#B0BEC5]" />
+                          {searchQuery} <span className="font-semibold text-[#1A1A1A]">treats</span>
+                        </Link>
+                        <Link href={`/shop/products?search=${searchQuery} cat`} onClick={() => setIsSearchOpen(false)} className="px-3 py-2 text-sm text-[#546E7A] hover:bg-[#F0F4F8] rounded-lg transition-colors flex items-center gap-2">
+                          <Search className="w-4 h-4 text-[#B0BEC5]" />
+                          {searchQuery} <span className="font-semibold text-[#1A1A1A]">untuk kucing</span>
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <Link href="/shop/products?category=Treats" onClick={() => setIsSearchOpen(false)} className="px-3 py-2 text-sm text-[#546E7A] hover:bg-[#F0F4F8] rounded-lg transition-colors flex items-center gap-2">
+                          <Search className="w-4 h-4 text-[#B0BEC5]" /> Healthy Treats
+                        </Link>
+                        <Link href="/shop/products?petType=Dog" onClick={() => setIsSearchOpen(false)} className="px-3 py-2 text-sm text-[#546E7A] hover:bg-[#F0F4F8] rounded-lg transition-colors flex items-center gap-2">
+                          <Search className="w-4 h-4 text-[#B0BEC5]" /> Dog Food
+                        </Link>
+                        <Link href="/shop/products?health=Joint Support" onClick={() => setIsSearchOpen(false)} className="px-3 py-2 text-sm text-[#546E7A] hover:bg-[#F0F4F8] rounded-lg transition-colors flex items-center gap-2">
+                          <Search className="w-4 h-4 text-[#B0BEC5]" /> Dukungan Sendi
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Product Results */}
+              <div className="flex-1 flex flex-col">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[#1B6CA8] font-bold text-xs uppercase tracking-wider">
+                    {searchQuery ? `Produk untuk "${searchQuery}"` : "Produk Populer"}
+                  </h3>
+                  {searchQuery && searchResults.length > 0 && (
+                    <Link href={`/shop/products?search=${searchQuery}`} onClick={() => setIsSearchOpen(false)} className="text-xs font-bold text-[#F26641] hover:underline">
+                      Lihat Semua Hasil ({searchResults.length})
+                    </Link>
+                  )}
+                </div>
+
+                {isSearching ? (
+                  <div className="flex-1 flex items-center justify-center min-h-[200px]">
+                    <div className="w-8 h-8 border-4 border-[#1B6CA8] border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                ) : searchResults.length > 0 ? (
+                  <div className="grid grid-cols-4 gap-4">
+                    {searchResults.map((product) => (
+                      <Link 
+                        key={product.id} 
+                        href={`/shop/products/${product.id}`}
+                        onClick={() => setIsSearchOpen(false)}
+                        className="flex flex-col gap-2 group cursor-pointer"
+                      >
+                        <div className="w-full aspect-square bg-[#F0F4F8] rounded-xl overflow-hidden relative p-2">
+                          <Image 
+                            src={product.imageUrl || "/images/product1.png"} 
+                            alt={product.name}
+                            fill
+                            className="object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                        <h4 className="text-sm font-bold font-serif text-[#1A1A1A] line-clamp-2 group-hover:text-[#1B6CA8] transition-colors">{product.name}</h4>
+                        <span className="text-[#F26641] font-bold text-sm">Rp {product.price.toLocaleString('id-ID')}</span>
+                      </Link>
+                    ))}
+                  </div>
+                ) : searchQuery ? (
+                  <div className="flex-1 flex items-center justify-center min-h-[200px] text-[#546E7A] text-sm">
+                    Tidak ada produk yang cocok dengan "{searchQuery}"
+                  </div>
+                ) : (
+                  <div className="flex-1 flex items-center justify-center min-h-[200px] text-[#546E7A] text-sm">
+                    Mulai ketik untuk mencari...
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -184,11 +393,11 @@ export default function Navbar() {
         
         <div className="flex-1 overflow-y-auto py-4 px-4 flex flex-col gap-2">
           {[
-            { name: "Home", path: "/" },
-            { name: "Marketplace", path: "/shop" },
-            { name: "Subscription", path: "/langganan" },
+            { name: "Beranda", path: "/" },
+            { name: "Toko", path: "/shop" },
+            { name: "Langganan", path: "/langganan" },
             { name: "Majalah", path: "/majalah" },
-            { name: "Supplier Portal", path: "/suplier-portal" },
+            { name: "Portal Suplier", path: "/suplier-portal" },
           ].map((item) => (
             <Link 
               key={item.path}
@@ -206,14 +415,24 @@ export default function Navbar() {
           ))}
           
           <div className="mt-8 border-t border-gray-100 pt-4">
-            <Link 
-              href="/profile" 
-              className="flex items-center gap-3 p-4 rounded-xl font-serif text-[16px] font-semibold text-[#1A1A1A] hover:bg-gray-50 transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              <UserCircle size={24} className="text-[#1B6CA8]" />
-              Login / Account
-            </Link>
+            {isAuthenticated === false ? (
+              <Link 
+                href="/auth" 
+                className="flex items-center gap-3 p-4 rounded-xl font-serif text-[16px] font-semibold text-white bg-[#F26641] hover:bg-[#BF4A28] transition-colors justify-center"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Masuk
+              </Link>
+            ) : (
+              <Link 
+                href="/profile" 
+                className="flex items-center gap-3 p-4 rounded-xl font-serif text-[16px] font-semibold text-[#1A1A1A] hover:bg-gray-50 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <UserCircle size={24} className="text-[#1B6CA8]" />
+                Akun
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -233,7 +452,7 @@ export default function Navbar() {
         }`}
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-100">
-          <span className="font-bold text-lg text-[#1A1A1A] font-serif">Filter Products</span>
+          <span className="font-bold text-lg text-[#1A1A1A] font-serif">Filter Produk</span>
           <button 
             onClick={() => setIsMobileFilterOpen(false)}
             className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors"
@@ -246,24 +465,24 @@ export default function Navbar() {
           {/* PET TYPE */}
           <div className="flex flex-col gap-3">
             <h4 className="text-[#1B6CA8] text-sm font-semibold uppercase tracking-wider mb-1">
-              Pet Type
+              Jenis Hewan
             </h4>
             <label className="flex items-center gap-3 cursor-pointer group">
               <input type="checkbox" className="w-5 h-5 rounded border-[#B0BEC5] text-[#1B6CA8] focus:ring-[#1B6CA8]" />
-              <span className="text-[#1A1A1A] text-base group-hover:text-[#1B6CA8] transition-colors">Dog</span>
+              <span className="text-[#1A1A1A] text-base group-hover:text-[#1B6CA8] transition-colors">Anjing</span>
             </label>
             <label className="flex items-center gap-3 cursor-pointer group">
               <input type="checkbox" className="w-5 h-5 rounded border-[#B0BEC5] text-[#1B6CA8] focus:ring-[#1B6CA8]" />
-              <span className="text-[#1A1A1A] text-base group-hover:text-[#1B6CA8] transition-colors">Cat</span>
+              <span className="text-[#1A1A1A] text-base group-hover:text-[#1B6CA8] transition-colors">Kucing</span>
             </label>
           </div>
 
           {/* HEALTH GOALS */}
           <div className="flex flex-col gap-3">
             <h4 className="text-[#1B6CA8] text-sm font-semibold uppercase tracking-wider mb-1">
-              Health Goals
+              Tujuan Kesehatan
             </h4>
-            {['Skin & Coat', 'Digestive Health', 'Joint Support', 'Weight Management'].map(item => (
+            {['Kesehatan Kulit & Bulu', 'Pencernaan', 'Dukungan Sendi', 'Manajemen Berat Badan'].map(item => (
               <label key={item} className="flex items-center gap-3 cursor-pointer group">
                 <input type="checkbox" className="w-5 h-5 rounded border-[#B0BEC5] text-[#1B6CA8] focus:ring-[#1B6CA8]" />
                 <span className="text-[#1A1A1A] text-base group-hover:text-[#1B6CA8] transition-colors">{item}</span>
@@ -274,9 +493,9 @@ export default function Navbar() {
           {/* PRODUCT TYPE */}
           <div className="flex flex-col gap-3">
             <h4 className="text-[#1B6CA8] text-sm font-semibold uppercase tracking-wider mb-1">
-              Product Type
+              Jenis Produk
             </h4>
-            {['Treats', 'Functional Treats', 'Subscription Boxes'].map(item => (
+            {['Cemilan', 'Cemilan Fungsional', 'Kotak Langganan'].map(item => (
               <label key={item} className="flex items-center gap-3 cursor-pointer group">
                 <input type="checkbox" className="w-5 h-5 rounded border-[#B0BEC5] text-[#1B6CA8] focus:ring-[#1B6CA8]" />
                 <span className="text-[#1A1A1A] text-base group-hover:text-[#1B6CA8] transition-colors">{item}</span>
@@ -287,7 +506,7 @@ export default function Navbar() {
           {/* PRICE RANGE */}
           <div className="flex flex-col gap-3">
             <h4 className="text-[#1B6CA8] text-sm font-semibold uppercase tracking-wider mb-1">
-              Price Range
+              Rentang Harga
             </h4>
             <div className="w-full h-1.5 bg-[#D6E8F5] rounded-full relative mt-2">
               <div className="absolute top-1/2 -translate-y-1/2 left-0 right-12 h-1.5 bg-[#1B6CA8] rounded-full"></div>
@@ -295,8 +514,8 @@ export default function Navbar() {
               <div className="absolute top-1/2 -translate-y-1/2 right-12 w-5 h-5 bg-[#FFFFFF] border-2 border-[#1B6CA8] rounded-full shadow cursor-pointer"></div>
             </div>
             <div className="flex justify-between items-center text-[#546E7A] text-sm font-bold mt-1">
-              <span>$0</span>
-              <span>$100+</span>
+              <span>Rp 0</span>
+              <span>Rp 1.500.000+</span>
             </div>
           </div>
 
@@ -305,7 +524,7 @@ export default function Navbar() {
           {/* IN STOCK ONLY */}
           <label className="flex items-center gap-3 cursor-pointer group">
             <input type="checkbox" className="w-5 h-5 rounded border-[#B0BEC5] text-[#1B6CA8] focus:ring-[#1B6CA8]" />
-            <span className="text-[#1A1A1A] text-base group-hover:text-[#1B6CA8] transition-colors">In Stock Only</span>
+            <span className="text-[#1A1A1A] text-base group-hover:text-[#1B6CA8] transition-colors">Hanya Tampilkan Stok Tersedia</span>
           </label>
         </div>
 
@@ -315,13 +534,13 @@ export default function Navbar() {
             onClick={() => setIsMobileFilterOpen(false)}
             className="w-1/3 py-3 rounded-xl border border-[#B0BEC5] text-[#546E7A] font-bold"
           >
-            Reset
+            Atur Ulang
           </button>
           <button 
             onClick={() => setIsMobileFilterOpen(false)}
             className="flex-1 py-3 bg-[#F26641] hover:bg-[#BF4A28] text-white rounded-xl font-bold shadow-sm transition-colors"
           >
-            Apply Filters
+            Terapkan Filter
           </button>
         </div>
       </div>
