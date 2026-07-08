@@ -2,7 +2,10 @@ import 'dotenv/config';
 import prisma from './lib/prisma';
 
 async function main() {
-  console.log('Clearing old products...');
+  console.log('Clearing old data...');
+  await prisma.orderItem.deleteMany({});
+  await prisma.order.deleteMany({});
+  await prisma.cartItem.deleteMany({});
   await prisma.product.deleteMany({});
 
   const productsData = [
