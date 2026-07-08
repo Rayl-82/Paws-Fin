@@ -17,7 +17,7 @@ export default async function LanggananPage() {
     orderBy: { createdAt: 'asc' },
   });
 
-  const subscriptionPlans = subscriptionPlansData.map(p => ({
+  const subscriptionPlans = subscriptionPlansData.map((p: any) => ({
     id: p.id,
     image: p.imageUrl || "/images/subscriptionbox.png",
     name: p.name,
@@ -25,7 +25,7 @@ export default async function LanggananPage() {
     price: `Rp ${p.price.toLocaleString('id-ID')}`
   }));
 
-  const bundlePlans = bundlesData.map(p => ({
+  const bundlePlans = bundlesData.map((p: any) => ({
     id: p.id,
     image: p.imageUrl || "/images/product1.png",
     name: p.name,
