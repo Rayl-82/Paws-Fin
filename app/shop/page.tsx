@@ -15,24 +15,8 @@ export default function TokoPage() {
   const [hasProfile, setHasProfile] = useState(false);
 
   useEffect(() => {
-    async function checkPetProfile() {
-      try {
-        const res = await fetch("/api/pets");
-        if (res.ok) {
-          const data = await res.json();
-          if (data?.data?.pets && data.data.pets.length > 0) {
-            setHasProfile(true);
-          } else {
-            setHasProfile(false);
-          }
-        } else {
-          setHasProfile(false);
-        }
-      } catch (err) {
-        setHasProfile(false);
-      }
-    }
-    checkPetProfile();
+    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    setHasProfile(loggedIn);
 
     async function fetchFeatured() {
       try {
