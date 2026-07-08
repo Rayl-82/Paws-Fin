@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Truck, CalendarOff, Crosshair, Leaf, ChevronDown } from "lucide-react";
 import prisma from "@/lib/prisma";
 
+export const dynamic = 'force-dynamic';
+
 export default async function LanggananPage() {
   const subscriptionPlansData = await prisma.product.findMany({
     where: { category: 'Subscription' },
