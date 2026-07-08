@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Use Prisma transaction for safe checkout
-    const order = await prisma.$transaction(async (tx) => {
+    const order = await prisma.$transaction(async (tx: any) => {
       // 1. Verify stock for all items
       let totalPrice = 0;
       for (const item of cartItems) {
