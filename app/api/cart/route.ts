@@ -17,14 +17,14 @@ export async function GET(req: NextRequest) {
       orderBy: { id: 'asc' }
     });
 
-    const items = cartItems.map(item => ({
+    const items = cartItems.map((item: any) => ({
       id: item.id,
       product: item.product,
       quantity: item.quantity,
       subtotal: item.quantity * item.product.price
     }));
 
-    const total = items.reduce((sum, item) => sum + item.subtotal, 0);
+    const total = items.reduce((sum: number, item: any) => sum + item.subtotal, 0);
 
     return successResponse({ items, total });
   } catch (error: any) {
