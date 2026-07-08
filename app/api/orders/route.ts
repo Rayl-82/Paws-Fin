@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
     const totalPrice = subtotal + shippingFee;
 
     // 3. Create order, order items, update stock, clear cart in a transaction
-    const order = await prisma.$transaction(async (tx) => {
+    const order = await prisma.$transaction(async (tx: any) => {
       // Create the order
       const newOrder = await tx.order.create({
         data: {
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
           notes,
           status: 'Processing',
           orderItems: {
-            create: cartItems.map(item => ({
+            create: cartItems.map((item: any) => ({
               productId: item.productId,
               quantity: item.quantity,
               price: item.product.price // Lock in the price

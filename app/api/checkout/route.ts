@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
           shippingAddress,
           notes,
           orderItems: {
-            create: cartItems.map((item) => ({
+            create: cartItems.map((item: any) => ({
               productId: item.productId,
               quantity: item.quantity,
               price: item.product.price // Snapshot price at checkout
