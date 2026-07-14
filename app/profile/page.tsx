@@ -18,7 +18,11 @@ import {
   Clock,
   Heart,
   LogOut,
-  Loader2
+  Loader2,
+  TreePine,
+  Activity,
+  ArrowRight,
+  Droplets
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -102,8 +106,24 @@ export default function ProfilePage() {
     return (
       <div className="min-h-screen bg-[#F7F9FC] flex flex-col">
         <Navbar />
-        <main className="flex-1 flex flex-col items-center justify-center gap-4 text-[#1B6CA8]">
-          <Loader2 className="w-12 h-12 animate-spin" />
+        <main className="flex-1 w-full py-8 lg:py-16 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-8 lg:gap-12 animate-pulse">
+          {/* Header Skeleton */}
+          <div className="bg-white rounded-[16px] border border-[#E0E7EF] p-6 lg:p-8 flex flex-col sm:flex-row items-center sm:items-start gap-6 h-auto sm:h-48">
+            <div className="w-24 h-24 lg:w-32 lg:h-32 bg-[#E0E7EF] rounded-full shrink-0"></div>
+            <div className="flex-1 w-full flex flex-col gap-3 mt-2 items-center sm:items-start">
+              <div className="h-8 bg-[#E0E7EF] rounded w-1/2"></div>
+              <div className="h-4 bg-[#E0E7EF] rounded w-1/3"></div>
+            </div>
+          </div>
+          
+          {/* Cards Skeleton */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-white rounded-2xl border border-[#E0E7EF] h-32"></div>
+            <div className="bg-white rounded-2xl border border-[#E0E7EF] h-32"></div>
+            <div className="bg-white rounded-2xl border border-[#E0E7EF] h-32"></div>
+          </div>
+          
+          <div className="h-64 bg-white rounded-[16px] border border-[#E0E7EF] w-full"></div>
         </main>
       </div>
     );
@@ -115,8 +135,6 @@ export default function ProfilePage() {
     <>
       <Navbar />
       
-
-
       <main className="min-h-screen bg-[#F7F9FC] py-8 lg:py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-8 lg:gap-12">
           
@@ -143,6 +161,118 @@ export default function ProfilePage() {
               </button>
             </div>
           </section>
+
+<div className="h-px bg-[#E0E7EF] w-full"></div>
+
+          {/* PERSONAL IMPACT DASHBOARD */}
+          <section>
+            <h2 className="text-2xl font-serif font-bold text-[#1A1A1A] flex items-center gap-2 mb-6">
+              <TreePine className="w-6 h-6 text-[#1565C0]" />
+              Personal Impact Dashboard
+            </h2>
+
+            {/* Impact Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div className="bg-gradient-to-br from-[#E3F2FD] to-[#BBDEFB] p-5 rounded-2xl border border-[#90CAF9] relative overflow-hidden">
+                <div className="relative z-10">
+                  <p className="text-[#1565C0] font-bold text-sm mb-1 uppercase tracking-wider">Total Limbah Dihemat</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-serif font-bold text-[#0D47A1]">1.4</span>
+                    <span className="text-[#1565C0] font-bold">kg</span>
+                  </div>
+                </div>
+                <TreePine className="absolute right-[-10px] bottom-[-10px] w-20 h-20 text-[#90CAF9]/40" />
+              </div>
+              
+              <div className="bg-gradient-to-br from-[#E8F5E9] to-[#C8E6C9] p-5 rounded-2xl border border-[#A5D6A7] relative overflow-hidden">
+                <div className="relative z-10">
+                  <p className="text-[#2E7D32] font-bold text-sm mb-1 uppercase tracking-wider">Skor Dampak Rata-rata</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-serif font-bold text-[#1B5E20]">8.7</span>
+                    <span className="text-[#2E7D32] font-bold">/ 10</span>
+                  </div>
+                </div>
+                <Activity className="absolute right-[-10px] bottom-[-10px] w-20 h-20 text-[#A5D6A7]/40" />
+              </div>
+              
+              <div className="bg-gradient-to-br from-[#FFF3E0] to-[#FFE0B2] p-5 rounded-2xl border border-[#FFCC80] relative overflow-hidden">
+                <div className="relative z-10">
+                  <p className="text-[#E65100] font-bold text-sm mb-1 uppercase tracking-wider">Nelayan Lokal Dibantu</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-serif font-bold text-[#BF360C]">3</span>
+                    <span className="text-[#E65100] font-bold">Partner</span>
+                  </div>
+                </div>
+                <Droplets className="absolute right-[-10px] bottom-[-10px] w-20 h-20 text-[#FFCC80]/40" />
+              </div>
+            </div>
+
+            {/* Circular Impact Engine Flowchart (Mock Data for latest order) */}
+            <div className="bg-white rounded-[16px] shadow-sm border border-[#E0E7EF] p-6 lg:p-8">
+              <h3 className="font-bold text-[#1A1A1A] mb-6 flex items-center gap-2">
+                <Activity className="w-5 h-5 text-[#1B6CA8]" />
+                Rincian Kalkulasi Dampak (Pesanan Terakhir)
+              </h3>
+              
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0">
+                {/* Step 1: Product */}
+                <div className="flex-1 flex flex-col items-center text-center p-4">
+                  <div className="w-12 h-12 bg-[#F0F4F8] rounded-full flex items-center justify-center mb-3">
+                    <Package className="w-6 h-6 text-[#1B6CA8]" />
+                  </div>
+                  <h4 className="font-bold text-[#1A1A1A] mb-1">Tuna Bites 500g</h4>
+                  <div className="text-xs text-[#546E7A] bg-[#F7F9FC] px-3 py-2 rounded-lg inline-block text-left mt-2 border border-[#E0E7EF]">
+                    <p>• 42% Fish By-products</p>
+                    <p>• Supplier: UD Laut Sehat</p>
+                    <p>• Yield: 1.0x</p>
+                  </div>
+                </div>
+
+                <div className="hidden md:flex text-[#B0BEC5]">
+                  <ArrowRight className="w-6 h-6" />
+                </div>
+                
+                <div className="md:hidden text-[#B0BEC5] rotate-90">
+                  <ArrowRight className="w-6 h-6" />
+                </div>
+
+                {/* Step 2: Engine */}
+                <div className="flex-1 flex flex-col items-center text-center p-4">
+                  <div className="w-12 h-12 bg-[#FFF0E6] rounded-full flex items-center justify-center mb-3">
+                    <RefreshCw className="w-6 h-6 text-[#F26641]" />
+                  </div>
+                  <h4 className="font-bold text-[#1A1A1A] mb-1">Impact Engine</h4>
+                  <div className="text-xs text-[#546E7A] bg-[#FFF8F5] border border-[#FFE0CC] px-3 py-2 rounded-lg inline-block text-left mt-2">
+                    <p className="font-bold text-[#F26641] mb-1">Otomatis Dihitung:</p>
+                    <p>• Digunakan: <span className="font-bold">210 gram</span></p>
+                    <p>• Terkonversi: <span className="font-bold text-[#2E7D32]">210 gram</span></p>
+                  </div>
+                </div>
+
+                <div className="hidden md:flex text-[#B0BEC5]">
+                  <ArrowRight className="w-6 h-6" />
+                </div>
+                
+                <div className="md:hidden text-[#B0BEC5] rotate-90">
+                  <ArrowRight className="w-6 h-6" />
+                </div>
+
+                {/* Step 3: Impact */}
+                <div className="flex-1 flex flex-col items-center text-center p-4">
+                  <div className="w-12 h-12 bg-[#E3F2FD] rounded-full flex items-center justify-center mb-3">
+                    <TreePine className="w-6 h-6 text-[#1565C0]" />
+                  </div>
+                  <h4 className="font-bold text-[#1A1A1A] mb-1">Skor Dampak</h4>
+                  <div className="mt-2 flex flex-col items-center">
+                    <span className="text-3xl font-serif font-bold text-[#1565C0]">8.7<span className="text-sm text-[#546E7A]">/10</span></span>
+                    <span className="text-xs bg-[#E8F5E9] text-[#2E7D32] px-2 py-1 rounded mt-1 font-bold">Limbah diselamatkan!</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div className="h-px bg-[#E0E7EF] w-full"></div>
 
           {/* MY PETS SECTION */}
           <section>
@@ -305,8 +435,6 @@ export default function ProfilePage() {
             </section>
 
           </div>
-
-          <div className="h-px bg-[#E0E7EF] w-full"></div>
 
           {/* ACCOUNT SETTINGS */}
           <section className="pb-8">

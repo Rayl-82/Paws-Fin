@@ -223,9 +223,13 @@ function ShopContent() {
             
             {/* 1. LOADING STATE */}
             {isLoading && (
-              <div className="flex-1 flex flex-col items-center justify-center text-[#1B6CA8] gap-4">
-                <Loader2 className="w-10 h-10 animate-spin" />
-                <p className="font-semibold">Memuat toko...</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-pulse">
+                <div className="h-80 bg-[#E0E7EF] rounded-[24px]"></div>
+                <div className="h-80 bg-[#E0E7EF] rounded-[24px]"></div>
+                <div className="h-80 bg-[#E0E7EF] rounded-[24px]"></div>
+                <div className="h-80 bg-[#E0E7EF] rounded-[24px]"></div>
+                <div className="h-80 bg-[#E0E7EF] rounded-[24px]"></div>
+                <div className="h-80 bg-[#E0E7EF] rounded-[24px]"></div>
               </div>
             )}
 
@@ -291,7 +295,26 @@ function ShopContent() {
 
 export default function ShopPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-[#1B6CA8]" /></div>}>
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#F7F9FC] font-sans flex flex-col">
+        <Navbar />
+        <main className="flex-1 max-w-[1440px] mx-auto px-4 md:px-8 lg:px-16 py-8 w-full animate-pulse">
+           <div className="flex justify-between items-center mb-8">
+              <div className="h-10 bg-[#E0E7EF] rounded w-1/4"></div>
+              <div className="flex gap-4">
+                 <div className="h-10 bg-[#E0E7EF] rounded w-32"></div>
+                 <div className="h-10 bg-[#E0E7EF] rounded w-32"></div>
+              </div>
+           </div>
+           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="h-80 bg-white rounded-[24px] border border-[#E0E7EF]"></div>
+              <div className="h-80 bg-white rounded-[24px] border border-[#E0E7EF]"></div>
+              <div className="h-80 bg-white rounded-[24px] border border-[#E0E7EF]"></div>
+              <div className="h-80 bg-white rounded-[24px] border border-[#E0E7EF]"></div>
+           </div>
+        </main>
+      </div>
+    }>
       <ShopContent />
     </Suspense>
   );

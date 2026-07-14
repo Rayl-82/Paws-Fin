@@ -420,7 +420,19 @@ function AuthForm() {
 
 export default function AuthPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-[#1B6CA8]" /></div>}>
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#F7F9FC] font-sans flex animate-pulse">
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
+           <div className="w-full max-w-md space-y-8">
+              <div className="h-10 bg-[#E0E7EF] rounded w-1/3 mx-auto"></div>
+              <div className="h-12 bg-[#E0E7EF] rounded w-full mt-12"></div>
+              <div className="h-12 bg-[#E0E7EF] rounded w-full mt-4"></div>
+              <div className="h-12 bg-[#E0E7EF] rounded w-full mt-8"></div>
+           </div>
+        </div>
+        <div className="hidden lg:flex w-1/2 bg-[#E0E7EF]"></div>
+      </div>
+    }>
       <AuthForm />
     </Suspense>
   );

@@ -128,11 +128,20 @@ export default function BundleDetailPage({ params }: { params: Promise<{ id: str
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#F7F9FC] flex flex-col">
+      <div className="min-h-screen bg-[#F7F9FC] font-sans flex flex-col">
         <Navbar />
-        <div className="flex-grow flex items-center justify-center">
-          <Loader2 className="w-8 h-8 animate-spin text-[#1B6CA8]" />
-        </div>
+        <main className="flex-1 max-w-[1440px] mx-auto px-4 md:px-8 lg:px-16 py-8 w-full animate-pulse">
+          <div className="h-4 bg-[#E0E7EF] rounded w-1/4 mb-8"></div>
+          <div className="flex flex-col lg:flex-row gap-12">
+             <div className="w-full lg:w-1/2 aspect-square bg-[#E0E7EF] rounded-[32px]"></div>
+             <div className="w-full lg:w-1/2 flex flex-col gap-6">
+                <div className="h-10 bg-[#E0E7EF] rounded w-3/4"></div>
+                <div className="h-6 bg-[#E0E7EF] rounded w-1/4"></div>
+                <div className="h-32 bg-[#E0E7EF] rounded w-full mt-4"></div>
+                <div className="h-16 bg-[#E0E7EF] rounded w-full mt-8"></div>
+             </div>
+          </div>
+        </main>
         <Footer />
       </div>
     );

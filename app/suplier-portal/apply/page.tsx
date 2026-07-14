@@ -29,7 +29,7 @@ export default function SupplierApplicationForm() {
         <div className="w-full max-w-2xl bg-white rounded-2xl shadow-sm border border-[#E0E6EB] p-8 md:p-12">
           
           <Link href="/suplier-portal" className="inline-flex items-center text-[#546E7A] hover:text-[#1B6CA8] transition-colors mb-8 font-semibold text-sm">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Back to Supplier Portal
+            <ArrowLeft className="w-4 h-4 mr-2" /> Back to Portal Partner
           </Link>
 
           {isSubmitted ? (

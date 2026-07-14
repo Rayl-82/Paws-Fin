@@ -2,17 +2,20 @@
 
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import SubscriptionCard from "@/components/SubscriptionCard";
 import Image from "next/image";
 import Link from "next/link";
-import { PawPrint, ArrowRight, ShoppingCart, ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { PawPrint, ArrowRight, ShoppingCart, ChevronLeft, ChevronRight, Check, Plus, Cat, Dog } from "lucide-react";
 
 export default function TokoPage() {
   const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
   const [regularProducts, setRegularProducts] = useState<any[]>([]);
   const [subscriptionPlans, setSubscriptionPlans] = useState<any[]>([]);
   const [hasProfile, setHasProfile] = useState(false);
+  const [pets, setPets] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -71,9 +74,29 @@ export default function TokoPage() {
       }
     }
 
-    fetchFeatured();
-    fetchRegular();
-    fetchSubscriptions();
+    async function fetchPets() {
+      try {
+        const res = await fetch("/api/pets");
+        if (res.ok) {
+          const data = await res.json();
+          setPets(data.data || []);
+        }
+      } catch (err) {
+        console.error("Failed to fetch pets", err);
+      }
+    }
+
+    const loadData = async () => {
+      setIsLoading(true);
+      const promises = [fetchFeatured(), fetchRegular(), fetchSubscriptions()];
+      if (loggedIn) {
+        promises.push(fetchPets());
+      }
+      await Promise.all(promises);
+      setIsLoading(false);
+    };
+
+    loadData();
   }, []);
 
   const collections = [
@@ -155,17 +178,73 @@ export default function TokoPage() {
         {/* Recommended For Your Pet or Create Profile Banner */}
         {hasProfile ? (
           <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-16">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
-              <h2 className="text-[#191C1E] text-3xl md:text-4xl font-bold font-serif">
-                Rekomendasi Untuk Hewan Peliharaan Anda
-              </h2>
-              <Link href="/shop/personalized" className="bg-[#005387] hover:bg-[#003D63] transition-colors text-white font-medium py-3 px-6 rounded-xl shadow-md">
-                Lihat detail
-              </Link>
+            {/* Pet Selector Banner */}
+            <div className="w-full bg-gradient-to-r from-[#0C3350] to-[#1B6CA8] rounded-2xl p-6 md:p-8 mb-8 shadow-lg overflow-hidden relative">
+              {/* Decorative background elements */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4" />
+              <div className="absolute bottom-0 left-1/2 w-48 h-48 bg-white/5 rounded-full translate-y-1/2" />
+
+              <div className="relative z-10">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                  <div>
+                    <h2 className="text-white text-2xl md:text-3xl font-bold font-serif mb-1">
+                      Rekomendasi Untuk Hewan Peliharaan Anda
+                    </h2>
+                    <p className="text-[#D6E8F5]/80 text-sm md:text-base">
+                      Pilih hewan peliharaan untuk melihat produk yang sesuai
+                    </p>
+                  </div>
+                  <Link href="/shop/personalized" className="bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 transition-all text-white font-medium py-2.5 px-5 rounded-xl text-sm flex items-center gap-2 whitespace-nowrap">
+                    Lihat Detail
+                    <ArrowRight size={16} />
+                  </Link>
+                </div>
+
+                {/* Pet Cards Row */}
+                <div className="flex gap-3 md:gap-4 overflow-x-auto pb-2 scrollbar-hide">
+                  {pets.map((pet) => {
+                    const isPetCat = pet.species?.toLowerCase() === 'cat' || pet.species?.toLowerCase() === 'kucing';
+                    const PetIcon = isPetCat ? Cat : Dog;
+                    return (
+                      <Link
+                        key={pet.id}
+                        href={`/shop/personalized?petId=${pet.id}`}
+                        className="flex-shrink-0 group bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/15 hover:border-white/30 rounded-xl p-4 flex items-center gap-3 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg min-w-[180px]"
+                      >
+                        <div className="w-11 h-11 bg-[#F26641]/90 rounded-full flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform">
+                          <PetIcon size={22} className="text-white" />
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                          <span className="text-white font-semibold text-sm truncate">{pet.petName}</span>
+                          <span className="text-[#D6E8F5]/70 text-xs capitalize truncate">{pet.species}{pet.breed ? ` • ${pet.breed}` : ''}</span>
+                        </div>
+                      </Link>
+                    );
+                  })}
+
+                  {/* Tambah Hewan Card */}
+                  <Link
+                    href="/shop/personalized/create"
+                    className="flex-shrink-0 group bg-[#F26641]/20 hover:bg-[#F26641]/35 backdrop-blur-sm border-2 border-dashed border-[#F26641]/50 hover:border-[#F26641] rounded-xl p-4 flex items-center gap-3 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg min-w-[180px]"
+                  >
+                    <div className="w-11 h-11 bg-[#F26641] rounded-full flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 group-hover:rotate-90 transition-all duration-300">
+                      <Plus size={22} className="text-white" strokeWidth={2.5} />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-white font-semibold text-sm">Tambah Hewan</span>
+                      <span className="text-[#D6E8F5]/70 text-xs">Daftarkan pet baru</span>
+                    </div>
+                  </Link>
+                </div>
+              </div>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 items-stretch">
-              {featuredProducts.map((prod, idx) => (
+              {isLoading ? (
+                Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="w-full aspect-[3/4] bg-[#E0E7EF] rounded-[24px] animate-pulse"></div>
+                ))
+              ) : featuredProducts.map((prod, idx) => (
                 <div key={idx} className="w-full h-full flex flex-col">
                   <ProductCard
                     id={prod.id}
@@ -179,8 +258,12 @@ export default function TokoPage() {
           </section>
         ) : (
           <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-16">
-            <div className="w-full bg-[#1B6CA8] rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
-              <div className="flex flex-col text-white max-w-2xl">
+            <div className="w-full bg-gradient-to-r from-[#0C3350] to-[#1B6CA8] rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-lg relative overflow-hidden">
+              {/* Decorative background elements */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4" />
+              <div className="absolute bottom-0 left-1/4 w-48 h-48 bg-white/5 rounded-full translate-y-1/2" />
+
+              <div className="flex flex-col text-white max-w-2xl relative z-10">
                 <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
                   Rekomendasi yang Dipersonalisasi untuk Hewan Anda
                 </h2>
@@ -188,11 +271,12 @@ export default function TokoPage() {
                   Buat profil hewan peliharaan Anda untuk mendapatkan rekomendasi produk yang disesuaikan dengan kebutuhan nutrisi spesifik mereka.
                 </p>
               </div>
-              <div className="w-full md:w-auto flex-shrink-0">
+              <div className="w-full md:w-auto flex-shrink-0 relative z-10">
                 <Link
-                  href="/profile?create=true"
-                  className="block w-full text-center bg-[#F26641] hover:bg-[#BF4A28] transition-colors text-white font-bold py-4 px-8 rounded-xl shadow-md text-lg"
+                  href="/shop/personalized/create"
+                  className="block w-full text-center bg-[#F26641] hover:bg-[#BF4A28] transition-all text-white font-bold py-4 px-8 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-0.5 text-lg flex items-center justify-center gap-2"
                 >
+                  <Plus size={20} />
                   Buat Profil Hewan Peliharaan
                 </Link>
               </div>
@@ -212,7 +296,11 @@ export default function TokoPage() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 items-stretch">
-            {regularProducts.map((prod, idx) => (
+            {isLoading ? (
+              Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="w-full aspect-[3/4] bg-[#E0E7EF] rounded-[24px] animate-pulse"></div>
+              ))
+            ) : regularProducts.map((prod, idx) => (
               <div key={idx} className="w-full h-full flex flex-col">
                 <ProductCard
                   id={prod.id}
@@ -238,7 +326,11 @@ export default function TokoPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-              {subscriptionPlans.map((plan, idx) => (
+              {isLoading ? (
+                Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="w-full h-[450px] bg-[#005387]/10 rounded-[24px] animate-pulse border border-[#005387]/20"></div>
+                ))
+              ) : subscriptionPlans.map((plan, idx) => (
                 <SubscriptionCard
                   key={idx}
                   href={`/shop/subscriptions/${plan.id}`}
@@ -294,28 +386,7 @@ export default function TokoPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full bg-[#2D3133] text-white pt-16 pb-8 px-4 md:px-8 lg:px-16">
-        <div className="max-w-[1440px] mx-auto flex flex-col gap-12">
-          {/* Top Row */}
-          <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-8 pb-12 border-b border-white/10">
-            <div className="text-[#FFDBCF] text-3xl font-bold font-serif">
-              Paws&amp;Fin
-            </div>
-            <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-[#E0E3E6] text-lg">
-              {["Kebijakan Privasi", "Ketentuan Layanan", "Laporan Keberlanjutan", "Hubungi Kami"].map((link) => (
-                <Link key={link} href="#" className="hover:text-white transition-colors">
-                  {link}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Bottom Row */}
-          <div className="text-center md:text-left text-[#E0E3E6]/60 text-base">
-            © 2024 Paws&amp;Fin. Berkomitmen pada integritas laut dan vitalitas hewan peliharaan.
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

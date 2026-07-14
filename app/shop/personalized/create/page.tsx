@@ -78,7 +78,7 @@ export default function CreatePetProfile() {
   };
 
   // --- Step 1: Basic Information ---
-  const Step1 = () => (
+  const renderStep1 = () => (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <h2 className="text-3xl font-serif font-bold text-[#1A1A1A] mb-2">Basic Information</h2>
       <p className="text-[#546E7A] mb-8">Let's start with the basics about your furry friend.</p>
@@ -150,7 +150,7 @@ export default function CreatePetProfile() {
   );
 
   // --- Step 2: Physical Information ---
-  const Step2 = () => (
+  const renderStep2 = () => (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <h2 className="text-3xl font-serif font-bold text-[#1A1A1A] mb-2">Physical Information</h2>
       <p className="text-[#546E7A] mb-8">This helps us calculate exact nutritional portions.</p>
@@ -206,7 +206,7 @@ export default function CreatePetProfile() {
   );
 
   // --- Step 3: Diet & Health ---
-  const Step3 = () => (
+  const renderStep3 = () => (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <h2 className="text-3xl font-serif font-bold text-[#1A1A1A] mb-2">Diet & Health</h2>
       <p className="text-[#546E7A] mb-8">Tell us about any specific dietary requirements.</p>
@@ -252,7 +252,7 @@ export default function CreatePetProfile() {
   );
 
   // --- Step 4: Lifestyle ---
-  const Step4 = () => (
+  const renderStep4 = () => (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <h2 className="text-3xl font-serif font-bold text-[#1A1A1A] mb-2">Lifestyle & Goals</h2>
       <p className="text-[#546E7A] mb-8">What are your primary goals for your pet's nutrition?</p>
@@ -305,7 +305,7 @@ export default function CreatePetProfile() {
   );
 
   // --- Final Review ---
-  const FinalReview = () => (
+  const renderFinalReview = () => (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <h2 className="text-3xl font-serif font-bold text-[#1A1A1A] mb-2">Review Profile</h2>
       <p className="text-[#546E7A] mb-8">Please confirm the details below.</p>
@@ -412,11 +412,11 @@ export default function CreatePetProfile() {
 
         {/* Form Container */}
         <div className="bg-white rounded-[24px] shadow-sm border border-[#E0E7EF] p-6 sm:p-8 lg:p-10 mb-8">
-          {step === 1 && <Step1 />}
-          {step === 2 && <Step2 />}
-          {step === 3 && <Step3 />}
-          {step === 4 && <Step4 />}
-          {step === 5 && <FinalReview />}
+          {step === 1 && renderStep1()}
+          {step === 2 && renderStep2()}
+          {step === 3 && renderStep3()}
+          {step === 4 && renderStep4()}
+          {step === 5 && renderFinalReview()}
         </div>
 
         {/* Navigation Buttons */}

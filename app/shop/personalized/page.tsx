@@ -6,7 +6,7 @@ import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
-import { ArrowRight, Sparkles, Search, RefreshCw, Loader2, ChevronDown } from "lucide-react";
+import { ArrowRight, Sparkles, Search, RefreshCw, Loader2, ChevronDown, Plus } from "lucide-react";
 
 export default function RecommendationPage() {
   const [petProfile, setPetProfile] = useState<any>(null);
@@ -74,10 +74,21 @@ export default function RecommendationPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#F7F9FC] flex flex-col">
+      <div className="min-h-screen bg-white flex flex-col">
         <Navbar />
-        <main className="flex-1 flex items-center justify-center">
-          <Loader2 className="w-12 h-12 text-[#1B6CA8] animate-spin" />
+        <main className="flex-1 w-full animate-pulse">
+          {/* Hero Skeleton */}
+          <section className="w-full bg-[#E0E7EF] py-8 lg:py-12 px-4 md:px-8 lg:px-16 flex flex-col md:flex-row items-center justify-center gap-12 h-[500px]">
+             <div className="flex-1 flex flex-col justify-center items-start z-10 w-full max-w-[1440px] mx-auto lg:pl-8 gap-4">
+                <div className="h-6 bg-white/40 rounded w-1/4"></div>
+                <div className="h-20 bg-white/50 rounded w-3/4"></div>
+                <div className="flex gap-4 mt-4">
+                  <div className="h-10 bg-white/40 rounded-full w-32"></div>
+                  <div className="h-10 bg-white/40 rounded-full w-32"></div>
+                </div>
+             </div>
+             <div className="relative flex-shrink-0 w-full max-w-[420px] aspect-square bg-white/50 rounded-xl"></div>
+          </section>
         </main>
         <Footer />
       </div>
@@ -214,9 +225,16 @@ export default function RecommendationPage() {
                     </select>
                   )}
                 </div>
-                <div className="bg-[#F26641] text-white font-bold text-lg md:text-xl px-5 py-2 rounded-full inline-flex items-center gap-2 shadow-sm">
-                  <span className="text-white text-sm">✦</span>
-                  {matchScore}% Kecocokan
+                <div className="flex items-center gap-4 mt-4 lg:mt-0">
+                  <div className="bg-[#F26641] text-white font-bold text-lg md:text-xl px-5 py-2 rounded-full inline-flex items-center gap-2 shadow-sm">
+                    <span className="text-white text-sm">✦</span>
+                    {matchScore}% Kecocokan
+                  </div>
+                  
+                  <Link href="/shop/personalized/create" className="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white font-bold text-sm md:text-base px-5 py-2 rounded-full inline-flex items-center gap-2 transition-all shadow-sm">
+                    <Plus className="w-4 h-4 md:w-5 md:h-5" />
+                    Tambah Hewan
+                  </Link>
                 </div>
               </div>
 

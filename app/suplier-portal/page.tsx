@@ -35,9 +35,14 @@ export default function SuplierPortal() {
               <p className="text-gray-200 text-base md:text-xl mb-6 md:mb-10 max-w-2xl leading-relaxed">
                 Partner with us to transform underutilized marine by-products into premium, sustainable pet nutrition.
               </p>
-              <Link href="/suplier-portal/apply" className="inline-flex justify-center bg-[#F26641] hover:bg-[#BF4A28] text-white font-semibold py-3 px-6 md:py-4 md:px-8 rounded-xl transition-all shadow-md hover:-translate-y-1 w-full md:w-max">
-                Become a Supplier
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-4 w-full md:w-max">
+                <Link href="/suplier-portal/apply" className="inline-flex justify-center bg-[#F26641] hover:bg-[#BF4A28] text-white font-semibold py-3 px-6 md:py-4 md:px-8 rounded-xl transition-all shadow-md hover:-translate-y-1 w-full sm:w-auto">
+                  Become a Partner
+                </Link>
+                <Link href="/suplier-portal/dashboard" className="inline-flex justify-center bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold py-3 px-6 md:py-4 md:px-8 rounded-xl transition-all shadow-md hover:-translate-y-1 w-full sm:w-auto">
+                  Partner Dashboard
+                </Link>
+              </div>
             </div>
           </div>
 
@@ -106,7 +111,7 @@ export default function SuplierPortal() {
                 <div className="absolute left-6 top-8 bottom-8 w-1 bg-[#D6E8F5] -z-10"></div>
                 
                 {[
-                  { title: "Local Fisheries & Suppliers", desc: "You provide fresh marine by-products." },
+                  { title: "Local Fisheries & Partners", desc: "You provide fresh marine by-products." },
                   { title: "Cleaning & Processing", desc: "We process them in our zero-waste facilities." },
                   { title: "Premium Pet Nutrition", desc: "Formulated into vet-approved treats and kibble." },
                   { title: "Delivered To Pet Parents", desc: "Supporting healthier pets and a cleaner ocean." }
@@ -181,7 +186,7 @@ export default function SuplierPortal() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 w-full text-center">
               {[
                 { value: "500kg+", label: "Marine By-Products Repurposed" },
-                { value: "120+", label: "Partner Suppliers" },
+                { value: "120+", label: "Portal Partners" },
                 { value: "2,000+", label: "Pets Served Monthly" },
                 { value: "0%", label: "Waste Philosophy" }
               ].map((stat, idx) => (

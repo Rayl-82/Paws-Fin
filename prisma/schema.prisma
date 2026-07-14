@@ -16,16 +16,21 @@ model User {
   role         Role     @default(CUSTOMER)
   createdAt    DateTime @default(now())
 
+  totalWasteDivertedKg Float @default(0)
+  averageImpactScore   Float @default(0)
+
   // Relationships (Required for Prisma mapping)
-  pets          Pet[]
-  orders        Order[]
-  subscriptions Subscription[]
-  cartItems     CartItem[]
+  pets           Pet[]
+  orders         Order[]
+  subscriptions  Subscription[]
+  cartItems      CartItem[]
+  partnerProfile PartnerProfile?
 }
 
 enum Role {
   CUSTOMER
   ADMIN
+  PARTNER
 }
 
 // --- PET PROFILES ---
@@ -47,15 +52,23 @@ model Pet {
 
 // --- E-COMMERCE: PRODUCTS ---
 model Product {
-  id          String  @id @default(uuid())
-  name        String
-  description String
-  price       Float
-  stock       Int     @default(0)
+  id              String   @id @default(uuid())
+  name            String
+  description     String
+  price           Float
+  stock           Int      @default(0)
   imageUrl        String?
   category        String?
   features        String[] // E.g., benefits for subscriptions or bundles
-  billingInterval String?  // E.g., "MONTHLY" for subscriptions
+  billingInterval String? // E.g., "MONTHLY" for subscriptions
+
+  // Impact Engine Fields
+  weightGram           Int             @default(0)
+  fishByProductPercent Float           @default(0)
+  yieldConversion      Float           @default(1.0)
+  baseImpactScore      Float           @default(0)
+  partnerId            String?
+  partner              PartnerProfile? @relation(fields: [partnerId], references: [id])
 
   createdAt DateTime @default(now())
 
@@ -99,6 +112,11 @@ model OrderItem {
 
   quantity Int
   price    Float // Price at time of purchase
+
+  // Impact Engine Fields
+  wasteDivertedKg Float   @default(0)
+  impactScore     Float   @default(0)
+  partnerId       String?
 }
 
 // --- ACTIVE USER SUBSCRIPTIONS ---
@@ -111,4 +129,43 @@ model Subscription {
   status       String    @default("ACTIVE")
   startDate    DateTime  @default(now())
   nextDelivery DateTime?
+}
+
+// --- PARTNER & SUPPLIER PORTAL ---
+model PartnerProfile {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyName     String
+  industryType    String
+  isVerified      Boolean  @default(false)
+  totalIncome     Float    @default(0)
+  co2SavedKg      Float    @default(0)
+  wasteRepurposed Float    @default(0)
+  createdAt       DateTime @default(now())
+
+  inventory InventoryItem[]
+  requests  PartnerRequest[]
+  products  Product[]
+}
+
+model InventoryItem {
+  id        String         @id @default(uuid())
+  partnerId String
+  partner   PartnerProfile @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  name      String
+  stockInKg Float
+  status    String         @default("Tersedia") // "Tersedia", "Habis"
+  updatedAt DateTime       @updatedAt
+}
+
+model PartnerRequest {
+  id               String         @id @default(uuid())
+  partnerId        String
+  partner          PartnerProfile @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  umkmName         String
+  productRequested String
+  quantityInKg     Float
+  status           String         @default("Menunggu Konfirmasi") // "Menunggu Konfirmasi", "Disetujui", "Dikirim"
+  createdAt        DateTime       @default(now())
 }

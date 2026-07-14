@@ -153,7 +153,7 @@ export default function Navbar() {
                   Majalah
                 </Link>
                 <Link href="/suplier-portal" className={`${isActive('/suplier-portal') ? 'text-[#F26641]' : 'text-[#1A1A1A] opacity-80 hover:opacity-100'} transition-opacity text-[15px] font-semibold tracking-[0.28px]`}>
-                  Portal Suplier
+                  Portal Partner
                 </Link>
               </div>
             </div>
@@ -397,7 +397,7 @@ export default function Navbar() {
             { name: "Toko", path: "/shop" },
             { name: "Langganan", path: "/langganan" },
             { name: "Majalah", path: "/majalah" },
-            { name: "Portal Suplier", path: "/suplier-portal" },
+            { name: "Portal Partner", path: "/suplier-portal" },
           ].map((item) => (
             <Link 
               key={item.path}
