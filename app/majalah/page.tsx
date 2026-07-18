@@ -8,50 +8,50 @@ import { ArrowRight, BookOpen, Droplets, Heart, Leaf, Mail, RefreshCw, Anchor, F
 
 export default function EducationalCenter() {
   const featuredLarge = {
-    title: "Why Marine By-Products are the Future of Sustainable Pet Nutrition",
-    category: "Sustainability",
-    image: "/images/featuredmainbanner.png", // Reusing image for demo
+    title: "Mengapa By-Product Laut adalah Masa Depan Nutrisi Hewan Berkelanjutan",
+    category: "Keberlanjutan",
+    image: "/images/featuredmainbanner.png",
     slug: "marine-by-products-future",
-    excerpt: "Discover how we are turning unused marine resources into premium, omega-rich nutrition while helping the oceans heal."
+    excerpt: "Temukan bagaimana kami mengubah sumber daya laut yang tak termanfaatkan menjadi nutrisi premium kaya Omega-3 sambil membantu lautan pulih kembali."
   };
 
   const featuredSmall = [
     {
-      title: "The Ultimate Guide to Omega-3s for Cats and Dogs",
-      category: "Pet Nutrition",
+      title: "Panduan Lengkap Omega-3 untuk Kucing dan Anjing",
+      category: "Nutrisi Hewan",
       image: "/images/sub1.png",
       slug: "ultimate-guide-omega-3",
     },
     {
-      title: "Understanding Pet Allergies and How Novel Proteins Help",
-      category: "Pet Care Tips",
+      title: "Memahami Alergi pada Hewan Peliharaan dan Peran Protein Baru",
+      category: "Tips Perawatan Hewan",
       image: "/images/sub2.png",
       slug: "understanding-pet-allergies",
     }
   ];
 
   const categories = [
-    { name: "Pet Nutrition", icon: <Heart className="w-6 h-6" />, color: "bg-[#FDDDD5] text-[#BF4A28]" },
-    { name: "Omega-3 Benefits", icon: <Droplets className="w-6 h-6" />, color: "bg-[#D6E8F5] text-[#1B6CA8]" },
-    { name: "Pet Care Tips", icon: <BookOpen className="w-6 h-6" />, color: "bg-[#E0E7EF] text-[#546E7A]" },
-    { name: "Circular Economy", icon: <RefreshCw className="w-6 h-6" />, color: "bg-[#E8F5E9] text-[#2E7D32]" },
+    { name: "Nutrisi Hewan", icon: <Heart className="w-6 h-6" />, color: "bg-[#FDDDD5] text-[#BF4A28]" },
+    { name: "Manfaat Omega-3", icon: <Droplets className="w-6 h-6" />, color: "bg-[#D6E8F5] text-[#1B6CA8]" },
+    { name: "Tips Perawatan", icon: <BookOpen className="w-6 h-6" />, color: "bg-[#E0E7EF] text-[#546E7A]" },
+    { name: "Ekonomi Sirkular", icon: <RefreshCw className="w-6 h-6" />, color: "bg-[#E8F5E9] text-[#2E7D32]" },
   ];
 
   const latestArticles = [
-    { title: "5 Signs Your Pet Needs Joint Support", image: "/images/product1.png", slug: "5-signs-joint-support", category: "Health" },
-    { title: "How Much Fish Oil is Too Much?", image: "/images/product2.png", slug: "how-much-fish-oil", category: "Nutrition" },
-    { title: "A Day in the Life of a Sustainable Fishery", image: "/images/product3.png", slug: "sustainable-fishery", category: "Behind the Scenes" },
-    { title: "Navigating Feline Finickiness", image: "/images/product4.png", slug: "feline-finickiness", category: "Behavior" },
-    { title: "The Truth About Grain-Free Diets", image: "/images/cattreats.png", slug: "truth-about-grain-free", category: "Diet" },
-    { title: "Eco-Friendly Pet Parenting 101", image: "/images/dogtreats.png", slug: "eco-friendly-pet-parenting", category: "Sustainability" },
+    { title: "5 Tanda Hewan Peliharaan Anda Butuh Suplemen Sendi", image: "/images/product1.png", slug: "5-signs-joint-support", category: "Kesehatan" },
+    { title: "Berapa Banyak Minyak Ikan yang Aman?", image: "/images/product2.png", slug: "how-much-fish-oil", category: "Nutrisi" },
+    { title: "Sehari di Perikanan Berkelanjutan", image: "/images/product3.png", slug: "sustainable-fishery", category: "Di Balik Layar" },
+    { title: "Mengatasi Kucing yang Susah Makan", image: "/images/product4.png", slug: "feline-finickiness", category: "Perilaku" },
+    { title: "Fakta di Balik Diet Bebas Gandum", image: "/images/cattreats.png", slug: "truth-about-grain-free", category: "Diet" },
+    { title: "Menjadi Pemilik Hewan Peliharaan yang Ramah Lingkungan", image: "/images/dogtreats.png", slug: "eco-friendly-pet-parenting", category: "Keberlanjutan" },
   ];
 
   const flowSteps = [
-    { name: "Fishery", icon: <Anchor className="w-8 h-8" /> },
-    { name: "Marine By-Products", icon: <Fish className="w-8 h-8" /> },
-    { name: "Processing", icon: <FlaskConical className="w-8 h-8" /> },
-    { name: "Pet Nutrition", icon: <Heart className="w-8 h-8" /> },
-    { name: "Healthier Pets", icon: <Cat className="w-8 h-8" /> },
+    { name: "Perikanan", icon: <Anchor className="w-8 h-8" /> },
+    { name: "By-Product Laut", icon: <Fish className="w-8 h-8" /> },
+    { name: "Pemrosesan", icon: <FlaskConical className="w-8 h-8" /> },
+    { name: "Nutrisi Hewan", icon: <Heart className="w-8 h-8" /> },
+    { name: "Hewan Lebih Sehat", icon: <Cat className="w-8 h-8" /> },
   ];
 
   return (
@@ -62,16 +62,16 @@ export default function EducationalCenter() {
         
         {/* HERO SECTION */}
         <section className="w-full bg-[#1B6CA8] py-20 lg:py-28 px-4 md:px-8 text-center flex flex-col items-center justify-center border-b border-[#124E7A]">
-          <span className="text-[#D6E8F5] text-sm md:text-base font-bold uppercase tracking-widest mb-4">Educational Center</span>
+          <span className="text-[#D6E8F5] text-sm md:text-base font-bold uppercase tracking-widest mb-4">Pusat Edukasi</span>
           <h1 className="text-white text-4xl md:text-5xl lg:text-7xl font-bold font-serif max-w-4xl leading-tight drop-shadow-sm">
-            Knowledge For Healthier Pets And Healthier Oceans
+            Pengetahuan untuk Hewan yang Lebih Sehat dan Laut yang Lebih Bersih
           </h1>
         </section>
 
         {/* FEATURED ARTICLES (MAGAZINE LAYOUT) */}
         <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 py-16 lg:py-24">
           <div className="flex items-center justify-between mb-10">
-            <h2 className="text-3xl lg:text-4xl font-bold font-serif text-[#1A1A1A]">Featured Articles</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold font-serif text-[#1A1A1A]">Artikel Pilihan</h2>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
@@ -93,7 +93,7 @@ export default function EducationalCenter() {
                   {featuredLarge.excerpt}
                 </p>
                 <div className="flex items-center gap-2 text-white font-bold hover:text-[#F26641] transition-colors">
-                  Read Article <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  Baca Artikel <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>
             </Link>
@@ -124,9 +124,9 @@ export default function EducationalCenter() {
         {/* EDUCATIONAL HIGHLIGHT SECTION (THE FLOW) */}
         <section className="w-full bg-[#1B6CA8] text-white py-20 lg:py-28 overflow-hidden">
           <div className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-16 text-center">
-            <h2 className="text-3xl lg:text-5xl font-bold font-serif mb-6">From Ocean By-Products To Pet Nutrition</h2>
+            <h2 className="text-3xl lg:text-5xl font-bold font-serif mb-6">Dari By-Product Laut Menuju Nutrisi Hewan</h2>
             <p className="text-[#D6E8F5] text-lg lg:text-xl max-w-3xl mx-auto mb-16 leading-relaxed">
-              We intercept high-quality marine resources that would otherwise go to waste, transforming them into premium nutrition. This circular model heals our oceans while nourishing your pets.
+              Kami memotong rantai pemborosan dengan mengolah sumber daya laut berkualitas tinggi yang biasanya terbuang, mengubahnya menjadi nutrisi premium. Model sirkular ini membantu lautan pulih sekaligus menyehatkan hewan peliharaan Anda.
             </p>
 
             <div className="flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-8 w-full max-w-5xl mx-auto">
@@ -154,25 +154,11 @@ export default function EducationalCenter() {
           </div>
         </section>
 
-        {/* BROWSE BY TOPIC */}
-        <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 py-16 lg:py-24">
-          <h2 className="text-3xl lg:text-4xl font-bold font-serif text-[#1A1A1A] mb-10 text-center md:text-left">Browse By Topic</h2>
-          
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            {categories.map((cat, idx) => (
-              <Link href={`/majalah?topic=${cat.name.toLowerCase().replace(/ /g, '-')}`} key={idx} className="bg-white rounded-2xl p-6 lg:p-8 flex flex-col justify-center items-center text-center shadow-sm border border-[#E0E7EF] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${cat.color} group-hover:scale-110 transition-transform duration-300`}>
-                  {cat.icon}
-                </div>
-                <h3 className="text-lg lg:text-xl font-bold font-serif text-[#1A1A1A]">{cat.name}</h3>
-              </Link>
-            ))}
-          </div>
-        </section>
+
 
         {/* LATEST ARTICLES */}
-        <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-20 lg:pb-32">
-          <h2 className="text-3xl lg:text-4xl font-bold font-serif text-[#1A1A1A] mb-10">Latest Articles</h2>
+        <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pt-16 lg:pt-24 pb-20 lg:pb-32">
+          <h2 className="text-3xl lg:text-4xl font-bold font-serif text-[#1A1A1A] mb-10">Artikel Terbaru</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {latestArticles.map((article, idx) => (
@@ -186,7 +172,7 @@ export default function EducationalCenter() {
                     {article.title}
                   </h3>
                   <div className="mt-auto flex items-center gap-2 text-[#546E7A] font-bold text-sm group-hover:text-[#1B6CA8] transition-colors">
-                    Read Article <ArrowRight className="w-4 h-4" />
+                    Baca Artikel <ArrowRight className="w-4 h-4" />
                   </div>
                 </div>
               </Link>
@@ -200,14 +186,14 @@ export default function EducationalCenter() {
             <div className="w-16 h-16 bg-[#1B6CA8] rounded-2xl flex items-center justify-center mx-auto mb-6 text-white rotate-3">
               <Mail className="w-8 h-8" />
             </div>
-            <h2 className="text-3xl lg:text-4xl font-bold font-serif text-[#1A1A1A] mb-4">Stay Updated</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold font-serif text-[#1A1A1A] mb-4">Tetap Update</h2>
             <p className="text-[#546E7A] text-lg mb-8">
-              Get the latest pet nutrition tips and sustainability insights delivered directly to your inbox.
+              Dapatkan tips nutrisi hewan dan wawasan keberlanjutan terbaru langsung di kotak masuk Anda.
             </p>
             <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onSubmit={(e) => e.preventDefault()}>
               <input 
                 type="email" 
-                placeholder="Enter your email address" 
+                placeholder="Masukkan alamat email Anda" 
                 className="flex-1 px-5 py-4 rounded-xl border border-[#B0BEC5] focus:outline-none focus:border-[#1B6CA8] focus:ring-1 focus:ring-[#1B6CA8] transition-all"
                 required
               />
@@ -215,7 +201,7 @@ export default function EducationalCenter() {
                 type="submit"
                 className="bg-[#1A1A1A] hover:bg-[#2D3133] text-white px-8 py-4 rounded-xl font-bold transition-colors shadow-sm"
               >
-                Subscribe
+                Daftar
               </button>
             </form>
           </div>

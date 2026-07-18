@@ -12,7 +12,7 @@ export default function Navbar() {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [cartCount, setCartCount] = useState(0);
-  
+  const [isScrolled, setIsScrolled] = useState(false);
   // Search State
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -67,8 +67,20 @@ export default function Navbar() {
     return () => window.removeEventListener('cartUpdated', handleCartUpdate);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initialize
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const isActive = (path: string) => pathname === path;
   const isShopActive = pathname?.startsWith("/shop");
+  
+  const isHome = pathname === "/";
+  const isTransparent = isHome && !isScrolled && !isMobileMenuOpen;
 
   // Prevent scroll when mobile menu or filter is open
   if (typeof window !== 'undefined') {
@@ -114,15 +126,23 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="w-full flex flex-col font-serif bg-white sticky top-0 z-50 shadow-sm md:shadow-none">
+      <nav className={`w-full flex flex-col font-serif top-0 z-50 transition-all duration-300 ${
+        isHome ? "fixed" : "sticky"
+      } ${
+        isTransparent ? "bg-transparent" : "bg-white shadow-sm md:shadow-none"
+      }`}>
         {/* Layer 1: Main Navigation */}
-        <div className="w-full h-[64px] lg:h-[72px] flex justify-center border-b lg:border-none border-gray-100">
+        <div className={`w-full h-[64px] lg:h-[72px] flex justify-center lg:border-none transition-colors duration-300 ${
+          isTransparent ? "border-transparent" : "border-b border-gray-100"
+        }`}>
           <div className="w-full px-4 lg:px-[48px] h-full flex items-center justify-between">
             {/* Left: Mobile Menu Toggle + Logo */}
             <div className="flex items-center gap-4 lg:gap-[48px] h-full">
               {/* Mobile Hamburger */}
               <button 
-                className="lg:hidden text-[#1A1A1A] p-1 -ml-1 hover:bg-gray-50 rounded-md transition-colors"
+                className={`lg:hidden p-1 -ml-1 rounded-md transition-colors ${
+                  isTransparent ? "text-white hover:bg-white/10" : "text-[#1A1A1A] hover:bg-gray-50"
+                }`}
                 onClick={() => setIsMobileMenuOpen(true)}
                 aria-label="Open menu"
               >
@@ -130,29 +150,31 @@ export default function Navbar() {
               </button>
 
               {/* Logo */}
-              <Link href="/" className="flex items-center h-full gap-2">
+              <Link href="/" className="flex items-center h-full gap-2 group">
                 <Image
                   src="/images/pawsnfinlogo.png"
                   alt="Paws&Fin Logo"
                   width={36}
                   height={36}
-                  className="object-contain lg:w-[40px] lg:h-[40px]"
+                  className="object-contain lg:w-[40px] lg:h-[40px] transition-transform duration-300 group-hover:scale-105"
                 />
-                <span className="lg:hidden font-bold text-xl text-[#1B6CA8] tracking-tight">Paws&Fin</span>
+                <span className={`lg:hidden font-bold text-xl tracking-tight transition-colors ${
+                  isTransparent ? "text-white" : "text-[#1B6CA8]"
+                }`}>Paws&Fin</span>
               </Link>
               
               {/* Desktop Links */}
               <div className="hidden lg:flex items-center gap-[40px] h-full pt-1">
-                <Link href="/shop" className={`${isShopActive ? 'text-[#F26641]' : 'text-[#1A1A1A] opacity-80 hover:opacity-100'} transition-opacity text-[15px] font-semibold tracking-[0.28px]`}>
+                <Link href="/shop" className={`${isShopActive ? 'text-[#F26641]' : isTransparent ? 'text-white hover:text-white/80' : 'text-[#1A1A1A] opacity-80 hover:opacity-100'} transition-all text-[15px] font-semibold tracking-[0.28px]`}>
                   Toko
                 </Link>
-                <Link href="/langganan" className={`${isActive('/langganan') ? 'text-[#F26641]' : 'text-[#1A1A1A] opacity-80 hover:opacity-100'} transition-opacity text-[15px] font-semibold tracking-[0.28px]`}>
+                <Link href="/langganan" className={`${isActive('/langganan') ? 'text-[#F26641]' : isTransparent ? 'text-white hover:text-white/80' : 'text-[#1A1A1A] opacity-80 hover:opacity-100'} transition-all text-[15px] font-semibold tracking-[0.28px]`}>
                   Langganan
                 </Link>
-                <Link href="/majalah" className={`${isActive('/majalah') ? 'text-[#F26641]' : 'text-[#1A1A1A] opacity-80 hover:opacity-100'} transition-opacity text-[15px] font-semibold tracking-[0.28px]`}>
-                  Majalah
+                <Link href="/majalah" className={`${isActive('/majalah') ? 'text-[#F26641]' : isTransparent ? 'text-white hover:text-white/80' : 'text-[#1A1A1A] opacity-80 hover:opacity-100'} transition-all text-[15px] font-semibold tracking-[0.28px]`}>
+                  Artikel
                 </Link>
-                <Link href="/suplier-portal" className={`${isActive('/suplier-portal') ? 'text-[#F26641]' : 'text-[#1A1A1A] opacity-80 hover:opacity-100'} transition-opacity text-[15px] font-semibold tracking-[0.28px]`}>
+                <Link href="/suplier-portal" className={`${isActive('/suplier-portal') ? 'text-[#F26641]' : isTransparent ? 'text-white hover:text-white/80' : 'text-[#1A1A1A] opacity-80 hover:opacity-100'} transition-all text-[15px] font-semibold tracking-[0.28px]`}>
                   Portal Partner
                 </Link>
               </div>
@@ -160,20 +182,28 @@ export default function Navbar() {
             
             {/* Right: Icons */}
             <div className="flex items-center gap-4 lg:gap-[24px]">
-              <Link href="/cart" className="relative text-[#1B6CA8] hover:opacity-80 transition-opacity flex items-center justify-center p-1 lg:p-0">
+              <Link href="/cart" className={`relative transition-all flex items-center justify-center p-1 lg:p-0 ${
+                isTransparent ? "text-white hover:text-white/80" : "text-[#1B6CA8] hover:opacity-80"
+              }`}>
                 <ShoppingCart className="w-[24px] h-[24px] lg:w-[22px] lg:h-[22px]" />
                 {cartCount > 0 && (
-                  <div className="absolute top-0 right-0 lg:-top-[8px] lg:-right-[8px] w-4 h-4 bg-[#F26641] rounded-full flex items-center justify-center border-[1.5px] border-white">
-                    <span className="text-white text-[9px] font-bold leading-none">{cartCount}</span>
+                  <div className={`absolute top-0 right-0 lg:-top-[8px] lg:-right-[8px] w-4 h-4 rounded-full flex items-center justify-center border-[1.5px] transition-colors ${
+                    isTransparent ? "bg-white border-transparent text-[#1B6CA8]" : "bg-[#F26641] border-white text-white"
+                  }`}>
+                    <span className="text-[9px] font-bold leading-none">{cartCount}</span>
                   </div>
                 )}
               </Link>
               {isAuthenticated === false ? (
-                <Link href="/auth" className="hidden lg:flex items-center justify-center bg-[#F26641] hover:bg-[#BF4A28] text-white px-4 py-1.5 rounded-lg text-sm font-bold transition-colors">
+                <Link href="/auth" className={`hidden lg:flex items-center justify-center px-4 py-1.5 rounded-full text-sm font-bold transition-all shadow-sm hover:-translate-y-0.5 ${
+                  isTransparent ? "bg-white text-[#1A1A1A] hover:bg-gray-100" : "bg-[#F26641] hover:bg-[#BF4A28] text-white"
+                }`}>
                   Masuk
                 </Link>
               ) : (
-                <Link href="/profile" className="text-[#1B6CA8] hover:opacity-80 transition-opacity flex items-center justify-center p-1 lg:p-0">
+                <Link href="/profile" className={`transition-all flex items-center justify-center p-1 lg:p-0 ${
+                  isTransparent ? "text-white hover:text-white/80" : "text-[#1B6CA8] hover:opacity-80"
+                }`}>
                   <UserCircle className="w-[28px] h-[28px] lg:w-[22px] lg:h-[22px]" />
                 </Link>
               )}
@@ -396,7 +426,7 @@ export default function Navbar() {
             { name: "Beranda", path: "/" },
             { name: "Toko", path: "/shop" },
             { name: "Langganan", path: "/langganan" },
-            { name: "Majalah", path: "/majalah" },
+            { name: "Artikel", path: "/majalah" },
             { name: "Portal Partner", path: "/suplier-portal" },
           ].map((item) => (
             <Link 

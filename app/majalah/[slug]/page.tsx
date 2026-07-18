@@ -5,42 +5,41 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 
-// Mock data fetcher for the demo
 const getArticleData = (slug: string) => {
   return {
     title: slug.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase()),
-    category: "Sustainability",
-    date: "July 5, 2026",
-    readTime: "6 min read",
+    category: "Keberlanjutan",
+    date: "5 Juli 2026",
+    readTime: "6 menit baca",
     author: {
       name: "Dr. Sarah Jenkins",
-      role: "Marine Biologist & Pet Nutritionist",
+      role: "Ahli Biologi Kelautan & Nutrisi Hewan",
       avatar: "/images/pawsnfinlogo.png"
     },
     image: "/images/featuredmainbanner.png",
     content: `
-      <p>The pet food industry is undergoing a massive shift. For decades, the focus has been on standard agricultural proteins—beef, chicken, and lamb. But as we look toward a more sustainable future, the answer to both healthier pets and a healthier planet might just lie in the ocean.</p>
+      <p>Industri makanan hewan sedang mengalami perubahan besar. Selama beberapa dekade, fokus utama tertuju pada protein dari peternakan—sapi, ayam, dan domba. Namun, kini ada jawaban yang lebih menjanjikan untuk hewan yang lebih sehat sekaligus planet yang lebih lestari: sumber daya dari lautan.</p>
       
-      <h3>The Hidden Potential of Marine By-Products</h3>
-      <p>When fish are processed for human consumption, a significant portion—sometimes up to 50%—is left behind. These "by-products" (heads, frames, skin, and organs) are often discarded or processed into low-value meal. However, this material is incredibly rich in bioavailable nutrients, specifically Omega-3 fatty acids (EPA and DHA), collagen, and essential minerals.</p>
+      <h3>Potensi Tersembunyi dari By-Product Laut</h3>
+      <p>Saat ikan diproses untuk konsumsi manusia, bagian yang tersisa bisa mencapai 50%—kepala, tulang, kulit, dan organ. "By-product" ini sering dibuang atau diproses menjadi bahan bernilai rendah. Padahal, kandungan nutrisinya sangat kaya: asam lemak Omega-3 (EPA dan DHA), kolagen, serta mineral esensial.</p>
       
-      <p>By capturing these pristine marine by-products before they are wasted, we can create premium pet nutrition. It's a process called "upcycling," and it sits at the heart of the circular economy.</p>
+      <p>Dengan mengolah by-product laut ini sebelum terbuang, kita bisa menciptakan nutrisi premium untuk hewan peliharaan. Proses ini disebut "upcycling", dan menjadi inti dari konsep ekonomi sirkular.</p>
 
-      <blockquote>"We aren't just making treats; we are actively participating in the reduction of marine waste, turning what was once discarded into a vital health supplement for our pets."</blockquote>
+      <blockquote>"Kami tidak sekadar membuat camilan hewan; kami secara aktif berkontribusi pada pengurangan limbah laut, mengubah yang dulunya terbuang menjadi suplemen kesehatan yang vital bagi hewan peliharaan kita."</blockquote>
 
-      <h3>Why Omega-3 Matters</h3>
-      <p>Omega-3 fatty acids are crucial for reducing inflammation, supporting cognitive function, and maintaining a healthy coat. Unlike plant-based Omega-3s (like flaxseed), marine-based Omega-3s do not need to be converted by the pet's body, making them immediately usable and highly effective.</p>
+      <h3>Mengapa Omega-3 Sangat Penting</h3>
+      <p>Asam lemak Omega-3 sangat krusial untuk meredakan peradangan, mendukung fungsi kognitif, dan menjaga bulu tetap sehat. Berbeda dengan Omega-3 nabati (seperti biji rami), Omega-3 dari laut tidak perlu dikonversi oleh tubuh hewan, sehingga langsung terserap dan lebih efektif.</p>
 
       <ul>
-        <li><strong>Joint Health:</strong> Reduces inflammation in aging pets.</li>
-        <li><strong>Skin & Coat:</strong> Alleviates dry, itchy skin and creates a soft, shiny coat.</li>
-        <li><strong>Heart Health:</strong> Supports cardiovascular function.</li>
+        <li><strong>Kesehatan Sendi:</strong> Mengurangi peradangan pada hewan yang mulai menua.</li>
+        <li><strong>Kulit & Bulu:</strong> Mengatasi kulit kering dan gatal, menjadikan bulu lembut dan berkilau.</li>
+        <li><strong>Kesehatan Jantung:</strong> Mendukung fungsi kardiovaskular yang optimal.</li>
       </ul>
 
-      <h3>A Win for the Oceans</h3>
-      <p>The beauty of this approach is that it requires zero additional fishing. We are maximizing the yield of what has already been caught, thereby reducing the strain on wild fish stocks and minimizing the environmental footprint of pet food production.</p>
+      <h3>Kebaikan untuk Lautan</h3>
+      <p>Pendekatan ini tidak memerlukan aktivitas penangkapan ikan tambahan. Kami memaksimalkan hasil dari ikan yang sudah tertangkap, sehingga mengurangi tekanan pada stok ikan liar dan meminimalkan jejak lingkungan dari produksi makanan hewan.</p>
 
-      <p>Next time you treat your pet, consider where the ingredients come from. With sustainable marine by-products, you're not just rewarding your dog or cat—you're rewarding the planet.</p>
+      <p>Lain kali saat Anda memberi camilan pada hewan peliharaan, pikirkanlah asal-usul bahan-bahannya. Dengan by-product laut yang berkelanjutan, Anda tidak hanya memanjakan anjing atau kucing—Anda juga memanjakan bumi kita.</p>
     `,
   };
 };
@@ -56,10 +55,10 @@ export default async function ArticleDetail({ params }: { params: Promise<{ slug
       <main className="w-full flex flex-col items-center flex-grow bg-white">
         
         {/* BREADCRUMBS & META */}
-        <section className="w-full max-w-[900px] mx-auto px-4 md:px-8 pt-12 pb-6">
+        <section className="w-full max-w-[800px] mx-auto px-4 md:px-8 pt-12 pb-6">
           <Link href="/majalah" className="inline-flex items-center gap-2 text-[#546E7A] hover:text-[#1B6CA8] transition-colors font-bold text-sm mb-8">
             <ArrowLeft className="w-4 h-4" />
-            Back to Educational Center
+            Kembali ke Pusat Edukasi
           </Link>
           
           <div className="flex items-center gap-4 mb-6">
@@ -98,7 +97,7 @@ export default async function ArticleDetail({ params }: { params: Promise<{ slug
         </section>
 
         {/* FEATURED IMAGE */}
-        <section className="w-full max-w-[1024px] mx-auto px-4 md:px-8 mb-12">
+        <section className="w-full max-w-[800px] mx-auto px-4 md:px-8 mb-12">
           <div className="w-full aspect-[21/9] relative rounded-2xl overflow-hidden shadow-sm bg-[#F0F4F8]">
             <Image 
               src={article.image} 
@@ -111,7 +110,7 @@ export default async function ArticleDetail({ params }: { params: Promise<{ slug
         </section>
 
         {/* ARTICLE CONTENT */}
-        <section className="w-full max-w-[768px] mx-auto px-4 md:px-8 pb-16 lg:pb-24">
+        <section className="w-full max-w-[800px] mx-auto px-4 md:px-8 pb-16 lg:pb-24">
           <div 
             className="prose prose-lg prose-[#1A1A1A] max-w-none 
               prose-headings:font-serif prose-headings:font-bold prose-headings:text-[#1A1A1A] 
@@ -128,13 +127,13 @@ export default async function ArticleDetail({ params }: { params: Promise<{ slug
         {/* RELATED PRODUCTS */}
         <section className="w-full bg-[#F7F9FC] py-16 lg:py-24 border-t border-[#E0E7EF]">
           <div className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-16">
-            <h2 className="text-3xl font-bold font-serif text-[#1A1A1A] mb-8">Products Related to This Topic</h2>
+            <h2 className="text-3xl font-bold font-serif text-[#1A1A1A] mb-8">Produk Terkait Topik Ini</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { image: "/images/product1.png", name: "Wild Salmon Jerky", price: "$14.99", tags: ["High Omega-3"] },
-                { image: "/images/product2.png", name: "Cod & Shrimp Bites", price: "$9.99", tags: ["Grain-Free"] },
-                { image: "/images/product3.png", name: "Pure Salmon Oil", price: "$24.00", tags: ["Skin & Coat"] },
-                { image: "/images/product4.png", name: "Atlantic Topper Mix", price: "$18.25", tags: ["Digestive Health"] },
+                { image: "/images/product1.png", name: "Wild Salmon Jerky", price: "$14.99", tags: ["Tinggi Omega-3"] },
+                { image: "/images/product2.png", name: "Cod & Shrimp Bites", price: "$9.99", tags: ["Bebas Gandum"] },
+                { image: "/images/product3.png", name: "Pure Salmon Oil", price: "$24.00", tags: ["Kulit & Bulu"] },
+                { image: "/images/product4.png", name: "Atlantic Topper Mix", price: "$18.25", tags: ["Kesehatan Pencernaan"] },
               ].map((prod, idx) => (
                 <ProductCard key={idx} image={prod.image} name={prod.name} price={prod.price} tags={prod.tags} />
               ))}
