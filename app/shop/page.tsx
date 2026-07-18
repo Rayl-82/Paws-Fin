@@ -146,7 +146,7 @@ export default function TokoPage() {
         {/* Section 1: Hero Banner */}
         <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-8 md:pb-12 lg:pb-16">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <Link href="/shop/subscriptions/sub1" className="w-full relative overflow-hidden rounded-[24px] bg-[#ECEEF1] shadow-xl min-h-[320px] md:min-h-[400px] lg:h-[500px] flex items-center group block">
+            <Link href="/shop/subscriptions/sub1" className="w-full relative overflow-hidden rounded-[24px] bg-[#ECEEF1] shadow-xl min-h-[360px] md:min-h-[400px] lg:h-[500px] flex items-center group block">
               <Image
                 src="/images/featuredmainbanner.png"
                 alt="Ocean Omega Box Background"
@@ -159,18 +159,18 @@ export default function TokoPage() {
               <div className="absolute inset-0 flex items-center p-6 sm:p-10 lg:pl-16 bg-gradient-to-r from-black/50 via-black/20 to-transparent lg:bg-none">
                 <div className="w-full max-w-sm flex flex-col justify-center">
                   {/* Product Name */}
-                  <h1 className="text-white lg:text-[#191C1E] text-4xl lg:text-5xl font-bold tracking-tight mb-4 leading-tight drop-shadow-md lg:drop-shadow-none">
+                  <h1 className="text-white lg:text-[#191C1E] text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-3 sm:mb-4 leading-tight drop-shadow-md lg:drop-shadow-none">
                     Ocean Omega Box
                   </h1>
 
                   {/* Feature Tags */}
-                  <div className="flex flex-col gap-3 mb-6">
+                  <div className="flex flex-col gap-2 sm:gap-3 mb-4 sm:mb-6">
                     {["Tinggi Omega-3", "Bebas Biji-bijian"].map((tag) => (
-                      <div key={tag} className="flex items-center gap-3">
-                        <div className="w-5 h-5 rounded-full bg-[#1B6CA8] lg:bg-[#005387] flex items-center justify-center flex-shrink-0 shadow-sm">
-                          <Check className="text-white w-3 h-3" strokeWidth={3} />
+                      <div key={tag} className="flex items-center gap-2 sm:gap-3">
+                        <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#1B6CA8] lg:bg-[#005387] flex items-center justify-center flex-shrink-0 shadow-sm">
+                          <Check className="text-white w-2.5 h-2.5 sm:w-3 sm:h-3" strokeWidth={3} />
                         </div>
-                        <span className="text-white lg:text-[#005387] text-base font-semibold tracking-wide drop-shadow-sm lg:drop-shadow-none">
+                        <span className="text-white lg:text-[#005387] text-sm sm:text-base font-semibold tracking-wide drop-shadow-sm lg:drop-shadow-none">
                           {tag}
                         </span>
                       </div>
@@ -178,12 +178,12 @@ export default function TokoPage() {
                   </div>
 
                   {/* Price */}
-                  <div className="text-[#F26641] text-3xl font-bold tracking-tight mb-6 drop-shadow-sm lg:drop-shadow-none">
+                  <div className="text-[#F26641] text-2xl sm:text-3xl font-bold tracking-tight mb-4 sm:mb-6 drop-shadow-sm lg:drop-shadow-none">
                     Rp 375.000
                   </div>
 
                   {/* Add to Cart Button */}
-                  <div className="w-full sm:w-auto bg-[#F26641] group-hover:bg-[#D55331] transition-colors text-white font-bold py-4 px-8 rounded-full flex justify-center items-center gap-2 shadow-lg group-hover:-translate-y-1 group-hover:shadow-xl">
+                  <div className="w-full sm:w-auto bg-[#F26641] group-hover:bg-[#D55331] transition-colors text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full flex justify-center items-center gap-2 shadow-lg group-hover:-translate-y-1 group-hover:shadow-xl text-sm sm:text-base">
                     <span>Lihat Detail</span>
                   </div>
                 </div>
@@ -198,7 +198,7 @@ export default function TokoPage() {
               </button>
 
               {/* Carousel Dots */}
-              <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-3 z-10">
+              <div className="absolute bottom-4 sm:bottom-6 left-0 right-0 flex justify-center gap-3 z-10">
                 <div className="w-8 h-2.5 bg-white rounded-full shadow-md transition-all duration-300" />
                 <div className="w-2.5 h-2.5 bg-white/40 hover:bg-white/70 transition-all duration-300 rounded-full cursor-pointer shadow-md" />
                 <div className="w-2.5 h-2.5 bg-white/40 hover:bg-white/70 transition-all duration-300 rounded-full cursor-pointer shadow-md" />
@@ -281,9 +281,6 @@ export default function TokoPage() {
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
                   Rekomendasi yang Dipersonalisasi untuk Hewan Anda
                 </h2>
-                <p className="text-[#D6E8F5] text-lg font-medium">
-                  Buat profil hewan peliharaan Anda untuk mendapatkan rekomendasi produk yang disesuaikan dengan kebutuhan nutrisi spesifik mereka.
-                </p>
               </div>
               <div className="w-full md:w-auto flex-shrink-0 relative z-10">
                 <Link
@@ -319,12 +316,13 @@ export default function TokoPage() {
 
         {/* Section 2: Product Cards Row */}
         <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-16">
-          <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
+          <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex flex-row justify-between items-end sm:items-end gap-4 mb-8">
             <h2 className="text-[#191C1E] text-3xl md:text-4xl font-bold tracking-tight">
               Produk Kami
             </h2>
-            <Link href="/shop/products" className="bg-[#1B6CA8] hover:bg-[#124E7A] transition-colors text-white font-bold py-3 px-6 rounded-full shadow-md">
+            <Link href="/shop/products" className="text-[#1B6CA8] hover:text-[#124E7A] transition-colors font-bold text-sm md:text-base flex items-center gap-1 shrink-0 pb-1">
               Lihat Semua
+              <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
             </Link>
           </motion.div>
 
@@ -349,13 +347,14 @@ export default function TokoPage() {
         {/* Section 3: Subscription Spotlight */}
         <section className="w-full bg-[#D6E8F5]/30 py-16 lg:py-24">
           <div className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 mx-auto flex flex-col gap-10">
-            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex flex-row justify-between items-end gap-4 mb-2 md:mb-0">
               <h2 className="text-[#191C1E] text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">
                 Sorotan Langganan
               </h2>
-              <button className="bg-[#1B6CA8] hover:bg-[#124E7A] transition-colors text-white font-bold py-3 px-6 rounded-full shadow-md w-full sm:w-auto">
-                Lihat Semua Paket
-              </button>
+              <Link href="/shop/subscriptions" className="text-[#1B6CA8] hover:text-[#124E7A] transition-colors font-bold text-sm md:text-base flex items-center gap-1 shrink-0 pb-1">
+                Semua Paket
+                <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+              </Link>
             </motion.div>
 
             <motion.div key={isLoading ? 'loading' : 'loaded'} variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.1 }} className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">

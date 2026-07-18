@@ -60,8 +60,7 @@ export default function SubscriptionCarousel({ title, subtitle, plans, isMonthly
       <div className="relative -mx-4 px-4 md:mx-0 md:px-0">
         <div 
           ref={scrollRef}
-          className="flex overflow-x-auto gap-6 pb-4 snap-x snap-mandatory items-stretch [&::-webkit-scrollbar]:hidden"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          className="flex overflow-x-auto gap-6 pb-6 snap-x snap-mandatory items-stretch [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#D6E8F5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#B0BEC5]"
         >
         {plans.map((plan, idx) => (
           <div key={idx} className="w-[85vw] sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] shrink-0 snap-center h-auto">

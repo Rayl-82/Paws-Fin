@@ -235,7 +235,7 @@ export default function Navbar() {
             </div>
             {/* Mobile Categories (Horizontal Pills) */}
             <div className="w-full px-4 pb-3 flex items-center justify-between gap-3">
-              <div className="flex-1 overflow-x-auto no-scrollbar flex items-center gap-2">
+              <div className="flex-1 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] flex items-center gap-2">
                 <Link href="/shop" className={`flex-shrink-0 px-4 py-1.5 rounded-full text-[13px] font-semibold transition-colors border ${isActive('/shop') ? 'bg-[#1B6CA8] text-white border-[#1B6CA8]' : 'bg-white text-[#546E7A] border-[#E0E7EF]'}`}>
                   Unggulan
                 </Link>

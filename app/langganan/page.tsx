@@ -47,7 +47,7 @@ export default async function LanggananPage() {
               src="/images/subsbanner.png"
               alt="Subscription Banner"
               fill
-              className="object-cover object-center"
+              className="object-cover object-[20%_center] sm:object-center scale-[1.3] sm:scale-100"
               priority
             />
             {/* Dark gradient overlay for readability */}
@@ -92,44 +92,44 @@ export default async function LanggananPage() {
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-[#1A1A1A] mb-4">Mengapa Berlangganan?</h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E0E6EB] flex flex-col gap-4">
-              <div className="w-10 h-10 bg-[#F0F4F8] rounded-xl flex items-center justify-center text-[#1B6CA8]">
-                <Truck className="w-5 h-5" />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+            <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-[#E0E6EB] flex flex-col gap-3 md:gap-4">
+              <div className="w-8 h-8 md:w-10 md:h-10 bg-[#F0F4F8] rounded-xl flex items-center justify-center text-[#1B6CA8]">
+                <Truck className="w-4 h-4 md:w-5 md:h-5" />
               </div>
               <div>
-                <h3 className="font-bold text-[#1A1A1A] mb-1">Gratis Pengiriman</h3>
-                <p className="text-[#546E7A] text-sm leading-relaxed">Nikmati pengiriman gratis untuk semua langganan bulanan aktif.</p>
+                <h3 className="font-bold text-[#1A1A1A] text-sm md:text-base mb-1">Gratis Pengiriman</h3>
+                <p className="text-[#546E7A] text-xs md:text-sm leading-relaxed">Nikmati pengiriman gratis untuk semua langganan bulanan aktif.</p>
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E0E6EB] flex flex-col gap-4">
-              <div className="w-10 h-10 bg-[#F0F4F8] rounded-xl flex items-center justify-center text-[#1B6CA8]">
-                <CalendarOff className="w-5 h-5" />
+            <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-[#E0E6EB] flex flex-col gap-3 md:gap-4">
+              <div className="w-8 h-8 md:w-10 md:h-10 bg-[#F0F4F8] rounded-xl flex items-center justify-center text-[#1B6CA8]">
+                <CalendarOff className="w-4 h-4 md:w-5 md:h-5" />
               </div>
               <div>
-                <h3 className="font-bold text-[#1A1A1A] mb-1">Jadwal Fleksibel</h3>
-                <p className="text-[#546E7A] text-sm leading-relaxed">Jeda, lewati, atau batalkan pengiriman kapan saja tanpa biaya.</p>
+                <h3 className="font-bold text-[#1A1A1A] text-sm md:text-base mb-1">Jadwal Fleksibel</h3>
+                <p className="text-[#546E7A] text-xs md:text-sm leading-relaxed">Jeda, lewati, atau batalkan pengiriman kapan saja tanpa biaya.</p>
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E0E6EB] flex flex-col gap-4">
-              <div className="w-10 h-10 bg-[#F0F4F8] rounded-xl flex items-center justify-center text-[#1B6CA8]">
-                <Crosshair className="w-5 h-5" />
+            <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-[#E0E6EB] flex flex-col gap-3 md:gap-4">
+              <div className="w-8 h-8 md:w-10 md:h-10 bg-[#F0F4F8] rounded-xl flex items-center justify-center text-[#1B6CA8]">
+                <Crosshair className="w-4 h-4 md:w-5 md:h-5" />
               </div>
               <div>
-                <h3 className="font-bold text-[#1A1A1A] mb-1">Pilihan Terpersonalisasi</h3>
-                <p className="text-[#546E7A] text-sm leading-relaxed">Kotak dikurasi sesuai profil unik hewan peliharaan Anda.</p>
+                <h3 className="font-bold text-[#1A1A1A] text-sm md:text-base mb-1">Pilihan Terpersonalisasi</h3>
+                <p className="text-[#546E7A] text-xs md:text-sm leading-relaxed">Kotak dikurasi sesuai profil hewan Anda.</p>
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E0E6EB] flex flex-col gap-4">
-              <div className="w-10 h-10 bg-[#F0F4F8] rounded-xl flex items-center justify-center text-[#1B6CA8]">
-                <Leaf className="w-5 h-5" />
+            <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-[#E0E6EB] flex flex-col gap-3 md:gap-4">
+              <div className="w-8 h-8 md:w-10 md:h-10 bg-[#F0F4F8] rounded-xl flex items-center justify-center text-[#1B6CA8]">
+                <Leaf className="w-4 h-4 md:w-5 md:h-5" />
               </div>
               <div>
-                <h3 className="font-bold text-[#1A1A1A] mb-1">Nutrisi Berkelanjutan</h3>
-                <p className="text-[#546E7A] text-sm leading-relaxed">Bersumber dari bahan laut premium yang didaur ulang.</p>
+                <h3 className="font-bold text-[#1A1A1A] text-sm md:text-base mb-1">Nutrisi Berkelanjutan</h3>
+                <p className="text-[#546E7A] text-xs md:text-sm leading-relaxed">Bahan laut premium yang didaur ulang.</p>
               </div>
             </div>
           </div>
