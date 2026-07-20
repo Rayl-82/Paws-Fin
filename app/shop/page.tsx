@@ -34,6 +34,19 @@ export default function TokoPage() {
   const [pets, setPets] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeBannerIndex, setActiveBannerIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+
+  const handleTouchStart = (e: React.TouchEvent) => setTouchStart(e.targetTouches[0].clientX);
+  const handleTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX);
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    if (distance > 50) setActiveBannerIndex((prev) => (prev + 1) % 3); // banners.length is 3
+    else if (distance < -50) setActiveBannerIndex((prev) => (prev === 0 ? 2 : prev - 1));
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
 
   const banners = [
     {
@@ -181,7 +194,12 @@ export default function TokoPage() {
         {/* Section 1: Hero Banner */}
         <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-8 md:pb-12 lg:pb-16">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div className="w-full relative overflow-hidden rounded-[24px] bg-[#ECEEF1] shadow-xl min-h-[360px] md:min-h-[400px] lg:h-[500px] flex items-center group">
+            <div 
+              className="w-full relative overflow-hidden rounded-[24px] bg-[#ECEEF1] shadow-xl min-h-[360px] md:min-h-[400px] lg:h-[500px] flex items-center group"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
               <Link href={banners[activeBannerIndex].href} className="absolute inset-0 block z-0">
                 <Image
                   src={banners[activeBannerIndex].image}
