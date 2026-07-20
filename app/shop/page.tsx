@@ -33,6 +33,41 @@ export default function TokoPage() {
   const [hasProfile, setHasProfile] = useState(false);
   const [pets, setPets] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeBannerIndex, setActiveBannerIndex] = useState(0);
+
+  const banners = [
+    {
+      id: 1,
+      image: "/images/featuredmainbanner.png",
+      title: "Ocean Omega Box",
+      tags: ["Tinggi Omega-3", "Bebas Biji-bijian"],
+      price: "Rp 375.000",
+      href: "/shop/subscriptions/sub1"
+    },
+    {
+      id: 2,
+      image: "/images/featuredmainbanner2.png",
+      title: "Premium Salmon Treats",
+      tags: ["100% Alami", "Tinggi Protein"],
+      price: "Rp 125.000",
+      href: "/shop/products/prod1"
+    },
+    {
+      id: 3,
+      image: "/images/featuredmainbanner3.png",
+      title: "Kitten Starter Pack",
+      tags: ["Pertumbuhan Optimal", "Mudah Dicerna"],
+      price: "Rp 250.000",
+      href: "/shop/subscriptions/sub2"
+    }
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveBannerIndex((prev) => (prev + 1) % banners.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [banners.length]);
 
   useEffect(() => {
     const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -55,8 +90,8 @@ export default function TokoPage() {
     async function fetchRegular() {
       try {
         const params = new URLSearchParams();
-        params.append('excludeCategory', 'Subscription');
-        params.append('excludeCategory', 'Bundle');
+        params.append('excludeCategory', 'Subscriptions');
+        params.append('excludeCategory', 'Bundles');
         const res = await fetch(`/api/products?${params.toString()}`);
         if (res.ok) {
           const data = await res.json();
@@ -70,7 +105,7 @@ export default function TokoPage() {
 
     async function fetchSubscriptions() {
       try {
-        const res = await fetch(`/api/products?category=Subscription`);
+        const res = await fetch(`/api/products?category=Subscriptions`);
         if (res.ok) {
           const data = await res.json();
           const subs = data?.data?.products || [];
@@ -146,64 +181,87 @@ export default function TokoPage() {
         {/* Section 1: Hero Banner */}
         <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pb-8 md:pb-12 lg:pb-16">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <Link href="/shop/subscriptions/sub1" className="w-full relative overflow-hidden rounded-[24px] bg-[#ECEEF1] shadow-xl min-h-[360px] md:min-h-[400px] lg:h-[500px] flex items-center group block">
-              <Image
-                src="/images/featuredmainbanner.png"
-                alt="Ocean Omega Box Background"
-                fill
-                className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                priority
-              />
+            <div className="w-full relative overflow-hidden rounded-[24px] bg-[#ECEEF1] shadow-xl min-h-[360px] md:min-h-[400px] lg:h-[500px] flex items-center group">
+              <Link href={banners[activeBannerIndex].href} className="absolute inset-0 block z-0">
+                <Image
+                  src={banners[activeBannerIndex].image}
+                  alt={banners[activeBannerIndex].title}
+                  fill
+                  className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                  priority
+                />
 
-              {/* Overlay Content */}
-              <div className="absolute inset-0 flex items-center p-6 sm:p-10 lg:pl-16 bg-gradient-to-r from-black/50 via-black/20 to-transparent lg:bg-none">
-                <div className="w-full max-w-sm flex flex-col justify-center">
-                  {/* Product Name */}
-                  <h1 className="text-white lg:text-[#191C1E] text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-3 sm:mb-4 leading-tight drop-shadow-md lg:drop-shadow-none">
-                    Ocean Omega Box
-                  </h1>
+                {/* Overlay Content */}
+                <div className="absolute inset-0 flex items-center p-6 sm:p-10 lg:pl-16 bg-gradient-to-r from-black/50 via-black/20 to-transparent lg:bg-none">
+                  <div className="w-full max-w-sm flex flex-col justify-center">
+                    {/* Product Name */}
+                    <h1 className="text-white lg:text-[#191C1E] text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-3 sm:mb-4 leading-tight drop-shadow-md lg:drop-shadow-none">
+                      {banners[activeBannerIndex].title}
+                    </h1>
 
-                  {/* Feature Tags */}
-                  <div className="flex flex-col gap-2 sm:gap-3 mb-4 sm:mb-6">
-                    {["Tinggi Omega-3", "Bebas Biji-bijian"].map((tag) => (
-                      <div key={tag} className="flex items-center gap-2 sm:gap-3">
-                        <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#1B6CA8] lg:bg-[#005387] flex items-center justify-center flex-shrink-0 shadow-sm">
-                          <Check className="text-white w-2.5 h-2.5 sm:w-3 sm:h-3" strokeWidth={3} />
+                    {/* Feature Tags */}
+                    <div className="flex flex-col gap-2 sm:gap-3 mb-4 sm:mb-6">
+                      {banners[activeBannerIndex].tags.map((tag) => (
+                        <div key={tag} className="flex items-center gap-2 sm:gap-3">
+                          <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#1B6CA8] lg:bg-[#005387] flex items-center justify-center flex-shrink-0 shadow-sm">
+                            <Check className="text-white w-2.5 h-2.5 sm:w-3 sm:h-3" strokeWidth={3} />
+                          </div>
+                          <span className="text-white lg:text-[#005387] text-sm sm:text-base font-semibold tracking-wide drop-shadow-sm lg:drop-shadow-none">
+                            {tag}
+                          </span>
                         </div>
-                        <span className="text-white lg:text-[#005387] text-sm sm:text-base font-semibold tracking-wide drop-shadow-sm lg:drop-shadow-none">
-                          {tag}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
 
-                  {/* Price */}
-                  <div className="text-[#F26641] text-2xl sm:text-3xl font-bold tracking-tight mb-4 sm:mb-6 drop-shadow-sm lg:drop-shadow-none">
-                    Rp 375.000
-                  </div>
+                    {/* Price */}
+                    <div className="text-[#F26641] text-2xl sm:text-3xl font-bold tracking-tight mb-4 sm:mb-6 drop-shadow-sm lg:drop-shadow-none">
+                      {banners[activeBannerIndex].price}
+                    </div>
 
-                  {/* Add to Cart Button */}
-                  <div className="w-full sm:w-auto bg-[#F26641] group-hover:bg-[#D55331] transition-colors text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full flex justify-center items-center gap-2 shadow-lg group-hover:-translate-y-1 group-hover:shadow-xl text-sm sm:text-base">
-                    <span>Lihat Detail</span>
+                    {/* Add to Cart Button */}
+                    <div className="w-full sm:w-auto bg-[#F26641] group-hover:bg-[#D55331] transition-colors text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full flex justify-center items-center gap-2 shadow-lg group-hover:-translate-y-1 group-hover:shadow-xl text-sm sm:text-base">
+                      <span>Lihat Detail</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
 
               {/* Carousel Navigation Arrows */}
-              <button className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/30 hover:bg-white text-gray-800 rounded-full flex items-center justify-center backdrop-blur-sm shadow-sm transition-all duration-300 opacity-0 group-hover:opacity-100 z-10">
+              <button 
+                onClick={(e) => {
+                  e.preventDefault();
+                  setActiveBannerIndex((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
+                }}
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/30 hover:bg-white text-gray-800 rounded-full flex items-center justify-center backdrop-blur-sm shadow-sm transition-all duration-300 opacity-0 group-hover:opacity-100 z-10"
+              >
                 <ChevronLeft size={24} />
               </button>
-              <button className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/30 hover:bg-white text-gray-800 rounded-full flex items-center justify-center backdrop-blur-sm shadow-sm transition-all duration-300 opacity-0 group-hover:opacity-100 z-10">
+              <button 
+                onClick={(e) => {
+                  e.preventDefault();
+                  setActiveBannerIndex((prev) => (prev + 1) % banners.length);
+                }}
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/30 hover:bg-white text-gray-800 rounded-full flex items-center justify-center backdrop-blur-sm shadow-sm transition-all duration-300 opacity-0 group-hover:opacity-100 z-10"
+              >
                 <ChevronRight size={24} />
               </button>
 
               {/* Carousel Dots */}
               <div className="absolute bottom-4 sm:bottom-6 left-0 right-0 flex justify-center gap-3 z-10">
-                <div className="w-8 h-2.5 bg-white rounded-full shadow-md transition-all duration-300" />
-                <div className="w-2.5 h-2.5 bg-white/40 hover:bg-white/70 transition-all duration-300 rounded-full cursor-pointer shadow-md" />
-                <div className="w-2.5 h-2.5 bg-white/40 hover:bg-white/70 transition-all duration-300 rounded-full cursor-pointer shadow-md" />
+                {banners.map((_, idx) => (
+                  <div 
+                    key={idx}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setActiveBannerIndex(idx);
+                    }}
+                    className={`h-2.5 transition-all duration-300 rounded-full cursor-pointer shadow-md ${
+                      activeBannerIndex === idx ? 'w-8 bg-white' : 'w-2.5 bg-white/40 hover:bg-white/70'
+                    }`}
+                  />
+                ))}
               </div>
-            </Link>
+            </div>
           </motion.div>
         </section>
 

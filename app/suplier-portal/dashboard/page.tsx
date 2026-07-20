@@ -81,14 +81,14 @@ export default function PartnerDashboardDesktop() {
               <p className="text-[#546E7A] text-lg">Industri Perikanan • Dashboard Overview</p>
             </div>
             
-            <div className="flex items-center gap-3">
-              <select className="bg-[#F0F4F8] border-none text-[#1A1A1A] font-semibold py-3 px-5 rounded-xl cursor-pointer focus:ring-2 focus:ring-[#1B6CA8] transition-all">
+            <div className="flex items-center gap-2 md:gap-3 w-full md:w-auto mt-2 md:mt-0">
+              <select className="bg-[#F0F4F8] border-none text-[#1A1A1A] font-semibold py-2.5 md:py-3 px-3 md:px-5 rounded-xl cursor-pointer focus:ring-2 focus:ring-[#1B6CA8] transition-all flex-1 md:flex-none text-xs md:text-base">
                 <option>Bulan Ini (Mei 2025)</option>
                 <option>Bulan Lalu (Apr 2025)</option>
                 <option>Tahun Ini</option>
               </select>
-              <button onClick={() => setIsAddStockOpen(true)} className="bg-[#F26641] hover:bg-[#BF4A28] text-white font-bold py-3 px-6 rounded-xl transition-all shadow-sm hover:shadow flex items-center gap-2">
-                <Plus size={20} />
+              <button onClick={() => setIsAddStockOpen(true)} className="bg-[#F26641] hover:bg-[#BF4A28] text-white font-bold py-2.5 md:py-3 px-4 md:px-6 rounded-xl transition-all shadow-sm hover:shadow flex items-center justify-center gap-1.5 shrink-0 whitespace-nowrap text-sm md:text-base">
+                <Plus size={18} className="md:w-[20px] md:h-[20px]" />
                 Tambah Stok
               </button>
             </div>
@@ -97,74 +97,82 @@ export default function PartnerDashboardDesktop() {
 
         {/* Stats Grid */}
         <section className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-16 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
             
             {/* Stat 1 */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E0E7EF] hover:shadow-md transition-shadow group">
-              <div className="flex justify-between items-start mb-4">
-                <div className="w-12 h-12 rounded-xl bg-[#E8F1F8] text-[#1B6CA8] flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Package size={24} />
+            <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-[#E0E7EF] hover:shadow-md transition-shadow group flex flex-col justify-between">
+              <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-2 mb-3 md:mb-4">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#E8F1F8] text-[#1B6CA8] flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Package className="w-5 h-5 md:w-6 md:h-6" />
                 </div>
-                <span className="flex items-center gap-1 text-sm font-bold text-green-600 bg-green-50 px-2 py-1 rounded-lg">
-                  <TrendingUp size={14} /> +15%
+                <span className="flex items-center gap-1 text-xs md:text-sm font-bold text-green-600 bg-green-50 px-1.5 md:px-2 py-0.5 md:py-1 rounded-lg shrink-0">
+                  <TrendingUp size={12} className="md:w-3.5 md:h-3.5" /> +15%
                 </span>
               </div>
-              <p className="text-[#546E7A] font-semibold mb-1">Limbah Dikirim</p>
-              <div className="flex items-baseline gap-2">
-                <h3 className="text-3xl font-bold font-serif text-[#1A1A1A]">245</h3>
-                <span className="text-[#546E7A] font-semibold">kg</span>
+              <div>
+                <p className="text-[#546E7A] text-xs md:text-sm font-semibold mb-0.5 md:mb-1">Limbah Dikirim</p>
+                <div className="flex items-baseline gap-1 md:gap-2">
+                  <h3 className="text-2xl md:text-3xl font-bold font-serif text-[#1A1A1A]">245</h3>
+                  <span className="text-[#546E7A] font-semibold text-xs md:text-base">kg</span>
+                </div>
               </div>
             </div>
 
             {/* Stat 2 */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E0E7EF] hover:shadow-md transition-shadow group">
-              <div className="flex justify-between items-start mb-4">
-                <div className="w-12 h-12 rounded-xl bg-[#E8F5E9] text-[#2E7D32] flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Leaf size={24} />
+            <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-[#E0E7EF] hover:shadow-md transition-shadow group flex flex-col justify-between">
+              <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-2 mb-3 md:mb-4">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#E8F5E9] text-[#2E7D32] flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Leaf className="w-5 h-5 md:w-6 md:h-6" />
                 </div>
-                <span className="flex items-center gap-1 text-sm font-bold text-green-600 bg-green-50 px-2 py-1 rounded-lg">
-                  <TrendingUp size={14} /> +12%
+                <span className="flex items-center gap-1 text-xs md:text-sm font-bold text-green-600 bg-green-50 px-1.5 md:px-2 py-0.5 md:py-1 rounded-lg shrink-0">
+                  <TrendingUp size={12} className="md:w-3.5 md:h-3.5" /> +12%
                 </span>
               </div>
-              <p className="text-[#546E7A] font-semibold mb-1">Pendapatan Tambahan</p>
-              <div className="flex items-baseline gap-1">
-                <span className="text-[#546E7A] font-semibold">Rp</span>
-                <h3 className="text-3xl font-bold font-serif text-[#1A1A1A]">4.25M</h3>
+              <div>
+                <p className="text-[#546E7A] text-xs md:text-sm font-semibold mb-0.5 md:mb-1">Pendapatan</p>
+                <div className="flex items-baseline gap-0.5 md:gap-1">
+                  <span className="text-[#546E7A] font-semibold text-xs md:text-base">Rp</span>
+                  <h3 className="text-2xl md:text-3xl font-bold font-serif text-[#1A1A1A]">4.25M</h3>
+                </div>
               </div>
             </div>
 
             {/* Stat 3 */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E0E7EF] hover:shadow-md transition-shadow group">
-              <div className="flex justify-between items-start mb-4">
-                <div className="w-12 h-12 rounded-xl bg-[#FFF0E6] text-[#E65100] flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <ShoppingBag size={24} />
+            <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-[#E0E7EF] hover:shadow-md transition-shadow group flex flex-col justify-between">
+              <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-2 mb-3 md:mb-4">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#FFF0E6] text-[#E65100] flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <ShoppingBag className="w-5 h-5 md:w-6 md:h-6" />
                 </div>
-                <span className="flex items-center gap-1 text-sm font-bold text-green-600 bg-green-50 px-2 py-1 rounded-lg">
-                  <TrendingUp size={14} /> +3
+                <span className="flex items-center gap-1 text-xs md:text-sm font-bold text-green-600 bg-green-50 px-1.5 md:px-2 py-0.5 md:py-1 rounded-lg shrink-0">
+                  <TrendingUp size={12} className="md:w-3.5 md:h-3.5" /> +3
                 </span>
               </div>
-              <p className="text-[#546E7A] font-semibold mb-1">Total Pesanan</p>
-              <div className="flex items-baseline gap-2">
-                <h3 className="text-3xl font-bold font-serif text-[#1A1A1A]">18</h3>
-                <span className="text-[#546E7A] font-semibold text-sm">Aktif</span>
+              <div>
+                <p className="text-[#546E7A] text-xs md:text-sm font-semibold mb-0.5 md:mb-1">Pesanan</p>
+                <div className="flex items-baseline gap-1 md:gap-2">
+                  <h3 className="text-2xl md:text-3xl font-bold font-serif text-[#1A1A1A]">18</h3>
+                  <span className="text-[#546E7A] font-semibold text-[10px] md:text-sm">Aktif</span>
+                </div>
               </div>
             </div>
 
             {/* Stat 4 */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E0E7EF] hover:shadow-md transition-shadow group relative overflow-hidden">
-              <div className="flex justify-between items-start mb-4 relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-[#E3F2FD] text-[#1565C0] flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <TreePine size={24} />
+            <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-[#E0E7EF] hover:shadow-md transition-shadow group relative overflow-hidden flex flex-col justify-between">
+              <div className="flex justify-between items-start mb-3 md:mb-4 relative z-10">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#E3F2FD] text-[#1565C0] flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <TreePine className="w-5 h-5 md:w-6 md:h-6" />
                 </div>
               </div>
-              <p className="text-[#546E7A] font-semibold mb-1 relative z-10">CO₂ Dihematkan</p>
-              <div className="flex items-baseline gap-2 relative z-10">
-                <h3 className="text-3xl font-bold font-serif text-[#1A1A1A]">78</h3>
-                <span className="text-[#546E7A] font-semibold">kg</span>
+              <div>
+                <p className="text-[#546E7A] text-xs md:text-sm font-semibold mb-0.5 md:mb-1 relative z-10">CO₂ Dihematkan</p>
+                <div className="flex items-baseline gap-1 md:gap-2 relative z-10">
+                  <h3 className="text-2xl md:text-3xl font-bold font-serif text-[#1A1A1A]">78</h3>
+                  <span className="text-[#546E7A] font-semibold text-xs md:text-base">kg</span>
+                </div>
               </div>
               
               <div className="absolute right-0 bottom-0 opacity-10 pointer-events-none">
-                <TreePine size={100} className="text-[#1565C0] translate-x-4 translate-y-4" />
+                <TreePine size={80} className="md:w-[100px] md:h-[100px] text-[#1565C0] translate-x-4 translate-y-4" />
               </div>
             </div>
             
@@ -231,7 +239,7 @@ export default function PartnerDashboardDesktop() {
                         <td className="px-6 py-5 font-semibold text-[#1A1A1A]">Kulit Ikan</td>
                         <td className="px-6 py-5 font-bold text-[#1B6CA8]">20 kg</td>
                         <td className="px-6 py-5">
-                          <span className="bg-[#FFF0E6] text-[#E65100] px-3 py-1 rounded-full text-xs font-bold border border-[#FFE0CC]">Menunggu Konfirmasi</span>
+                          <span className="bg-[#FFF0E6] text-[#E65100] px-3 py-1 rounded-full text-xs font-bold border border-[#FFE0CC] whitespace-nowrap inline-block">Menunggu Konfirmasi</span>
                         </td>
                         <td className="px-6 py-5">
                           <button className="text-[#1B6CA8] hover:text-[#0C3350] font-bold text-sm bg-blue-50 px-4 py-2 rounded-lg transition-colors">Tinjau</button>
@@ -252,7 +260,7 @@ export default function PartnerDashboardDesktop() {
                         <td className="px-6 py-5 font-semibold text-[#1A1A1A]">Tulang Ikan</td>
                         <td className="px-6 py-5 font-bold text-[#1B6CA8]">15 kg</td>
                         <td className="px-6 py-5">
-                          <span className="bg-[#E8F5E9] text-[#2E7D32] px-3 py-1 rounded-full text-xs font-bold border border-[#C8E6C9]">Disetujui</span>
+                          <span className="bg-[#E8F5E9] text-[#2E7D32] px-3 py-1 rounded-full text-xs font-bold border border-[#C8E6C9] whitespace-nowrap inline-block">Disetujui</span>
                         </td>
                         <td className="px-6 py-5">
                           <button className="text-[#546E7A] hover:text-[#1A1A1A] p-2 transition-colors"><MoreVertical size={20} /></button>
@@ -273,7 +281,7 @@ export default function PartnerDashboardDesktop() {
                         <td className="px-6 py-5 font-semibold text-[#1A1A1A]">Kepala Ikan</td>
                         <td className="px-6 py-5 font-bold text-[#1B6CA8]">10 kg</td>
                         <td className="px-6 py-5">
-                          <span className="bg-[#E3F2FD] text-[#1565C0] px-3 py-1 rounded-full text-xs font-bold border border-[#BBDEFB]">Dikirim</span>
+                          <span className="bg-[#E3F2FD] text-[#1565C0] px-3 py-1 rounded-full text-xs font-bold border border-[#BBDEFB] whitespace-nowrap inline-block">Dikirim</span>
                         </td>
                         <td className="px-6 py-5">
                           <button className="text-[#546E7A] hover:text-[#1A1A1A] p-2 transition-colors"><MoreVertical size={20} /></button>

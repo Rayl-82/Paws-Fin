@@ -10,12 +10,12 @@ export const dynamic = 'force-dynamic';
 
 export default async function LanggananPage() {
   const subscriptionPlansData = await prisma.product.findMany({
-    where: { category: 'Subscription' },
+    where: { category: 'Subscriptions' },
     orderBy: { createdAt: 'asc' },
   });
 
   const bundlesData = await prisma.product.findMany({
-    where: { category: 'Bundle' },
+    where: { category: 'Bundles' },
     orderBy: { createdAt: 'asc' },
   });
 

@@ -34,24 +34,28 @@ export default function SubscriptionDetailPage({ params }: { params: Promise<{ i
   // Mock related products
   const relatedProducts = [
     {
+      id: "510930b5-bc80-4671-8b7a-4d275a4506ff",
       image: "/images/product3.png",
       name: "Atlantic Kelp Powder",
       price: "Rp 45.000",
       description: "Metabolism and thyroid support",
     },
     {
+      id: "prod1",
       image: "/images/product1.png",
       name: "Wild Salmon Chips",
       price: "Rp 32.000",
-      description: "Crunchy high-protein snack",
+      description: "100% Wild Caught",
     },
     {
+      id: "48c9f8b6-1f91-4ce6-8640-352ec5b6de33",
       image: "/images/product4.png",
       name: "Marine Collagen Liquid",
       price: "Rp 120.000",
       description: "Joint and bone vitality",
     },
     {
+      id: "b663ade0-5cc3-4740-b44f-4d859b681330",
       image: "/images/product2.png",
       name: "Mackerel Wet Mix",
       price: "Rp 15.000 / pc",
@@ -532,6 +536,7 @@ export default function SubscriptionDetailPage({ params }: { params: Promise<{ i
             {relatedProducts.map((product, index) => (
               <ProductCard
                 key={index}
+                id={product.id}
                 image={product.image}
                 name={product.name}
                 price={product.price}

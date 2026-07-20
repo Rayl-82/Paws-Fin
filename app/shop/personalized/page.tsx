@@ -87,27 +87,56 @@ export default function RecommendationPage() {
       }
 
       setPetProfile(currentPet);
+    } catch (err) {
+      console.error("Failed to load pet profiles", err);
+    } finally {
+      if (!currentPet) setIsLoading(false);
+    }
+  };
 
-      // 3. Fetch Recommended Products
-      if (currentPet) {
-        const prodRes = await fetch("/api/products");
+  // 3. Fetch Recommended Products whenever petProfile changes
+  useEffect(() => {
+    if (!petProfile) return;
+    
+    let isMounted = true;
+    const loadRecommendations = async () => {
+      setIsLoading(true);
+      try {
+        const prodRes = await fetch("/api/products?limit=50");
         if (prodRes.ok) {
           const prodData = await prodRes.json();
           const productsList = prodData.data?.products || [];
-          // Separate a subscription and some products
-          const subs = productsList.filter((p: any) => p.category === "Subscription");
-          const others = productsList.filter((p: any) => p.category !== "Subscription");
           
-          if (subs.length > 0) setSubscription(subs[0]);
-          setProducts(others.slice(0, 4)); // Get 4 recommendations
+          if (!isMounted) return;
+
+          // Deterministic selection based on pet name length so 1 pet = 1 consistent combo
+          const nameLen = petProfile?.petName?.length || 0;
+          
+          const subs = productsList.filter((p: any) => p.category === "Subscriptions" || p.category === "Bundles");
+          const others = productsList.filter((p: any) => p.category !== "Subscriptions" && p.category !== "Bundles");
+          
+          if (subs.length > 0) {
+            const subIndex = nameLen % subs.length;
+            setSubscription(subs[subIndex]);
+          }
+          
+          if (others.length > 0) {
+            // Shift array deterministically
+            const shift = nameLen % others.length;
+            const shiftedOthers = [...others.slice(shift), ...others.slice(0, shift)];
+            setProducts(shiftedOthers.slice(0, 4));
+          }
         }
+      } catch (err) {
+        console.error("Failed to load recommendations", err);
+      } finally {
+        if (isMounted) setTimeout(() => setIsLoading(false), 600); // Artificial delay for skeleton effect
       }
-    } catch (err) {
-      console.error("Failed to load recommendations", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
+    
+    loadRecommendations();
+    return () => { isMounted = false; };
+  }, [petProfile?.petName, petProfile?.id]);
 
   if (isLoading) {
     return (
@@ -317,7 +346,7 @@ export default function RecommendationPage() {
                       {matchScore}% Kecocokan
                     </div>
                     
-                    <Link href="/shop/personalized/create" className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white font-bold text-sm md:text-base px-6 py-3 rounded-full inline-flex items-center justify-center gap-2 transition-all shadow-sm w-full sm:w-auto">
+                    <Link href="/shop/personalized/create" className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white font-bold text-sm md:text-base px-6 py-3 rounded-full inline-flex items-center justify-center gap-2 transition-all shadow-sm w-full sm:w-auto whitespace-nowrap">
                       <Plus className="w-4 h-4 md:w-5 md:h-5" />
                       Tambah Profil
                     </Link>

@@ -13,6 +13,19 @@ export async function GET(
       where: { id }
     });
 
+    // Fallback: If banner dummy ID is used, find the actual product by name in the DB
+    if (!product && (id === 'prod1' || id === 'sub1' || id === 'sub2')) {
+      const bannerProductNames: Record<string, string> = {
+        'prod1': 'Premium Salmon Treats',
+        'sub1': 'Ocean Omega Box',
+        'sub2': 'Kitten Starter Pack'
+      };
+      
+      product = await prisma.product.findFirst({
+        where: { name: bannerProductNames[id] }
+      });
+    }
+
     if (!product && (id === 'sub1' || id === 'sub2' || id === 'sub3')) {
       const mockSubs = {
         'sub1': { id: 'sub1', name: 'Kotak Ocean Omega', price: 375000, description: 'Pengiriman bulanan kotak ikan premium kami', imageUrl: '/images/sub1.png', category: 'Subscription', features: ['Tinggi Omega-3', 'Bebas Biji-bijian'], billingInterval: 'Bulanan', stock: 100, createdAt: new Date() },

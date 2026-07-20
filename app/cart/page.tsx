@@ -61,16 +61,32 @@ export default function CartPage() {
   };
 
   const loadGuestCart = () => {
-    const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
-    const mappedItems = guestCart.map((item: any) => ({
-      ...item,
-      subtotal: item.product.price * item.quantity
-    }));
-    const cartTotal = mappedItems.reduce((acc: number, item: any) => acc + item.subtotal, 0);
-    
-    setItems(mappedItems);
-    setTotal(cartTotal);
-    setIsLoading(false);
+    try {
+      const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+      
+      // Filter out corrupted items to prevent crashes
+      const validItems = Array.isArray(guestCart) ? guestCart.filter((item: any) => item && item.product) : [];
+      
+      const mappedItems = validItems.map((item: any) => ({
+        ...item,
+        subtotal: (item.product?.price || 0) * (item.quantity || 1)
+      }));
+      const cartTotal = mappedItems.reduce((acc: number, item: any) => acc + item.subtotal, 0);
+      
+      // Clean up localStorage if there were corrupted items
+      if (validItems.length !== (Array.isArray(guestCart) ? guestCart.length : 0)) {
+        localStorage.setItem("guestCart", JSON.stringify(validItems));
+      }
+      
+      setItems(mappedItems);
+      setTotal(cartTotal);
+    } catch (e) {
+      console.error("Error loading guest cart:", e);
+      setItems([]);
+      setTotal(0);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const updateQuantity = async (id: string, delta: number, currentQuantity: number) => {
@@ -183,7 +199,7 @@ export default function CartPage() {
         <main className="flex-1 flex flex-col items-center justify-center gap-6 p-8">
           <div className="bg-white rounded-[16px] shadow-sm border border-[#E0E7EF] p-12 text-center flex flex-col items-center max-w-lg w-full">
             <div className="w-20 h-20 bg-[#F0F4F8] rounded-full flex items-center justify-center mb-6">
-              <AlertCircle className="w-10 h-10 text-[#BF4A28]" />
+              <AlertCircle className="w-10 h-10 text-[#F26641]" />
             </div>
             <h2 className="text-2xl font-serif font-bold text-[#1A1A1A] mb-3">Ups!</h2>
             <p className="text-[#546E7A] mb-8 text-center leading-relaxed">

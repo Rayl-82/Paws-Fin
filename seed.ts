@@ -11,11 +11,12 @@ async function main() {
   const productsData = [
     // Subscriptions (4)
     {
+      id: 'sub1',
       name: 'Ocean Omega Box',
       description: 'Premium fish-based treats for adult cats. Curated monthly to provide the optimal balance of proteins and essential fatty acids.',
-      price: 89000,
+      price: 375000,
       stock: 50,
-      imageUrl: '/images/product1.png',
+      imageUrl: '/images/featuredmainbanner.png',
       category: 'Subscriptions',
     },
     {
@@ -27,11 +28,12 @@ async function main() {
       category: 'Subscriptions',
     },
     {
-      name: 'Kitten Growth Plan',
-      description: 'High-calorie marine bites perfectly sized for growing kittens. Supports brain development with rich DHA.',
-      price: 95000,
+      id: 'sub2',
+      name: 'Kitten Starter Pack',
+      description: 'Pertumbuhan Optimal & Mudah Dicerna. High-calorie marine bites perfectly sized for growing kittens. Supports brain development with rich DHA.',
+      price: 250000,
       stock: 45,
-      imageUrl: '/images/product3.png',
+      imageUrl: '/images/featuredmainbanner3.png',
       category: 'Subscriptions',
     },
     {
@@ -79,11 +81,12 @@ async function main() {
 
     // Individual Products (10)
     {
-      name: 'Salmon Skin Crisps',
-      description: 'Rich in Omega-3, perfect for healthy skin and a shiny coat. Gently air-dried to preserve nutrients.',
-      price: 45000,
+      id: 'prod1',
+      name: 'Premium Salmon Treats',
+      description: '100% Alami & Tinggi Protein. Rich in Omega-3, perfect for healthy skin and a shiny coat. Gently air-dried to preserve nutrients.',
+      price: 125000,
       stock: 120,
-      imageUrl: '/images/product1.png',
+      imageUrl: '/images/featuredmainbanner2.png',
       category: 'Products',
     },
     {

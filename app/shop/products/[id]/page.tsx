@@ -121,24 +121,28 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   // Mock related products (would eventually come from a real recommendation engine)
   const relatedProducts = [
     {
+      id: "510930b5-bc80-4671-8b7a-4d275a4506ff",
       image: "/images/product3.png",
       name: "Atlantic Kelp Powder",
       price: "Rp 45.000",
       description: "4.5",
     },
     {
+      id: "prod1",
       image: "/images/product1.png",
       name: "Wild Salmon Chips",
       price: "Rp 32.000",
       description: "4.9",
     },
     {
+      id: "48c9f8b6-1f91-4ce6-8640-352ec5b6de33",
       image: "/images/product4.png",
       name: "Marine Collagen Liquid",
       price: "Rp 120.000",
       description: "5.0",
     },
     {
+      id: "b663ade0-5cc3-4740-b44f-4d859b681330",
       image: "/images/product2.png",
       name: "Mackerel Wet Mix",
       price: "Rp 15.000",
@@ -173,7 +177,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
         <Navbar />
         <main className="flex-1 flex flex-col items-center justify-center gap-6 p-8">
           <div className="bg-white rounded-3xl p-12 shadow-sm border border-[#E0E6EB] flex flex-col items-center text-center max-w-lg">
-            <AlertCircle className="w-16 h-16 text-[#BF4A28] mb-4" />
+            <AlertCircle className="w-16 h-16 text-[#F26641] mb-4" />
             <h1 className="text-3xl font-bold font-serif text-[#1A1A1A] mb-4">
               {error === "Product not found" ? "Produk Tidak Ditemukan" : "Ups!"}
             </h1>
@@ -468,6 +472,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             {relatedProducts.map((p, index) => (
               <ProductCard
                 key={index}
+                id={p.id}
                 image={p.image}
                 name={p.name}
                 price={p.price}

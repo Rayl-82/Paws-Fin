@@ -72,8 +72,8 @@ function ShopContent() {
         petTypes.forEach(p => params.append('petType', p));
         healthGoals.forEach(h => params.append('health', h));
         productTypes.forEach(p => params.append('productType', p));
-        params.append('excludeCategory', 'Subscription');
-        params.append('excludeCategory', 'Bundle');
+        params.append('excludeCategory', 'Subscriptions');
+        params.append('excludeCategory', 'Bundles');
 
         const res = await fetch(`/api/products?${params.toString()}`);
         if (!res.ok) {
