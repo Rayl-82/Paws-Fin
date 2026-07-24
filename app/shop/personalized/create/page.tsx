@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,7 +8,7 @@ import { ArrowLeft, ArrowRight, Upload, CheckCircle2, ChevronRight, Check } from
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
-export default function CreatePetProfile() {
+function CreatePetProfileContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const editId = searchParams.get("editId");
@@ -567,5 +567,17 @@ export default function CreatePetProfile() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function CreatePetProfile() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#F7F9FC] font-sans flex flex-col items-center justify-center">
+        <div className="w-8 h-8 border-4 border-[#1B6CA8] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    }>
+      <CreatePetProfileContent />
+    </Suspense>
   );
 }
