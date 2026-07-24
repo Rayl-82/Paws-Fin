@@ -34,24 +34,28 @@ export default function BundleDetailPage({ params }: { params: Promise<{ id: str
   // Mock related products
   const relatedProducts = [
     {
+      id: "510930b5-bc80-4671-8b7a-4d275a4506ff",
       image: "/images/product3.png",
       name: "Atlantic Kelp Powder",
       price: "Rp 45.000",
       description: "Metabolism and thyroid support",
     },
     {
+      id: "48c9f8b6-1f91-4ce6-8640-352ec5b6de33",
       image: "/images/product1.png",
       name: "Wild Salmon Chips",
       price: "Rp 32.000",
       description: "Crunchy high-protein snack",
     },
     {
+      id: "b663ade0-5cc3-4740-b44f-4d859b681330",
       image: "/images/product4.png",
       name: "Marine Collagen Liquid",
       price: "Rp 120.000",
       description: "Joint and bone vitality",
     },
     {
+      id: "dummy-id-4",
       image: "/images/product2.png",
       name: "Mackerel Wet Mix",
       price: "Rp 15.000 / pc",
@@ -174,7 +178,7 @@ export default function BundleDetailPage({ params }: { params: Promise<{ id: str
           
           {/* Left: Gallery */}
           <div className="flex-1 flex flex-col gap-4">
-            <div className="w-full aspect-[4/5] md:aspect-square bg-white rounded-2xl border border-[#E0E6EB] overflow-hidden relative shadow-sm">
+            <div className="w-full aspect-[4/5] md:aspect-square bg-white rounded-2xl border border-[#E0E6EB] overflow-x-clip relative shadow-sm">
               <Image
                 src={product.imageUrl || "/images/product4.png"}
                 alt={product.name}
@@ -268,7 +272,7 @@ export default function BundleDetailPage({ params }: { params: Promise<{ id: str
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-[#F2F4F7] rounded-lg border border-[#E0E6EB] relative overflow-hidden">
+                    <div className="w-12 h-12 bg-[#F2F4F7] rounded-lg border border-[#E0E6EB] relative overflow-x-clip">
                        <Image src="/images/product1.png" alt="Wild Salmon Jerky" fill className="object-cover" />
                     </div>
                     <div>
@@ -280,7 +284,7 @@ export default function BundleDetailPage({ params }: { params: Promise<{ id: str
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-[#F2F4F7] rounded-lg border border-[#E0E6EB] relative overflow-hidden">
+                    <div className="w-12 h-12 bg-[#F2F4F7] rounded-lg border border-[#E0E6EB] relative overflow-x-clip">
                        <Image src="/images/product2.png" alt="Tuna Crunchies" fill className="object-cover" />
                     </div>
                     <div>
@@ -292,7 +296,7 @@ export default function BundleDetailPage({ params }: { params: Promise<{ id: str
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-[#F2F4F7] rounded-lg border border-[#E0E6EB] relative overflow-hidden">
+                    <div className="w-12 h-12 bg-[#F2F4F7] rounded-lg border border-[#E0E6EB] relative overflow-x-clip">
                        <Image src="/images/product3.png" alt="Ocean Kelp Bites" fill className="object-cover" />
                     </div>
                     <div>
@@ -469,7 +473,7 @@ export default function BundleDetailPage({ params }: { params: Promise<{ id: str
                       <span className="text-[#546E7A] font-medium">{stars}</span>
                       <Star className="w-4 h-4 fill-[#FDB32A] text-[#FDB32A]" />
                     </div>
-                    <div className="flex-1 h-2 bg-[#E0E6EB] rounded-full overflow-hidden">
+                    <div className="flex-1 h-2 bg-[#E0E6EB] rounded-full overflow-x-clip">
                       <div 
                         className="h-full bg-[#1B6CA8] rounded-full" 
                         style={{ width: stars === 5 ? '85%' : stars === 4 ? '12%' : stars === 3 ? '3%' : '0%' }}
@@ -545,6 +549,7 @@ export default function BundleDetailPage({ params }: { params: Promise<{ id: str
             {relatedProducts.map((product, index) => (
               <ProductCard
                 key={index}
+                id={product.id}
                 image={product.image}
                 name={product.name}
                 price={product.price}

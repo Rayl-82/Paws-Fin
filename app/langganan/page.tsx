@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Truck, CalendarOff, Crosshair, Leaf, ChevronDown } from "lucide-react";
 import prisma from "@/lib/prisma";
+import FadeIn from "@/components/FadeIn";
 
 export const dynamic = 'force-dynamic';
 
@@ -41,7 +42,7 @@ export default async function LanggananPage() {
 
       <main className="w-full flex flex-col items-center pt-6 lg:pt-8 pb-24">
         {/* HERO BANNER */}
-        <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 mb-12">
+        <FadeIn className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 mb-12">
           <div className="w-full h-[220px] md:h-[240px] lg:h-[280px] rounded-2xl relative overflow-hidden bg-[#1B6CA8] shadow-sm">
             <Image
               src="/images/subsbanner.png"
@@ -62,10 +63,10 @@ export default async function LanggananPage() {
               </p>
             </div>
           </div>
-        </section>
+        </FadeIn>
 
         {/* SUBSCRIPTION PLANS */}
-        <section id="plans" className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 mb-16 md:mb-24">
+        <FadeIn delay={0.2} className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 mb-16 md:mb-24">
           <SubscriptionCarousel
             title="Paket Langganan"
             plans={subscriptionPlans}
@@ -73,10 +74,10 @@ export default async function LanggananPage() {
             baseHref="/shop/subscriptions"
             buttonText="Berlangganan Sekarang"
           />
-        </section>
+        </FadeIn>
 
         {/* ONE-TIME BUNDLES */}
-        <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 mb-16 md:mb-32">
+        <FadeIn delay={0.3} className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 mb-16 md:mb-32">
           <SubscriptionCarousel
             title="Bundel Sekali Beli"
             plans={bundlePlans}
@@ -84,10 +85,10 @@ export default async function LanggananPage() {
             baseHref="/shop/bundles"
             buttonText="Tambah ke Keranjang"
           />
-        </section>
+        </FadeIn>
 
         {/* WHY SUBSCRIBE? */}
-        <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 mb-20 md:mb-32">
+        <FadeIn className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 mb-20 md:mb-32">
           <div className="mb-8 md:mb-12">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-[#1A1A1A] mb-4">Mengapa Berlangganan?</h2>
           </div>
@@ -133,10 +134,10 @@ export default async function LanggananPage() {
               </div>
             </div>
           </div>
-        </section>
+        </FadeIn>
 
         {/* FAQ */}
-        <section className="w-full max-w-3xl px-4 md:px-8 mx-auto mb-8 md:mb-16">
+        <FadeIn className="w-full max-w-3xl px-4 md:px-8 mx-auto mb-8 md:mb-16">
           <div className="text-center mb-8 md:mb-10">
             <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#1A1A1A]">Pertanyaan yang Sering Diajukan</h2>
           </div>
@@ -193,7 +194,7 @@ export default async function LanggananPage() {
               </div>
             </details>
           </div>
-        </section>
+        </FadeIn>
       </main>
 
       <Footer />

@@ -44,6 +44,7 @@ model Pet {
   breed           String?
   age             Int?
   weight          Float?
+  imageUrl        String?
   activityLevel   String?
   healthCondition String?
 

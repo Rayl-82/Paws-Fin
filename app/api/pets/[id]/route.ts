@@ -2,6 +2,32 @@ import { NextRequest } from 'next/server';
 import { successResponse, errorResponse } from '@/lib/api/response';
 import prisma from '@/lib/prisma';
 
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const userId = req.headers.get('x-user-id');
+    if (!userId) {
+      return errorResponse('Unauthorized', 401);
+    }
+
+    const { id } = await params;
+    const pet = await prisma.pet.findUnique({
+      where: { id }
+    });
+
+    if (!pet || pet.userId !== userId) {
+      return errorResponse('Pet not found', 404);
+    }
+
+    return successResponse(pet);
+  } catch (error: any) {
+    console.error('Failed to fetch pet:', error);
+    return errorResponse('Internal server error', 500);
+  }
+}
+
 export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -34,6 +60,7 @@ export async function PUT(
       breed, 
       age, 
       weight, 
+      imageUrl,
       activityLevel, 
       healthCondition 
     } = body;
@@ -46,6 +73,7 @@ export async function PUT(
         ...(breed !== undefined && { breed }),
         ...(age !== undefined && { age: age !== null ? parseInt(age) : null }),
         ...(weight !== undefined && { weight: weight !== null ? parseFloat(weight) : null }),
+        ...(imageUrl !== undefined && { imageUrl }),
         ...(activityLevel !== undefined && { activityLevel }),
         ...(healthCondition !== undefined && { healthCondition })
       }

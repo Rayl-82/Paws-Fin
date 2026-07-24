@@ -1,16 +1,23 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useRef, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, ArrowRight, Upload, CheckCircle2, ChevronRight, Check } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export default function CreatePetProfile() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const editId = searchParams.get("editId");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+
   const [step, setStep] = useState(1);
   const totalSteps = 5; // 4 input steps + 1 review step
+  const [stepError, setStepError] = useState<string | null>(null);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -38,8 +45,56 @@ export default function CreatePetProfile() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const nextStep = () => setStep(prev => Math.min(prev + 1, totalSteps + 1));
-  const prevStep = () => setStep(prev => Math.max(prev - 1, 1));
+  useEffect(() => {
+    if (editId) {
+      fetch("/api/pets")
+        .then(res => res.json())
+        .then(data => {
+          if (data.data) {
+            const petToEdit = data.data.find((p: any) => p.id === editId);
+            if (petToEdit) {
+              setFormData(prev => ({
+                ...prev,
+                name: petToEdit.petName || "",
+                species: petToEdit.species || "",
+                weight: petToEdit.weight?.toString() || "",
+                activityLevel: petToEdit.activityLevel || "",
+                primaryGoal: petToEdit.healthCondition || "",
+              }));
+            }
+          }
+        })
+        .catch(err => console.error("Failed to load pet for edit", err));
+    }
+  }, [editId]);
+
+  const nextStep = () => {
+    setStepError(null);
+    
+    if (step === 1) {
+      if (!formData.name || !formData.species || !formData.gender || !formData.dob) {
+        setStepError("Mohon lengkapi semua data dasar (Nama, Spesies, Gender, Tanggal Lahir).");
+        return;
+      }
+    } else if (step === 2) {
+      if (!formData.weight || !formData.activityLevel || !formData.bodyCondition) {
+        setStepError("Mohon lengkapi semua data fisik (Berat, Tingkat Aktivitas, Kondisi Tubuh).");
+        return;
+      }
+    } else if (step === 4) {
+      if (!formData.lifestyle || !formData.primaryGoal) {
+        setStepError("Mohon lengkapi semua data gaya hidup dan tujuan kesehatan utama.");
+        return;
+      }
+    }
+    
+    setStep(prev => Math.min(prev + 1, totalSteps + 1));
+  };
+
+  const prevStep = () => {
+    setStepError(null);
+    setStep(prev => Math.max(prev - 1, 1));
+  };
 
   const completeProfile = async () => {
     try {
@@ -58,7 +113,8 @@ export default function CreatePetProfile() {
             age: formData.dob ? new Date().getFullYear() - new Date(formData.dob).getFullYear() : 0,
             weight: formData.weight,
             activityLevel: formData.activityLevel,
-            healthCondition: formData.primaryGoal
+            healthCondition: formData.primaryGoal,
+            imageUrl: photoPreview
           })
         });
       } else {
@@ -86,11 +142,62 @@ export default function CreatePetProfile() {
       <div className="space-y-6">
         {/* Photo Upload */}
         <div className="flex flex-col items-center sm:items-start gap-4 mb-8">
-          <div className="w-24 h-24 bg-[#F0F4F8] rounded-full flex items-center justify-center border-2 border-dashed border-[#B0BEC5]">
-            <Upload className="w-6 h-6 text-[#B0BEC5]" />
+          <input 
+            type="file" 
+            ref={fileInputRef}
+            onChange={(e) => {
+              if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  const img = document.createElement("img");
+                  img.onload = () => {
+                    const canvas = document.createElement("canvas");
+                    const MAX_WIDTH = 500;
+                    const MAX_HEIGHT = 500;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                      if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                      }
+                    } else {
+                      if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                      }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext("2d");
+                    ctx?.drawImage(img, 0, 0, width, height);
+                    setPhotoPreview(canvas.toDataURL("image/jpeg", 0.8));
+                  };
+                  img.src = reader.result as string;
+                };
+                reader.readAsDataURL(file);
+              }
+            }}
+            className="hidden" 
+            accept="image/*"
+          />
+          <div 
+            className="w-24 h-24 bg-[#F0F4F8] rounded-full flex items-center justify-center border-2 border-dashed border-[#B0BEC5] overflow-x-clip cursor-pointer"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            {photoPreview ? (
+              <Image src={photoPreview} alt="Pet Preview" width={96} height={96} className="object-cover w-full h-full" />
+            ) : (
+              <Upload className="w-6 h-6 text-[#B0BEC5]" />
+            )}
           </div>
-          <button className="text-[#1B6CA8] font-bold text-sm hover:underline">
-            Upload Pet Photo
+          <button 
+            onClick={() => fileInputRef.current?.click()}
+            className="text-[#1B6CA8] font-bold text-sm hover:underline"
+          >
+            {photoPreview ? "Change Pet Photo" : "Upload Pet Photo"}
           </button>
         </div>
 
@@ -357,7 +464,7 @@ export default function CreatePetProfile() {
       <div className="min-h-screen bg-[#F7F9FC] font-sans flex flex-col">
         <Navbar />
         <main className="flex-1 flex flex-col items-center justify-center p-4">
-          <div className="w-full max-w-lg bg-white rounded-[24px] shadow-sm border border-[#E0E7EF] p-8 lg:p-12 text-center relative overflow-hidden animate-in zoom-in duration-500">
+          <div className="w-full max-w-lg bg-white rounded-[24px] shadow-sm border border-[#E0E7EF] p-8 lg:p-12 text-center relative overflow-x-clip animate-in zoom-in duration-500">
             <div className="absolute top-0 left-0 w-full h-2 bg-[#1B6CA8]"></div>
             
             <div className="w-20 h-20 bg-[#D6E8F5] rounded-full flex items-center justify-center mx-auto mb-6">
@@ -402,7 +509,7 @@ export default function CreatePetProfile() {
             </span>
           </div>
           
-          <div className="w-full h-2 bg-[#E0E7EF] rounded-full overflow-hidden">
+          <div className="w-full h-2 bg-[#E0E7EF] rounded-full overflow-x-clip">
             <div 
               className="h-full bg-[#1B6CA8] rounded-full transition-all duration-500 ease-out" 
               style={{ width: `${(step / totalSteps) * 100}%` }}
@@ -418,6 +525,13 @@ export default function CreatePetProfile() {
           {step === 4 && renderStep4()}
           {step === 5 && renderFinalReview()}
         </div>
+
+        {/* Error Message */}
+        {stepError && (
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm font-bold animate-in fade-in slide-in-from-bottom-2">
+            {stepError}
+          </div>
+        )}
 
         {/* Navigation Buttons */}
         <div className="flex items-center justify-between">
@@ -443,7 +557,7 @@ export default function CreatePetProfile() {
               onClick={completeProfile}
               className="bg-[#F26641] hover:bg-[#BF4A28] text-white px-8 py-3 rounded-xl font-bold transition-colors shadow-sm flex items-center gap-2"
             >
-              Create Pet Profile
+              {editId ? "Save Changes" : "Create Pet Profile"}
               <CheckCircle2 className="w-5 h-5" />
             </button>
           )}

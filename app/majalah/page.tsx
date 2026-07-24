@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, BookOpen, Droplets, Heart, Leaf, Mail, RefreshCw, Anchor, Fish, FlaskConical, Cat } from "lucide-react";
+import FadeIn from "@/components/FadeIn";
 
 export default function EducationalCenter() {
   const featuredLarge = {
@@ -61,15 +62,15 @@ export default function EducationalCenter() {
       <main className="w-full flex flex-col items-center flex-grow">
         
         {/* HERO SECTION */}
-        <section className="w-full bg-[#1B6CA8] py-20 lg:py-28 px-4 md:px-8 text-center flex flex-col items-center justify-center border-b border-[#124E7A]">
+        <FadeIn className="w-full bg-[#1B6CA8] py-20 lg:py-28 px-4 md:px-8 text-center flex flex-col items-center justify-center border-b border-[#124E7A]">
           <span className="text-[#D6E8F5] text-sm md:text-base font-bold uppercase tracking-widest mb-4">Pusat Edukasi</span>
           <h1 className="text-white text-4xl md:text-5xl lg:text-7xl font-bold font-serif max-w-4xl leading-tight drop-shadow-sm">
             Pengetahuan untuk Hewan yang Lebih Sehat dan Laut yang Lebih Bersih
           </h1>
-        </section>
+        </FadeIn>
 
         {/* FEATURED ARTICLES (MAGAZINE LAYOUT) */}
-        <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 py-16 lg:py-24">
+        <FadeIn delay={0.2} className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 py-16 lg:py-24">
           <div className="flex items-center justify-between mb-10">
             <h2 className="text-3xl lg:text-4xl font-bold font-serif text-[#1A1A1A]">Artikel Pilihan</h2>
           </div>
@@ -119,10 +120,10 @@ export default function EducationalCenter() {
             </div>
             
           </div>
-        </section>
+        </FadeIn>
 
         {/* EDUCATIONAL HIGHLIGHT SECTION (THE FLOW) */}
-        <section className="w-full bg-[#1B6CA8] text-white py-20 lg:py-28 overflow-hidden">
+        <FadeIn className="w-full bg-[#1B6CA8] text-white py-20 lg:py-28 overflow-hidden">
           <div className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-16 text-center">
             <h2 className="text-3xl lg:text-5xl font-bold font-serif mb-6">Dari By-Product Laut Menuju Nutrisi Hewan</h2>
             <p className="text-[#D6E8F5] text-lg lg:text-xl max-w-3xl mx-auto mb-16 leading-relaxed">
@@ -152,12 +153,12 @@ export default function EducationalCenter() {
               ))}
             </div>
           </div>
-        </section>
+        </FadeIn>
 
 
 
         {/* LATEST ARTICLES */}
-        <section className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pt-16 lg:pt-24 pb-20 lg:pb-32">
+        <FadeIn className="w-full max-w-[1440px] px-4 md:px-8 lg:px-16 pt-16 lg:pt-24 pb-20 lg:pb-32">
           <h2 className="text-3xl lg:text-4xl font-bold font-serif text-[#1A1A1A] mb-10">Artikel Terbaru</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
@@ -178,10 +179,10 @@ export default function EducationalCenter() {
               </Link>
             ))}
           </div>
-        </section>
+        </FadeIn>
 
         {/* NEWSLETTER CTA */}
-        <section className="w-full bg-[#E0E7EF]/50 py-16 lg:py-24 border-t border-[#E0E7EF]">
+        <FadeIn className="w-full bg-[#E0E7EF]/50 py-16 lg:py-24 border-t border-[#E0E7EF]">
           <div className="max-w-2xl mx-auto px-4 text-center">
             <div className="w-16 h-16 bg-[#1B6CA8] rounded-2xl flex items-center justify-center mx-auto mb-6 text-white rotate-3">
               <Mail className="w-8 h-8" />
@@ -205,7 +206,7 @@ export default function EducationalCenter() {
               </button>
             </form>
           </div>
-        </section>
+        </FadeIn>
 
       </main>
       <Footer />

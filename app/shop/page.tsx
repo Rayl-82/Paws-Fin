@@ -187,7 +187,7 @@ export default function TokoPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F7F9FC] font-sans text-[#1A1A1A] flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-[#F7F9FC] font-sans text-[#1A1A1A] flex flex-col relative overflow-x-clip">
       <Navbar />
 
       <main className="w-full flex flex-col items-center flex-grow pt-6 lg:pt-8">

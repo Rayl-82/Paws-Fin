@@ -4,6 +4,7 @@ import { ArrowLeft, Share2, Heart } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
+import prisma from "@/lib/prisma";
 
 const getArticleData = (slug: string) => {
   return {
@@ -47,6 +48,18 @@ const getArticleData = (slug: string) => {
 export default async function ArticleDetail({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
   const article = getArticleData(resolvedParams.slug);
+
+  const relatedProductsData = await prisma.product.findMany({
+    take: 4,
+  });
+
+  const relatedProducts = relatedProductsData.map((p) => ({
+    id: p.id,
+    image: p.imageUrl || "/images/product1.png",
+    name: p.name,
+    price: `Rp ${p.price.toLocaleString('id-ID')}`,
+    tags: ["Tinggi Omega-3", "Berkualitas"],
+  }));
 
   return (
     <div className="min-h-screen bg-[#F7F9FC] font-sans text-[#1A1A1A] flex flex-col">
@@ -129,13 +142,8 @@ export default async function ArticleDetail({ params }: { params: Promise<{ slug
           <div className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-16">
             <h2 className="text-3xl font-bold font-serif text-[#1A1A1A] mb-8">Produk Terkait Topik Ini</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { image: "/images/product1.png", name: "Wild Salmon Jerky", price: "$14.99", tags: ["Tinggi Omega-3"] },
-                { image: "/images/product2.png", name: "Cod & Shrimp Bites", price: "$9.99", tags: ["Bebas Gandum"] },
-                { image: "/images/product3.png", name: "Pure Salmon Oil", price: "$24.00", tags: ["Kulit & Bulu"] },
-                { image: "/images/product4.png", name: "Atlantic Topper Mix", price: "$18.25", tags: ["Kesehatan Pencernaan"] },
-              ].map((prod, idx) => (
-                <ProductCard key={idx} image={prod.image} name={prod.name} price={prod.price} tags={prod.tags} />
+              {relatedProducts.map((prod, idx) => (
+                <ProductCard key={idx} id={prod.id} image={prod.image} name={prod.name} price={prod.price} tags={prod.tags} />
               ))}
             </div>
           </div>

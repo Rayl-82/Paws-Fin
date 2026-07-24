@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -26,10 +27,14 @@ const fadeUpVariant: Variants = {
   }
 };
 
-export default function RecommendationPage() {
+function RecommendationContent() {
+  const searchParams = useSearchParams();
+  const petIdQuery = searchParams.get("petId");
+
   const [petProfile, setPetProfile] = useState<any>(null);
   const [allPets, setAllPets] = useState<any[]>([]);
-  const [products, setProducts] = useState<any[]>([]);
+  const [allMatchedProducts, setAllMatchedProducts] = useState<any[]>([]);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [subscription, setSubscription] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [matchScore, setMatchScore] = useState(0);
@@ -67,7 +72,11 @@ export default function RecommendationPage() {
         const data = await res.json();
         if (data.data && data.data.length > 0) {
           setAllPets(data.data);
-          currentPet = data.data[0]; 
+          if (petIdQuery) {
+            currentPet = data.data.find((p: any) => p.id === petIdQuery) || data.data[0];
+          } else {
+            currentPet = data.data[0]; 
+          }
         }
       }
 
@@ -124,7 +133,7 @@ export default function RecommendationPage() {
             // Shift array deterministically
             const shift = nameLen % others.length;
             const shiftedOthers = [...others.slice(shift), ...others.slice(0, shift)];
-            setProducts(shiftedOthers.slice(0, 4));
+            setAllMatchedProducts(shiftedOthers);
           }
         }
       } catch (err) {
@@ -168,7 +177,7 @@ export default function RecommendationPage() {
           initial={{ opacity: 0 }} 
           animate={{ opacity: 1 }} 
           exit={{ opacity: 0 }}
-          className="min-h-screen bg-[#F7F9FC] font-sans text-[#1A1A1A] flex flex-col overflow-x-hidden"
+          className="min-h-screen bg-[#F7F9FC] font-sans text-[#1A1A1A] flex flex-col overflow-x-clip"
         >
           <Navbar />
           <main className="flex-1 w-full flex flex-col">
@@ -179,7 +188,7 @@ export default function RecommendationPage() {
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }} 
                   animate={{ opacity: 1, y: 0 }}
-                  className="w-full bg-gradient-to-r from-[#0C3350] to-[#1B6CA8] rounded-[32px] p-8 md:p-12 lg:p-16 flex flex-col md:flex-row items-center justify-between gap-12 shadow-xl relative overflow-hidden"
+                  className="w-full bg-gradient-to-r from-[#0C3350] to-[#1B6CA8] rounded-[32px] p-8 md:p-12 lg:p-16 flex flex-col md:flex-row items-center justify-between gap-12 shadow-xl relative overflow-x-clip"
                 >
                   {/* Decorative Elements */}
                   <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4 blur-2xl" />
@@ -209,7 +218,7 @@ export default function RecommendationPage() {
                   </div>
 
                   <div className="hidden md:block w-full md:w-[40%] lg:w-1/2 max-w-md relative z-10">
-                    <div className="aspect-[4/3] relative rounded-[24px] overflow-hidden shadow-2xl border-4 border-white/10 transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                    <div className="aspect-[4/3] relative rounded-[24px] overflow-x-clip shadow-2xl border-4 border-white/10 transform rotate-2 hover:rotate-0 transition-transform duration-500">
                       <Image
                         src="/images/UserPet.png" 
                         alt="Healthy Pet Background"
@@ -278,13 +287,13 @@ export default function RecommendationPage() {
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         exit={{ opacity: 0 }}
-        className="min-h-screen bg-[#F7F9FC] font-sans text-[#1A1A1A] flex flex-col overflow-x-hidden"
+        className="min-h-screen bg-[#F7F9FC] font-sans text-[#1A1A1A] flex flex-col overflow-x-clip"
       >
         <Navbar />
 
         <main className="flex-1 w-full pb-16">
           {/* Hero Section */}
-          <section className="w-full bg-[#1B6CA8] py-8 lg:py-16 px-4 md:px-8 lg:px-16 flex flex-col md:flex-row items-center justify-center gap-12 relative overflow-hidden">
+          <section className="w-full bg-[#1B6CA8] py-8 lg:py-16 px-4 md:px-8 lg:px-16 flex flex-col md:flex-row items-center justify-center gap-12 relative overflow-x-clip">
             
             <div className="absolute inset-0 z-0">
               <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#1B6CA8] opacity-50 blur-3xl rounded-full"></div>
@@ -391,9 +400,9 @@ export default function RecommendationPage() {
             >
               <div className="absolute w-32 h-32 bottom-0 left-0 bg-[#F26641] opacity-40 rounded-full blur-3xl"></div>
               <div className="w-full h-full bg-white rounded-[24px] shadow-2xl p-4 pb-16 relative">
-                <div className="relative w-full h-full rounded-[16px] overflow-hidden">
+                <div className="relative w-full h-full rounded-[16px] overflow-x-clip">
                   <Image
-                    src={petProfile.species === 'Dog' ? "/images/product-salmon.png" : "/images/UserPet.png"}
+                    src={petProfile.imageUrl || (petProfile.species === 'Dog' ? "/images/product-salmon.png" : "/images/UserPet.png")}
                     alt={petProfile.petName || "Hewan Peliharaan"}
                     fill
                     className="object-cover"
@@ -426,7 +435,7 @@ export default function RecommendationPage() {
               transition={{ duration: 0.6 }}
               className="w-full max-w-[1440px] mx-auto px-4 md:px-8 lg:px-16"
             >
-              <section className="w-full bg-[#124E7A] rounded-[24px] overflow-hidden flex flex-col md:flex-row items-stretch shadow-md">
+              <section className="w-full bg-[#124E7A] rounded-[24px] overflow-x-clip flex flex-col md:flex-row items-stretch shadow-md">
                 <div className="flex-1 p-8 md:p-12 lg:p-16 flex flex-col justify-center items-start">
                   <span className="text-[#F26641] text-xs md:text-sm font-bold tracking-widest uppercase mb-4 opacity-100 bg-[#0C3350] px-4 py-1.5 rounded-full shadow-inner">
                     BERGABUNG DENGAN KLUB
@@ -483,29 +492,46 @@ export default function RecommendationPage() {
               Produk Tepat Untuk {petProfile.petName || "Hewan Peliharaan"}
             </motion.h2>
             
-            {products.length === 0 ? (
+            {allMatchedProducts.length === 0 ? (
               <p className="text-[#546E7A]">Memuat rekomendasi...</p>
             ) : (
-              <motion.div 
-                variants={staggerContainer}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.1 }}
-                className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6"
-              >
-                {products.map((prod) => (
-                  <motion.div variants={fadeUpVariant} key={prod.id}>
-                    <ProductCard
-                      id={prod.id}
-                      image={prod.imageUrl || "/images/product1.png"}
-                      name={prod.name}
-                      price={`Rp ${prod.price.toLocaleString('id-ID')}`}
-                      description="4.8" // Mock rating
-                      tags={prod.category === "Treats" ? ["Tinggi Omega-3", "Bahan Tunggal"] : ["Premium"]}
-                    />
-                  </motion.div>
-                ))}
-              </motion.div>
+              <div className="flex flex-col items-center">
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  className="flex overflow-x-auto snap-x snap-mandatory sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6 pb-6 sm:pb-0 w-full no-scrollbar"
+                >
+                  {(isExpanded ? allMatchedProducts : allMatchedProducts.slice(0, 4)).map((prod, idx) => (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 30 }} 
+                      whileInView={{ opacity: 1, y: 0 }} 
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: (idx % 4) * 0.1 }}
+                      key={prod.id} 
+                      className="min-w-[85vw] sm:min-w-0 snap-center"
+                    >
+                      <ProductCard
+                        id={prod.id}
+                        image={prod.imageUrl || "/images/product1.png"}
+                        name={prod.name}
+                        price={`Rp ${prod.price.toLocaleString('id-ID')}`}
+                        description="4.8" // Mock rating
+                        tags={prod.category === "Treats" ? ["Tinggi Omega-3", "Bahan Tunggal"] : ["Premium"]}
+                      />
+                    </motion.div>
+                  ))}
+                </motion.div>
+
+                {allMatchedProducts.length > 4 && (
+                  <button 
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="mt-8 px-8 py-3 bg-white border-2 border-[#1B6CA8] text-[#1B6CA8] font-bold rounded-full hover:bg-[#D6E8F5] transition-colors shadow-sm"
+                  >
+                    {isExpanded ? "Sembunyikan" : "Lihat Lebih Banyak"}
+                  </button>
+                )}
+              </div>
             )}
           </section>
 
@@ -513,5 +539,13 @@ export default function RecommendationPage() {
         <Footer />
       </motion.div>
     </AnimatePresence>
+  );
+}
+
+export default function RecommendationPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <RecommendationContent />
+    </Suspense>
   );
 }

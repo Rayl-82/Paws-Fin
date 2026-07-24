@@ -18,11 +18,13 @@ import {
   Clock,
   Heart,
   LogOut,
-  Loader2,
   TreePine,
   Activity,
   ArrowRight,
-  Droplets
+  Droplets,
+  Trash2,
+  AlertTriangle,
+  Loader2
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -44,6 +46,8 @@ export default function ProfilePage() {
   const [orders, setOrders] = useState<any[]>([]);
   const [pets, setPets] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [petToDelete, setPetToDelete] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
 
 
@@ -98,6 +102,24 @@ export default function ProfilePage() {
     }
   };
 
+  const confirmDeletePet = async () => {
+    if (!petToDelete) return;
+    setIsDeleting(true);
+    try {
+      const res = await fetch(`/api/pets/${petToDelete}`, { method: 'DELETE' });
+      if (res.ok) {
+        setPets(pets.filter(p => p.id !== petToDelete));
+        setPetToDelete(null);
+      } else {
+        alert("Gagal menghapus profil hewan peliharaan.");
+      }
+    } catch (err) {
+      alert("Terjadi kesalahan sistem.");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   const activePets = pets;
   const activeSubs = MOCK_SUBSCRIPTIONS;
   const activeOrders = orders;
@@ -139,22 +161,19 @@ export default function ProfilePage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-8 lg:gap-12">
           
           {/* HEADER SECTION */}
-          <section className="bg-white rounded-[16px] shadow-sm border border-[#E0E7EF] p-6 lg:p-8 flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left relative overflow-hidden">
+          <section className="bg-white rounded-[16px] shadow-sm border border-[#E0E7EF] p-6 lg:p-8 flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-2 bg-[#1B6CA8]"></div>
             
-            <div className="w-24 h-24 lg:w-32 lg:h-32 bg-[#F0F4F8] rounded-full flex items-center justify-center flex-shrink-0 shadow-sm border-4 border-white">
+            <div className="w-24 h-24 lg:w-32 lg:h-32 bg-[#F0F4F8] rounded-full flex items-center justify-center flex-shrink-0 shadow-sm border-4 border-white z-10">
               <UserCircle className="w-12 h-12 text-[#B0BEC5]" />
             </div>
 
-            <div className="flex-1 mt-2">
+            <div className="flex-1 flex flex-col justify-center">
               <h1 className="text-2xl lg:text-3xl font-serif font-bold text-[#1A1A1A]">{user.name}</h1>
               <p className="text-[#546E7A] mt-1">{user.email}</p>
             </div>
 
-            <div className="flex flex-col gap-3 w-full sm:w-auto mt-4 sm:mt-2">
-              <button className="w-full sm:w-auto px-6 py-2.5 rounded-xl border border-[#B0BEC5] text-[#546E7A] font-bold hover:bg-[#F0F4F8] hover:text-[#1A1A1A] transition-colors text-sm">
-                Edit Profil
-              </button>
+            <div className="flex items-center w-full sm:w-auto mt-4 sm:mt-0">
               <button onClick={handleLogout} className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-red-50 text-red-600 font-bold hover:bg-red-100 transition-colors text-sm">
                 <LogOut className="w-4 h-4" />
                 Keluar
@@ -307,19 +326,32 @@ export default function ProfilePage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {activePets.map(pet => (
                   <div key={pet.id} className="bg-white rounded-[16px] shadow-sm border border-[#E0E7EF] p-5 flex flex-col items-center text-center relative">
-                    <div className="w-20 h-20 bg-[#D6E8F5] rounded-full flex items-center justify-center mb-4 overflow-hidden border border-[#E0E7EF]">
-                      <span className="text-[#1B6CA8] text-xs font-bold px-2">Gambar</span>
+                    <div className="w-20 h-20 bg-[#D6E8F5] rounded-full flex items-center justify-center mb-4 overflow-hidden border border-[#E0E7EF] relative">
+                      {pet.imageUrl ? (
+                        <Image src={pet.imageUrl} alt={pet.petName} fill className="object-cover" />
+                      ) : (
+                        <span className="text-[#1B6CA8] text-xs font-bold px-2 text-center leading-tight">Belum Ada<br/>Foto</span>
+                      )}
                     </div>
                     <h3 className="font-serif font-bold text-[#1A1A1A] text-xl mb-1">{pet.petName}</h3>
                     <p className="text-[#546E7A] text-sm mb-4">{pet.species} • {pet.age ? `${pet.age} Tahun` : 'Umur tidak diketahui'}</p>
                     
                     <div className="w-full flex flex-col gap-2 mt-auto">
-                      <Link href="/shop/personalized" className="w-full bg-[#1B6CA8] hover:bg-[#124E7A] text-white py-2 rounded-lg font-semibold transition-colors text-sm shadow-sm inline-flex justify-center">
+                      <Link href={`/shop/personalized?petId=${pet.id}`} className="w-full bg-[#1B6CA8] hover:bg-[#124E7A] text-white py-2 rounded-lg font-semibold transition-colors text-sm shadow-sm inline-flex justify-center">
                         Lihat Rekomendasi
                       </Link>
-                      <button className="w-full border border-[#B0BEC5] text-[#546E7A] hover:bg-[#F0F4F8] hover:text-[#1A1A1A] py-2 rounded-lg font-semibold transition-colors text-sm">
-                        Edit Hewan Peliharaan
-                      </button>
+                      <div className="flex gap-2">
+                        <Link href={`/profile/pets/${pet.id}`} className="flex-1 border border-[#B0BEC5] text-[#546E7A] hover:bg-[#F0F4F8] hover:text-[#1A1A1A] py-2 rounded-lg font-semibold transition-colors text-sm inline-flex justify-center items-center">
+                          Edit
+                        </Link>
+                        <button 
+                          onClick={() => setPetToDelete(pet.id)} 
+                          className="w-[42px] border border-red-200 text-red-500 hover:bg-red-50 hover:text-red-600 py-2 rounded-lg flex justify-center items-center transition-colors"
+                          title="Hapus Profil"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -489,6 +521,37 @@ export default function ProfilePage() {
       </main>
 
       <Footer />
+
+      {/* Delete Confirmation Modal */}
+      {petToDelete && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-xl border border-[#E0E7EF] w-full max-w-sm p-6 flex flex-col items-center text-center animate-in zoom-in-95 duration-200">
+            <div className="w-16 h-16 bg-[#FDDDD5] rounded-full flex items-center justify-center mb-4 border-4 border-white shadow-sm">
+              <AlertTriangle className="w-8 h-8 text-[#F26641]" />
+            </div>
+            <h3 className="text-xl font-serif font-bold text-[#1A1A1A] mb-2">Hapus Profil Hewan?</h3>
+            <p className="text-[#546E7A] text-sm mb-6">
+              Data yang sudah dihapus tidak bisa dikembalikan lagi. Rekomendasi nutrisi untuk hewan ini juga akan hilang.
+            </p>
+            <div className="flex gap-3 w-full">
+              <button 
+                onClick={() => setPetToDelete(null)}
+                disabled={isDeleting}
+                className="flex-1 py-3 rounded-xl border border-[#B0BEC5] text-[#546E7A] font-bold hover:bg-[#F0F4F8] transition-colors"
+              >
+                Batal
+              </button>
+              <button 
+                onClick={confirmDeletePet}
+                disabled={isDeleting}
+                className="flex-1 py-3 rounded-xl bg-[#F26641] hover:bg-[#BF4A28] disabled:opacity-50 text-white font-bold transition-colors shadow-sm flex justify-center items-center gap-2"
+              >
+                {isDeleting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Ya, Hapus"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

@@ -27,6 +27,7 @@ export async function GET(req: NextRequest) {
             breed: 'Golden Retriever',
             age: 3,
             weight: 15.5,
+            imageUrl: null,
             activityLevel: 'Aktif',
             healthCondition: 'Dukungan Sendi',
             createdAt: new Date(),
@@ -39,6 +40,7 @@ export async function GET(req: NextRequest) {
             breed: 'Persian',
             age: 2,
             weight: 4.5,
+            imageUrl: null,
             activityLevel: 'Sedang',
             healthCondition: 'Kesehatan Kulit & Bulu',
             createdAt: new Date(),
@@ -69,6 +71,7 @@ export async function POST(req: NextRequest) {
       breed, 
       age, 
       weight, 
+      imageUrl,
       activityLevel, 
       healthCondition 
     } = body;
@@ -86,6 +89,7 @@ export async function POST(req: NextRequest) {
         ...(breed && { breed }),
         ...(age && { age: parseInt(age) }),
         ...(weight && { weight: parseFloat(weight) }),
+        ...(imageUrl && { imageUrl }),
         ...(activityLevel && { activityLevel }),
         ...(healthCondition && { healthCondition })
       }

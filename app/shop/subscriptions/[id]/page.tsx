@@ -178,7 +178,7 @@ export default function SubscriptionDetailPage({ params }: { params: Promise<{ i
           
           {/* Left: Gallery */}
           <div className="flex-1 flex flex-col gap-4">
-            <div className="w-full aspect-[4/5] md:aspect-square bg-white rounded-2xl border border-[#E0E6EB] overflow-hidden relative shadow-sm">
+            <div className="w-full aspect-[4/5] md:aspect-square bg-white rounded-2xl border border-[#E0E6EB] overflow-x-clip relative shadow-sm">
               <Image
                 src={product.imageUrl || "/images/product4.png"}
                 alt={product.name}
@@ -189,7 +189,7 @@ export default function SubscriptionDetailPage({ params }: { params: Promise<{ i
             </div>
             <div className="grid grid-cols-3 gap-4">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="aspect-square bg-white rounded-xl border border-[#E0E6EB] hover:border-[#1B6CA8] transition-colors overflow-hidden relative cursor-pointer">
+                <div key={i} className="aspect-square bg-white rounded-xl border border-[#E0E6EB] hover:border-[#1B6CA8] transition-colors overflow-x-clip relative cursor-pointer">
                   <Image
                     src={`/images/product${i}.png`}
                     alt={`Thumbnail ${i}`}
@@ -241,7 +241,7 @@ export default function SubscriptionDetailPage({ params }: { params: Promise<{ i
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-[#F2F4F7] rounded-lg border border-[#E0E6EB] relative overflow-hidden">
+                    <div className="w-12 h-12 bg-[#F2F4F7] rounded-lg border border-[#E0E6EB] relative overflow-x-clip">
                        <Image src="/images/product1.png" alt="Wild Salmon Jerky" fill className="object-cover" />
                     </div>
                     <div>
@@ -253,7 +253,7 @@ export default function SubscriptionDetailPage({ params }: { params: Promise<{ i
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-[#F2F4F7] rounded-lg border border-[#E0E6EB] relative overflow-hidden">
+                    <div className="w-12 h-12 bg-[#F2F4F7] rounded-lg border border-[#E0E6EB] relative overflow-x-clip">
                        <Image src="/images/product2.png" alt="Tuna Crunchies" fill className="object-cover" />
                     </div>
                     <div>
@@ -265,7 +265,7 @@ export default function SubscriptionDetailPage({ params }: { params: Promise<{ i
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-[#F2F4F7] rounded-lg border border-[#E0E6EB] relative overflow-hidden">
+                    <div className="w-12 h-12 bg-[#F2F4F7] rounded-lg border border-[#E0E6EB] relative overflow-x-clip">
                        <Image src="/images/product4.png" alt="Ocean Kelp Bites" fill className="object-cover" />
                     </div>
                     <div>
@@ -460,7 +460,7 @@ export default function SubscriptionDetailPage({ params }: { params: Promise<{ i
                       <span className="text-[#546E7A] font-medium">{stars}</span>
                       <Star className="w-4 h-4 fill-[#FDB32A] text-[#FDB32A]" />
                     </div>
-                    <div className="flex-1 h-2 bg-[#E0E6EB] rounded-full overflow-hidden">
+                    <div className="flex-1 h-2 bg-[#E0E6EB] rounded-full overflow-x-clip">
                       <div 
                         className="h-full bg-[#1B6CA8] rounded-full" 
                         style={{ width: stars === 5 ? '85%' : stars === 4 ? '12%' : stars === 3 ? '3%' : '0%' }}

@@ -101,7 +101,7 @@ function ShopContent() {
 
       <main className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-16 py-8">
         {/* Promotional Banner */}
-        <div className="w-full h-[220px] md:h-[240px] lg:h-[280px] rounded-2xl overflow-hidden relative shadow-sm mb-10 bg-[#ECEEF1]">
+        <div className="w-full h-[220px] md:h-[240px] lg:h-[280px] rounded-2xl overflow-x-clip relative shadow-sm mb-10 bg-[#ECEEF1]">
           <Image
             src="/images/promobanner.png"
             alt="Best Sellers Promotional Banner"

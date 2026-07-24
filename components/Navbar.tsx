@@ -4,14 +4,16 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Search, ShoppingCart, UserCircle, Menu, X, ChevronRight, SlidersHorizontal } from "lucide-react";
+import { Search, ShoppingCart, UserCircle, Menu, X, ChevronRight, SlidersHorizontal, Trees, Activity, Anchor } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [user, setUser] = useState<any>(null);
   const [cartCount, setCartCount] = useState(0);
+  const [cartItems, setCartItems] = useState<any[]>([]);
   const [isScrolled, setIsScrolled] = useState(false);
   // Search State
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -27,6 +29,7 @@ export default function Navbar() {
           const data = await res.json();
           const items = data.data?.items || [];
           setCartCount(items.reduce((acc: number, item: any) => acc + item.quantity, 0));
+          setCartItems(items);
         }
       } catch (err) {
         console.error(err);
@@ -34,6 +37,7 @@ export default function Navbar() {
     } else {
       const guestCart = JSON.parse(localStorage.getItem('guestCart') || '[]');
       setCartCount(guestCart.reduce((acc: number, item: any) => acc + item.quantity, 0));
+      setCartItems(guestCart);
     }
   };
 
@@ -42,8 +46,15 @@ export default function Navbar() {
       try {
         const res = await fetch('/api/auth/me');
         if (res.ok) {
-          setIsAuthenticated(true);
-          fetchCartCount(true);
+          const data = await res.json();
+          if (data.authenticated) {
+            setIsAuthenticated(true);
+            setUser(data.user);
+            fetchCartCount(true);
+          } else {
+            setIsAuthenticated(false);
+            fetchCartCount(false);
+          }
         } else {
           setIsAuthenticated(false);
           fetchCartCount(false);
@@ -79,7 +90,7 @@ export default function Navbar() {
   const isActive = (path: string) => pathname === path;
   const isShopActive = pathname?.startsWith("/shop");
   
-  const isHome = pathname === "/";
+  const isHome = pathname === "/" || pathname === "/suplier-portal";
   const isTransparent = isHome && !isScrolled && !isMobileMenuOpen;
 
   // Prevent scroll when mobile menu or filter is open
@@ -182,18 +193,73 @@ export default function Navbar() {
             
             {/* Right: Icons */}
             <div className="flex items-center gap-4 lg:gap-[24px]">
-              <Link href="/cart" className={`relative transition-all flex items-center justify-center p-1 lg:p-0 ${
-                isTransparent ? "text-white hover:text-white/80" : "text-[#1B6CA8] hover:opacity-80"
-              }`}>
-                <ShoppingCart className="w-[24px] h-[24px] lg:w-[22px] lg:h-[22px]" />
-                {cartCount > 0 && (
-                  <div className={`absolute top-0 right-0 lg:-top-[8px] lg:-right-[8px] w-4 h-4 rounded-full flex items-center justify-center border-[1.5px] transition-colors ${
-                    isTransparent ? "bg-white border-transparent text-[#1B6CA8]" : "bg-[#F26641] border-white text-white"
-                  }`}>
-                    <span className="text-[9px] font-bold leading-none">{cartCount}</span>
-                  </div>
-                )}
-              </Link>
+              
+              {/* Cart Icon with Hover Dropdown */}
+              <div className="relative group flex items-center justify-center p-1 lg:p-0">
+                <Link href="/cart" className={`relative transition-all flex items-center justify-center p-1 lg:p-0 ${
+                  isTransparent ? "text-white hover:text-white/80" : "text-[#1B6CA8] hover:opacity-80"
+                }`}>
+                  <ShoppingCart className="w-[24px] h-[24px] lg:w-[22px] lg:h-[22px]" />
+                  {cartCount > 0 && (
+                    <div className={`absolute top-0 right-0 lg:-top-[8px] lg:-right-[8px] w-4 h-4 rounded-full flex items-center justify-center border-[1.5px] transition-colors ${
+                      isTransparent ? "bg-white border-transparent text-[#1B6CA8]" : "bg-[#F26641] border-white text-white"
+                    }`}>
+                      <span className="text-[9px] font-bold leading-none">{cartCount}</span>
+                    </div>
+                  )}
+                </Link>
+                
+                {/* Cart Dropdown (Desktop Only) */}
+                <div className="hidden lg:block absolute top-full right-0 mt-2 w-[300px] bg-white shadow-xl rounded-xl border border-[#E0E7EF] p-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                  {cartCount === 0 ? (
+                     <div className="text-center flex flex-col items-center">
+                       <div className="w-16 h-16 bg-[#F0F4F8] rounded-full flex items-center justify-center mb-4">
+                         <ShoppingCart className="w-8 h-8 text-[#B0BEC5]" />
+                       </div>
+                       <p className="font-bold text-[#1A1A1A] mb-2 text-sm">Wah, keranjang belanjamu kosong</p>
+                       <p className="text-xs text-[#546E7A] mb-4">Yuk, isi dengan barang-barang impianmu!</p>
+                       <Link href="/shop" className="bg-[#F26641] hover:bg-[#BF4A28] transition-colors text-white px-4 py-2.5 rounded-xl font-bold block w-full text-sm">Mulai Belanja</Link>
+                     </div>
+                  ) : (
+                     <div className="flex flex-col text-left">
+                       <div className="flex justify-between items-center mb-4 border-b border-[#F0F4F8] pb-2">
+                         <span className="font-bold text-[#1A1A1A] text-sm">Keranjang ({cartCount})</span>
+                         <Link href="/cart" className="text-xs font-bold text-[#1B6CA8] hover:underline">Lihat Semua</Link>
+                       </div>
+                       
+                       <div className="flex flex-col gap-3 mb-4 max-h-[200px] overflow-y-auto pr-1">
+                         {cartItems.slice(0, 3).map((item, idx) => (
+                           <div key={idx} className="flex gap-3 items-center">
+                             <div className="w-12 h-12 bg-[#F0F4F8] rounded-lg overflow-hidden flex-shrink-0 relative">
+                               <Image 
+                                 src={item.product?.imageUrl || item.imageUrl || "/images/product1.png"} 
+                                 alt={item.product?.name || item.name || "Produk"}
+                                 fill
+                                 className="object-cover"
+                               />
+                             </div>
+                             <div className="flex flex-col flex-1 min-w-0">
+                               <span className="text-xs font-bold text-[#1A1A1A] truncate">{item.product?.name || item.name}</span>
+                               <div className="flex items-center justify-between mt-0.5">
+                                 <span className="text-xs text-[#546E7A]">{item.quantity} x <span className="font-semibold text-[#F26641]">Rp {(item.product?.price || item.price || 0).toLocaleString('id-ID')}</span></span>
+                               </div>
+                             </div>
+                           </div>
+                         ))}
+                         {cartItems.length > 3 && (
+                           <div className="text-center pt-2">
+                             <span className="text-xs text-[#546E7A] italic">+{cartItems.length - 3} produk lainnya</span>
+                           </div>
+                         )}
+                       </div>
+
+                       <Link href="/cart" className="bg-[#F26641] hover:bg-[#BF4A28] transition-colors text-white px-4 py-2.5 rounded-xl font-bold block w-full text-center text-sm">Buka Keranjang</Link>
+                     </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Profile / Login */}
               {isAuthenticated === false ? (
                 <Link href="/auth" className={`hidden lg:flex items-center justify-center px-4 py-1.5 rounded-full text-sm font-bold transition-all shadow-sm hover:-translate-y-0.5 ${
                   isTransparent ? "bg-white text-[#1A1A1A] hover:bg-gray-100" : "bg-[#F26641] hover:bg-[#BF4A28] text-white"
@@ -201,11 +267,62 @@ export default function Navbar() {
                   Masuk
                 </Link>
               ) : (
-                <Link href="/profile" className={`transition-all flex items-center justify-center p-1 lg:p-0 ${
-                  isTransparent ? "text-white hover:text-white/80" : "text-[#1B6CA8] hover:opacity-80"
-                }`}>
-                  <UserCircle className="w-[28px] h-[28px] lg:w-[22px] lg:h-[22px]" />
-                </Link>
+                <div className="relative group flex items-center justify-center p-1 lg:p-0">
+                  <Link href="/profile" className={`transition-all flex items-center justify-center p-1 lg:p-0 ${
+                    isTransparent ? "text-white hover:text-white/80" : "text-[#1B6CA8] hover:opacity-80"
+                  }`}>
+                    <UserCircle className="w-[28px] h-[28px] lg:w-[22px] lg:h-[22px]" />
+                  </Link>
+
+                  {/* Profile Dropdown (Desktop Only) */}
+                  <div className="hidden lg:block absolute top-full right-0 mt-2 w-[320px] bg-white shadow-xl rounded-xl border border-[#E0E7EF] overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                     <div className="p-4 border-b border-[#F0F4F8] flex items-center gap-3">
+                        <UserCircle className="w-10 h-10 text-[#B0BEC5]" />
+                        <div>
+                          <p className="font-bold text-[#1A1A1A] text-sm">{user?.name || "Akun Saya"}</p>
+                        </div>
+                     </div>
+
+                     {/* Personal Impact Dashboard */}
+                     <div className="p-4 border-b border-[#F0F4F8] bg-[#F7F9FC]">
+                        <h4 className="text-xs font-bold text-[#1A1A1A] mb-3 flex items-center gap-1.5 tracking-wide">
+                          <Trees className="w-4 h-4 text-[#1B6CA8]"/> 
+                          Personal Impact Dashboard
+                        </h4>
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="bg-[#D6E8F5] p-2.5 rounded-lg relative overflow-hidden">
+                            <span className="text-[9px] font-bold text-[#1B6CA8] block mb-1">TOTAL LIMBAH DIHEMAT</span>
+                            <span className="text-sm font-bold text-[#1B6CA8]">1.4 kg</span>
+                            <Trees className="absolute right-[-5px] bottom-[-5px] w-10 h-10 text-[#1B6CA8] opacity-10" />
+                          </div>
+                          <div className="bg-[#E8F5E9] p-2.5 rounded-lg relative overflow-hidden">
+                            <span className="text-[9px] font-bold text-[#2E7D32] block mb-1">SKOR DAMPAK</span>
+                            <span className="text-sm font-bold text-[#2E7D32]">8.7 <span className="text-[10px]">/10</span></span>
+                            <Activity className="absolute right-[-5px] bottom-[-5px] w-10 h-10 text-[#2E7D32] opacity-10" />
+                          </div>
+                          <div className="col-span-2 bg-[#FDDDD5] p-2.5 rounded-lg relative overflow-hidden flex justify-between items-center">
+                            <div>
+                              <span className="text-[9px] font-bold text-[#BF4A28] block mb-1">NELAYAN LOKAL DIBANTU</span>
+                              <span className="text-sm font-bold text-[#BF4A28]">3 Partner</span>
+                            </div>
+                            <Anchor className="absolute right-2 bottom-[-5px] w-12 h-12 text-[#BF4A28] opacity-10" />
+                          </div>
+                        </div>
+                     </div>
+
+                     <div className="flex flex-col py-2">
+                        <Link href="/profile" className="px-4 py-2.5 text-sm font-semibold text-[#546E7A] hover:bg-[#F0F4F8] hover:text-[#1B6CA8]">Profil</Link>
+                        <Link href="/profile?tab=orders" className="px-4 py-2.5 text-sm font-semibold text-[#546E7A] hover:bg-[#F0F4F8] hover:text-[#1B6CA8]">Pembelian</Link>
+                        <div className="h-px bg-[#F0F4F8] my-1"></div>
+                        <button 
+                          onClick={async () => { await fetch('/api/auth/logout', {method: 'POST'}); window.location.href='/'; }} 
+                          className="px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 text-left"
+                        >
+                          Keluar
+                        </button>
+                     </div>
+                  </div>
+                </div>
               )}
             </div>
           </div>

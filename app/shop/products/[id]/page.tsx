@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight, Loader2, AlertCircle, Star } from "lucide-react";
+import { ChevronRight, Loader2, AlertCircle, Star, Minus, Plus } from "lucide-react";
 import StarRating, { deriveRating } from "@/components/StarRating";
 
 // Matches our Product model
@@ -30,6 +30,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   const [isAdding, setIsAdding] = useState(false);
   const [cartSuccess, setCartSuccess] = useState(false);
   const [cartError, setCartError] = useState<string | null>(null);
+  const [quantity, setQuantity] = useState(1);
 
   // Use deriveRating based on product ID to match the ProductCard, fallback to 4.8
   const ratingValue = product ? deriveRating(product.id) : 4.8;
@@ -45,7 +46,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
       const res = await fetch("/api/cart", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId: product.id, quantity: 1 }),
+        body: JSON.stringify({ productId: product.id, quantity }),
       });
       const data = await res.json();
       
@@ -55,12 +56,12 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
         const existingItem = guestCart.find((i: any) => i.productId === product.id);
         
         if (existingItem) {
-          existingItem.quantity += 1;
+          existingItem.quantity += quantity;
         } else {
           guestCart.push({
             id: `guest-item-${Date.now()}`,
             productId: product.id,
-            quantity: 1,
+            quantity: quantity,
             product: {
               id: product.id,
               name: product.name,
@@ -215,7 +216,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           
           {/* Left: Gallery */}
           <div className="flex-1 flex flex-col gap-4">
-            <div className="w-full aspect-[4/5] md:aspect-square bg-white rounded-2xl border border-[#E0E6EB] overflow-hidden relative shadow-sm">
+            <div className="w-full aspect-[4/5] md:aspect-square bg-white rounded-2xl border border-[#E0E6EB] overflow-x-clip relative shadow-sm">
               <Image
                 src={mainImage}
                 alt={product.name}
@@ -292,6 +293,33 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
 
             {/* Purchase Actions */}
             <div className="flex flex-col gap-4 mt-auto">
+              
+              {/* Quantity Selector */}
+              <div className="flex items-center gap-4 mb-2">
+                <span className="text-[#546E7A] font-bold">Kuantitas:</span>
+                <div className="flex items-center border border-[#E0E6EB] rounded-xl overflow-hidden bg-white shadow-sm">
+                  <button 
+                    onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                    disabled={quantity <= 1 || product.stock === 0}
+                    className="p-3 bg-[#F7F9FC] text-[#546E7A] hover:bg-[#E0E6EB] hover:text-[#1B6CA8] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                    aria-label="Kurangi jumlah"
+                  >
+                    <Minus className="w-5 h-5" />
+                  </button>
+                  <div className="px-4 py-2 font-bold text-[#1A1A1A] min-w-[56px] text-center text-lg border-x border-[#E0E6EB]">
+                    {quantity}
+                  </div>
+                  <button 
+                    onClick={() => setQuantity(q => Math.min(product.stock, q + 1))}
+                    disabled={quantity >= product.stock || product.stock === 0}
+                    className="p-3 bg-[#F7F9FC] text-[#546E7A] hover:bg-[#E0E6EB] hover:text-[#1B6CA8] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                    aria-label="Tambah jumlah"
+                  >
+                    <Plus className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
               {cartSuccess && (
                 <div className="p-3 bg-[#E8F5E9] text-[#2E7D32] border border-green-200 text-sm font-bold rounded-xl text-center">
                   Berhasil ditambahkan ke keranjang!
@@ -405,7 +433,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                       <span className="text-sm font-medium text-[#546E7A]">{row.stars}</span>
                       <Star className="w-4 h-4 fill-[#FDB32A] text-[#FDB32A]" />
                     </div>
-                    <div className="flex-1 h-2 bg-[#E0E6EB] rounded-full overflow-hidden">
+                    <div className="flex-1 h-2 bg-[#E0E6EB] rounded-full overflow-x-clip">
                       <div className="h-full bg-[#1B6CA8] rounded-full" style={{ width: `${row.pct}%` }}></div>
                     </div>
                   </div>
