@@ -40,31 +40,48 @@ export default function EditPetProfile({ params }: { params: Promise<{ id: strin
   const fetchPetData = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`/api/pets/${petId}`);
-      if (res.ok) {
-        const data = await res.json();
-        const pet = data.data;
-        if (pet) {
+      if (petId === "guest") {
+        const localData = localStorage.getItem("petProfileData");
+        if (localData) {
+          const parsed = JSON.parse(localData);
           setFormData({
-            petName: pet.petName || "",
-            species: pet.species || "",
-            age: pet.age ? pet.age.toString() : "",
-            weight: pet.weight ? pet.weight.toString() : "",
-            activityLevel: pet.activityLevel || "",
-            healthCondition: pet.healthCondition || "",
+            petName: parsed.name || "",
+            species: parsed.species || "",
+            age: parsed.dob ? (new Date().getFullYear() - new Date(parsed.dob).getFullYear()).toString() : "",
+            weight: parsed.weight || "",
+            activityLevel: parsed.activityLevel || "",
+            healthCondition: parsed.primaryGoal || "",
           });
-          if (pet.imageUrl) {
-            setPhotoPreview(pet.imageUrl);
+        } else {
+          router.push("/shop/personalized");
+        }
+      } else {
+        const res = await fetch(`/api/pets/${petId}`);
+        if (res.ok) {
+          const data = await res.json();
+          const pet = data.data;
+          if (pet) {
+            setFormData({
+              petName: pet.petName || "",
+              species: pet.species || "",
+              age: pet.age ? pet.age.toString() : "",
+              weight: pet.weight ? pet.weight.toString() : "",
+              activityLevel: pet.activityLevel || "",
+              healthCondition: pet.healthCondition || "",
+            });
+            if (pet.imageUrl) {
+              setPhotoPreview(pet.imageUrl);
+            }
+          } else {
+            router.push("/profile");
           }
         } else {
           router.push("/profile");
         }
-      } else {
-        router.push("/profile");
       }
     } catch (err) {
       console.error("Failed to load pet data", err);
-      router.push("/profile");
+      router.push(petId === "guest" ? "/shop/personalized" : "/profile");
     } finally {
       setIsLoading(false);
     }
@@ -132,19 +149,32 @@ export default function EditPetProfile({ params }: { params: Promise<{ id: strin
         imageUrl: photoPreview, // Save base64 image
       };
 
-      const res = await fetch(`/api/pets/${petId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      if (petId === "guest") {
+        const localPet = {
+          name: payload.petName,
+          species: payload.species,
+          weight: payload.weight,
+          activityLevel: payload.activityLevel,
+          primaryGoal: payload.healthCondition,
+        };
+        localStorage.setItem("petProfileData", JSON.stringify(localPet));
+        setSuccessMsg("Profil hewan peliharaan berhasil diperbarui!");
+        setTimeout(() => router.push("/shop/personalized"), 1000);
+      } else {
+        const res = await fetch(`/api/pets/${petId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
 
-      if (!res.ok) {
-        throw new Error("Gagal menyimpan perubahan");
+        if (!res.ok) {
+          throw new Error("Gagal menyimpan perubahan");
+        }
+
+        setSuccessMsg("Profil hewan peliharaan berhasil diperbarui!");
+        // Hilangkan autoredirect supaya user tetap di halaman ini
+        router.refresh();
       }
-
-      setSuccessMsg("Profil hewan peliharaan berhasil diperbarui!");
-      // Hilangkan autoredirect supaya user tetap di halaman ini
-      router.refresh();
 
     } catch (err: any) {
       setErrorMsg(err.message || "Terjadi kesalahan.");
@@ -156,12 +186,18 @@ export default function EditPetProfile({ params }: { params: Promise<{ id: strin
   const confirmDeletePet = async () => {
     setIsDeleting(true);
     try {
-      const res = await fetch(`/api/pets/${petId}`, { method: 'DELETE' });
-      if (res.ok) {
-        router.push("/profile");
+      if (petId === "guest") {
+        localStorage.removeItem("petProfileData");
+        localStorage.removeItem("hasPetProfile");
+        router.push("/shop/personalized");
       } else {
-        setErrorMsg("Gagal menghapus profil hewan peliharaan.");
-        setShowDeleteModal(false);
+        const res = await fetch(`/api/pets/${petId}`, { method: 'DELETE' });
+        if (res.ok) {
+          router.push("/profile");
+        } else {
+          setErrorMsg("Gagal menghapus profil hewan peliharaan.");
+          setShowDeleteModal(false);
+        }
       }
     } catch (err) {
       setErrorMsg("Terjadi kesalahan sistem saat menghapus.");
@@ -189,9 +225,9 @@ export default function EditPetProfile({ params }: { params: Promise<{ id: strin
       
       <main className="flex-1 w-full max-w-3xl mx-auto px-4 sm:px-6 py-8 lg:py-12">
         
-        <Link href="/profile" className="inline-flex items-center gap-2 text-[#546E7A] hover:text-[#1B6CA8] transition-colors mb-6 font-bold text-sm">
+        <Link href={petId === "guest" ? "/shop/personalized" : "/profile"} className="inline-flex items-center gap-2 text-[#546E7A] hover:text-[#1B6CA8] transition-colors mb-6 font-bold text-sm">
           <ArrowLeft className="w-4 h-4" />
-          Kembali ke Profil
+          {petId === "guest" ? "Kembali ke Rekomendasi" : "Kembali ke Profil"}
         </Link>
 
         <div className="bg-white rounded-[24px] shadow-sm border border-[#E0E7EF] p-6 sm:p-8 lg:p-10">
@@ -224,13 +260,24 @@ export default function EditPetProfile({ params }: { params: Promise<{ id: strin
                     <Upload className="w-6 h-6 text-[#B0BEC5]" />
                   )}
                 </div>
-                <button 
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="px-4 py-2 border border-[#B0BEC5] text-[#546E7A] rounded-xl font-bold hover:bg-[#F0F4F8] hover:text-[#1A1A1A] transition-colors text-sm"
-                >
-                  Ubah Foto
-                </button>
+                <div className="flex gap-3">
+                  <button 
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="px-4 py-2 border border-[#B0BEC5] text-[#546E7A] rounded-xl font-bold hover:bg-[#F0F4F8] hover:text-[#1A1A1A] transition-colors text-sm"
+                  >
+                    Ubah Foto
+                  </button>
+                  {photoPreview && (
+                    <button 
+                      type="button"
+                      onClick={() => setPhotoPreview(null)}
+                      className="px-4 py-2 border border-red-200 text-red-500 rounded-xl font-bold hover:bg-red-50 transition-colors text-sm"
+                    >
+                      Hapus Foto
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -335,28 +382,34 @@ export default function EditPetProfile({ params }: { params: Promise<{ id: strin
             </div>
 
             <div className="pt-6 border-t border-[#F0F4F8] flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex-1 w-full">
+              <div className="flex-1 w-full flex flex-col sm:flex-row items-center gap-4">
+                <button 
+                  type="button"
+                  onClick={() => setShowDeleteModal(true)}
+                  className="bg-white border border-red-200 text-red-500 hover:bg-red-50 hover:text-red-600 px-6 py-3 rounded-xl font-bold transition-colors flex items-center gap-2 w-full sm:w-auto justify-center flex-shrink-0"
+                >
+                  <Trash2 className="w-5 h-5" /> Hapus Profil
+                </button>
                 {errorMsg && (
-                  <div className="p-3 bg-red-50 border border-red-100 text-red-600 text-sm font-semibold rounded-xl animate-in fade-in slide-in-from-bottom-2">
+                  <div className="p-3 bg-red-50 border border-red-100 text-red-600 text-sm font-semibold rounded-xl animate-in fade-in slide-in-from-bottom-2 w-full sm:w-auto">
                     {errorMsg}
                   </div>
                 )}
                 
                 {successMsg && (
-                  <div className="p-3 bg-green-50 border border-green-100 text-green-700 text-sm font-semibold rounded-xl flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2">
+                  <div className="p-3 bg-green-50 border border-green-100 text-green-700 text-sm font-semibold rounded-xl flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 w-full sm:w-auto">
                     <Check className="w-4 h-4" />
                     {successMsg}
                   </div>
                 )}
               </div>
               <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto mt-4 sm:mt-0">
-                <button 
-                  type="button"
-                  onClick={() => setShowDeleteModal(true)}
-                  className="bg-white border border-red-200 text-red-500 hover:bg-red-50 hover:text-red-600 px-6 py-3 rounded-xl font-bold transition-colors flex items-center gap-2 w-full sm:w-auto justify-center flex-shrink-0"
+                <Link 
+                  href={petId === "guest" ? "/shop/personalized" : "/profile"}
+                  className="bg-white border border-[#B0BEC5] text-[#546E7A] hover:bg-[#F0F4F8] hover:text-[#1A1A1A] px-8 py-3 rounded-xl font-bold transition-colors flex items-center justify-center flex-shrink-0"
                 >
-                  <Trash2 className="w-5 h-5" /> Hapus
-                </button>
+                  Batal
+                </Link>
                 <button 
                   type="submit"
                   disabled={isSaving}

@@ -38,6 +38,7 @@ function RecommendationContent() {
   const [subscription, setSubscription] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [matchScore, setMatchScore] = useState(0);
+  const [isGuest, setIsGuest] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -92,7 +93,10 @@ function RecommendationContent() {
             activityLevel: parsed.activityLevel,
             healthCondition: parsed.primaryGoal
           };
+          setIsGuest(true);
         }
+      } else {
+        setIsGuest(false);
       }
 
       setPetProfile(currentPet);
@@ -291,6 +295,13 @@ function RecommendationContent() {
       >
         <Navbar />
 
+        {isGuest && (
+          <div className="w-full bg-[#FDDDD5] text-[#BF4A28] px-4 py-3 text-center text-sm font-bold flex items-center justify-center gap-2 z-40 relative border-b border-[#F26641]/20">
+            <AlertCircle className="w-5 h-5 flex-shrink-0" />
+            <span>Data profil belum tersimpan permanen. <Link href="/login" className="underline hover:text-[#F26641]">Daftar / Masuk</Link> untuk menyimpan profil.</span>
+          </div>
+        )}
+
         <main className="flex-1 w-full pb-16">
           {/* Hero Section */}
           <section className="w-full bg-[#1B6CA8] py-8 lg:py-16 px-4 md:px-8 lg:px-16 flex flex-col md:flex-row items-center justify-center gap-12 relative overflow-x-clip">
@@ -355,10 +366,17 @@ function RecommendationContent() {
                       {matchScore}% Kecocokan
                     </div>
                     
-                    <Link href="/shop/personalized/create" className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white font-bold text-sm md:text-base px-6 py-3 rounded-full inline-flex items-center justify-center gap-2 transition-all shadow-sm w-full sm:w-auto whitespace-nowrap">
-                      <Plus className="w-4 h-4 md:w-5 md:h-5" />
-                      Tambah Profil
-                    </Link>
+                    {isGuest ? (
+                      <Link href="/profile/pets/guest" className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white font-bold text-sm md:text-base px-6 py-3 rounded-full inline-flex items-center justify-center gap-2 transition-all shadow-sm w-full sm:w-auto whitespace-nowrap">
+                        <AlertCircle className="w-4 h-4 md:w-5 md:h-5" />
+                        Ubah Profil
+                      </Link>
+                    ) : (
+                      <Link href="/shop/personalized/create" className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white font-bold text-sm md:text-base px-6 py-3 rounded-full inline-flex items-center justify-center gap-2 transition-all shadow-sm w-full sm:w-auto whitespace-nowrap">
+                        <Plus className="w-4 h-4 md:w-5 md:h-5" />
+                        Tambah Profil
+                      </Link>
+                    )}
                   </motion.div>
                 </div>
 
@@ -435,7 +453,7 @@ function RecommendationContent() {
               transition={{ duration: 0.6 }}
               className="w-full max-w-[1440px] mx-auto px-4 md:px-8 lg:px-16"
             >
-              <section className="w-full bg-[#124E7A] rounded-[24px] overflow-x-clip flex flex-col md:flex-row items-stretch shadow-md">
+              <section className="w-full bg-[#124E7A] rounded-[24px] overflow-hidden flex flex-col md:flex-row items-stretch shadow-md">
                 <div className="flex-1 p-8 md:p-12 lg:p-16 flex flex-col justify-center items-start">
                   <span className="text-[#F26641] text-xs md:text-sm font-bold tracking-widest uppercase mb-4 opacity-100 bg-[#0C3350] px-4 py-1.5 rounded-full shadow-inner">
                     BERGABUNG DENGAN KLUB
@@ -516,7 +534,8 @@ function RecommendationContent() {
                         image={prod.imageUrl || "/images/product1.png"}
                         name={prod.name}
                         price={`Rp ${prod.price.toLocaleString('id-ID')}`}
-                        description="4.8" // Mock rating
+                        rating={4.8}
+                        description={prod.description}
                         tags={prod.category === "Treats" ? ["Tinggi Omega-3", "Bahan Tunggal"] : ["Premium"]}
                       />
                     </motion.div>

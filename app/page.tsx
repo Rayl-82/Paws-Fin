@@ -51,7 +51,7 @@ export default function Home() {
                   <ArrowRight size={20} />
                 </Link>
                 <Link href="/shop/personalized" className="bg-white/10 hover:bg-white text-white hover:text-[#0C3350] border border-white/30 backdrop-blur-sm font-semibold py-3 px-6 md:py-4 md:px-8 rounded-full flex justify-center items-center transition-all shadow-md hover:-translate-y-1 hover:shadow-lg">
-                  Ikuti Kuis
+                  Mulai Personalisasi
                 </Link>
               </div>
             </motion.div>
@@ -305,10 +305,10 @@ export default function Home() {
                 <div className="p-8 flex flex-col flex-grow">
                   <h3 className="text-[#191C1E] text-2xl font-bold mb-4 group-hover:text-[#F26641] transition-colors">Buat Profil Hewan</h3>
                   <p className="text-[#546E7A] text-base mb-8 flex-grow leading-relaxed">
-                    Take our vet-designed quiz to find the perfect marine formula tailored specifically to your pet's needs.
+                    Lengkapi profil kesehatan hewan peliharaan Anda untuk menemukan formula nutrisi laut yang paling sesuai dengan kebutuhannya.
                   </p>
                   <Link href="/shop/personalized" className="w-full bg-[#F26641] hover:bg-[#BF4A28] text-white font-bold py-4 px-6 rounded-full transition-colors text-center mt-auto shadow-md hover:shadow-lg">
-                    Mulai Kuis
+                    Mulai Personalisasi
                   </Link>
                 </div>
               </div>

@@ -69,9 +69,25 @@ function ShopContent() {
       setIsLoading(true);
       try {
         const params = new URLSearchParams();
-        petTypes.forEach(p => params.append('petType', p));
-        healthGoals.forEach(h => params.append('health', h));
-        productTypes.forEach(p => params.append('productType', p));
+        petTypes.forEach(p => {
+          if (p === 'Anjing') params.append('petType', 'Dog');
+          else if (p === 'Kucing') params.append('petType', 'Cat');
+          else params.append('petType', p);
+        });
+        
+        healthGoals.forEach(h => {
+          if (h === 'Kesehatan Kulit & Bulu') params.append('health', 'skin');
+          else if (h === 'Pencernaan') params.append('health', 'digest');
+          else if (h === 'Dukungan Sendi') params.append('health', 'joint');
+          else if (h === 'Manajemen Berat Badan') params.append('health', 'weight');
+          else params.append('health', h);
+        });
+        
+        productTypes.forEach(p => {
+          if (p === 'Cemilan') params.append('productType', 'Treats');
+          else if (p === 'Cemilan Fungsional') params.append('productType', 'Functional');
+          else params.append('productType', p);
+        });
         params.append('excludeCategory', 'Subscriptions');
         params.append('excludeCategory', 'Bundles');
 
@@ -212,7 +228,7 @@ function ShopContent() {
                   Jenis Produk
                 </h4>
                 <div className="flex flex-wrap gap-2">
-                  {['Cemilan', 'Cemilan Fungsional', 'Kotak Langganan'].map(item => {
+                  {['Cemilan', 'Cemilan Fungsional'].map(item => {
                     const isSelected = productTypes.includes(item);
                     return (
                       <button
@@ -295,6 +311,7 @@ function ShopContent() {
                         image={product.imageUrl || "/images/product1.png"}
                         name={product.name}
                         price={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(product.price)}
+                        description={product.description}
                       />
                     </motion.div>
                   ))}

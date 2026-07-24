@@ -315,8 +315,8 @@ export default function Navbar() {
                         <Link href="/profile?tab=orders" className="px-4 py-2.5 text-sm font-semibold text-[#546E7A] hover:bg-[#F0F4F8] hover:text-[#1B6CA8]">Pembelian</Link>
                         <div className="h-px bg-[#F0F4F8] my-1"></div>
                         <button 
-                          onClick={async () => { await fetch('/api/auth/logout', {method: 'POST'}); window.location.href='/'; }} 
-                          className="px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 text-left"
+                          onClick={async () => { await fetch('/api/auth/logout', {method: 'POST'}); localStorage.removeItem('isLoggedIn'); window.location.href='/'; }} 
+                          className="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 transition-colors flex items-center gap-2 text-sm font-semibold"
                         >
                           Keluar
                         </button>

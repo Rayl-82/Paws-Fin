@@ -96,6 +96,7 @@ export default function ProfilePage() {
   const handleLogout = async () => {
     try {
       await fetch("/api/auth/logout", { method: "POST" });
+      localStorage.removeItem('isLoggedIn');
       router.push("/");
     } catch (err) {
       console.error(err);
@@ -371,14 +372,14 @@ export default function ProfilePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             
             {/* SUBSCRIPTIONS */}
-            <section>
+            <section className="flex flex-col h-full">
               <h2 className="text-2xl font-serif font-bold text-[#1A1A1A] flex items-center gap-2 mb-6">
                 <RefreshCw className="w-6 h-6 text-[#1B6CA8]" />
                 Langganan
               </h2>
 
               {activeSubs.length === 0 ? (
-                <div className="bg-white rounded-[16px] shadow-sm border border-[#E0E7EF] p-8 text-center flex flex-col items-center h-full justify-center">
+                <div className="bg-white rounded-[16px] shadow-sm border border-[#E0E7EF] p-8 text-center flex flex-col items-center flex-1 justify-center">
                   <div className="w-12 h-12 bg-[#F0F4F8] rounded-full flex items-center justify-center mb-4">
                     <RefreshCw className="w-6 h-6 text-[#B0BEC5]" />
                   </div>
@@ -419,14 +420,14 @@ export default function ProfilePage() {
             </section>
 
             {/* ORDER HISTORY */}
-            <section>
+            <section className="flex flex-col h-full">
               <h2 className="text-2xl font-serif font-bold text-[#1A1A1A] flex items-center gap-2 mb-6">
                 <Package className="w-6 h-6 text-[#1B6CA8]" />
                 Riwayat Pesanan
               </h2>
 
               {activeOrders.length === 0 ? (
-                <div className="bg-white rounded-[16px] shadow-sm border border-[#E0E7EF] p-8 text-center flex flex-col items-center h-full justify-center">
+                <div className="bg-white rounded-[16px] shadow-sm border border-[#E0E7EF] p-8 text-center flex flex-col items-center flex-1 justify-center">
                   <div className="w-12 h-12 bg-[#F0F4F8] rounded-full flex items-center justify-center mb-4">
                     <Package className="w-6 h-6 text-[#B0BEC5]" />
                   </div>
@@ -467,6 +468,8 @@ export default function ProfilePage() {
             </section>
 
           </div>
+
+          <div className="h-px bg-[#E0E7EF] w-full"></div>
 
           {/* ACCOUNT SETTINGS */}
           <section className="pb-8">

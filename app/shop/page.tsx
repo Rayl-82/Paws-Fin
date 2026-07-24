@@ -78,7 +78,7 @@ export default function TokoPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveBannerIndex((prev) => (prev + 1) % banners.length);
-    }, 5000);
+    }, 10000);
     return () => clearInterval(interval);
   }, [banners.length]);
 
@@ -141,27 +141,32 @@ export default function TokoPage() {
 
     async function fetchPets() {
       try {
-        const localPetData = localStorage.getItem("petProfileData");
-        if (localPetData) {
-          try {
-            const parsed = JSON.parse(localPetData);
-            setPets([{ 
-              id: "local-1", 
-              petName: parsed.name || 'Peliharaan', 
-              species: parsed.species || 'Cat',
-              breed: parsed.breed || ''
-            }]);
-            return;
-          } catch (e) {
-            console.error("Failed to parse local pet data", e);
-          }
-        }
-        
+        let hasApiPets = false;
         if (loggedIn) {
           const res = await fetch("/api/pets");
           if (res.ok) {
             const data = await res.json();
-            setPets(data.data || []);
+            if (data.data && data.data.length > 0) {
+              setPets(data.data);
+              hasApiPets = true;
+            }
+          }
+        }
+        
+        if (!hasApiPets) {
+          const localPetData = localStorage.getItem("petProfileData");
+          if (localPetData) {
+            try {
+              const parsed = JSON.parse(localPetData);
+              setPets([{ 
+                id: "local-1", 
+                petName: parsed.name || 'Peliharaan', 
+                species: parsed.species || 'Cat',
+                breed: parsed.breed || ''
+              }]);
+            } catch (e) {
+              console.error("Failed to parse local pet data", e);
+            }
           }
         }
       } catch (err) {
@@ -180,10 +185,10 @@ export default function TokoPage() {
   }, []);
 
   const collections = [
-    { image: "/images/cattreats.png", name: "Cemilan Kucing", href: "/shop/products?petType=Cat" },
-    { image: "/images/dogtreats.png", name: "Cemilan Anjing", href: "/shop/products?petType=Dog" },
-    { image: "/images/functionaltreats.png", name: "Fungsional", href: "/shop/products?category=Functional" },
-    { image: "/images/subscriptionbox.png", name: "Kotak Langganan", href: "/shop/subscriptions" },
+    { image: "/images/cattreats.png", name: "Cemilan Kucing", href: "/shop/products?petType=Kucing" },
+    { image: "/images/dogtreats.png", name: "Cemilan Anjing", href: "/shop/products?petType=Anjing" },
+    { image: "/images/functionaltreats.png", name: "Fungsional", href: "/shop/products?category=Cemilan Fungsional" },
+    { image: "/images/subscriptionbox.png", name: "Kotak Langganan", href: "/langganan" },
   ];
 
   return (
@@ -383,6 +388,7 @@ export default function TokoPage() {
                     image={prod.imageUrl || "/images/product1.png"}
                     name={prod.name}
                     price={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(prod.price)}
+                    description={prod.description}
                   />
                 </motion.div>
               ))}
@@ -414,6 +420,7 @@ export default function TokoPage() {
                   image={prod.imageUrl || "/images/product1.png"}
                   name={prod.name}
                   price={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(prod.price)}
+                  description={prod.description}
                 />
               </motion.div>
             ))}
@@ -427,7 +434,7 @@ export default function TokoPage() {
               <h2 className="text-[#191C1E] text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">
                 Sorotan Langganan
               </h2>
-              <Link href="/shop/subscriptions" className="text-[#1B6CA8] hover:text-[#124E7A] transition-colors font-bold text-sm md:text-base flex items-center gap-1 shrink-0 pb-1">
+              <Link href="/langganan" className="text-[#1B6CA8] hover:text-[#124E7A] transition-colors font-bold text-sm md:text-base flex items-center gap-1 shrink-0 pb-1">
                 Semua Paket
                 <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
               </Link>

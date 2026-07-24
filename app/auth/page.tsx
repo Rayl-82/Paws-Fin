@@ -73,6 +73,7 @@ function AuthForm() {
       }
       
       // Success - Sync cart and redirect
+      localStorage.setItem('isLoggedIn', 'true');
       await syncGuestCart();
       
       if (searchParams.get("checkout") === "true") {
